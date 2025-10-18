@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,8 +62,19 @@
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        .header p {
+       .header p {
             font-size: 1.5em;
+        }
+        #typed-text {
+            color: yellow;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .typed-cursor {
+            color: yellow;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
         }
            @media (max-width: 768px) {
             .header {
@@ -122,15 +134,118 @@
             color: #3a7bd5;
             margin-bottom: 25px;
         }
-        .progress {
-            height: 25px;
-            background-color: #444;
-            border-radius: 15px;
-        }
-        .progress-bar {
+        
+/* Data Flow Animation */
+.data-flow-animation {
+    position: relative;
+    width: 500%;
+    max-width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    border: 1px solid #2a3f5a;
+    border-radius: 8px;
+    background-color: #112240;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.6s ease-out;
+}
+
+.flow-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #2a3f5a;
+}
+
+.flow-line-1 { top: 20%; }
+.flow-line-2 { top: 50%; }
+.flow-line-3 { top: 80%; }
+
+.data-packet {
+    position: absolute;
+    left: -20px;
+    width: 15px;
+    height: 8px;
+    background: #64ffda;
+    border-radius: 2px;
+    box-shadow: 0 0 10px #64ffda;
+    animation: data-move 5s linear infinite;
+}
+
+@keyframes data-move {
+    from { left: -20px; }
+    to { left: 105%; }
+}
+
+.packet-1 { top: calc(20% - 4px); animation-duration: 4s; animation-delay: 0s; }
+.packet-2 { top: calc(50% - 4px); animation-duration: 3.5s; animation-delay: 1s; }
+.packet-3 { top: calc(80% - 4px); animation-duration: 4.5s; animation-delay: 0.5s; }
+.packet-4 { top: calc(20% - 4px); animation-duration: 4.2s; animation-delay: 2s; }
+.packet-5 { top: calc(50% - 4px); animation-duration: 3.8s; animation-delay: 3s; }
+
+/* Code Matrix Animation */
+#matrix-canvas {
+    display: block;
+    width: 100%;
+    height: 300px;
+    opacity: 0;
+    transition: opacity 0.6s ease-out;
+    border-radius: 8px;
+}
+
+.philosophy-box {
+    background-color: #112240;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #2a3f5a;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.philosophy-box h4 {
+    color: #ccd6f6;
+    margin-bottom: 15px;
+}
+.philosophy-box h4 i {
+    color: #64ffda;
+    margin-right: 10px;
+}
+.philosophy-box p {
+    color: #8892b0;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+
+       .progress-bar {
             background: linear-gradient(135deg, #3a7bd5, #00d2ff);
             font-size: 1em;
             font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(200%);
+            }
         }
         .contact {
             background-color: #222;
@@ -179,23 +294,32 @@
             30%, 50%, 70% { transform: translate3d(-3px, 0, 0) rotate(-5deg); }
             40%, 60% { transform: translate3d(3px, 0, 0) rotate(5deg); }
         }
-        @keyframes nav-shake {
+       @keyframes nav-shake {
             0%, 100% { transform: translateY(0); }
             25% { transform: translateY(-5px); }
             50% { transform: translateY(5px); }
             75% { transform: translateY(-3px); }
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
          .projects-container {
             padding: 80px 15px;
             background-color: black;
         }
 
-        .project-card {
+      .project-card {
             border: none;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-radius: 15px;
             overflow: hidden;
+            animation: float 5s ease-in-out infinite;
         }
            .card-body{
             background-color: black;
@@ -301,6 +425,30 @@
             line-height: 1.7;
             color: #f0f0f0;
         }
+        
+#about.is-visible .skills-section:nth-of-type(2) .skill-item:nth-child(4) { transition-delay: 0.85s; }
+
+
+#more-info.is-visible .info-box:nth-of-type(1) { transition-delay: 0.1s; }
+#more-info.is-visible .info-box:nth-of-type(2) { transition-delay: 0.2s; }
+#more-info.is-visible .info-box:nth-of-type(3) { transition-delay: 0.3s; }
+#more-info.is-visible .info-box:nth-of-type(4) { transition-delay: 0.4s; }
+
+#iot-dashboard.is-visible .data-flow-animation { transition-delay: 0.1s; opacity: 1; }
+#iot-dashboard.is-visible #matrix-canvas { transition-delay: 0.1s; opacity: 1; }
+
+#philosophy.is-visible .philosophy-box {
+    opacity: 1;
+    transform: translateY(0);
+}
+#philosophy.is-visible .row > .col-md-6:nth-child(1) .philosophy-box { transition-delay: 0.1s; }
+#philosophy.is-visible .row > .col-md-6:nth-child(2) .philosophy-box { transition-delay: 0.2s; }
+#philosophy.is-visible .row > .col-md-6:nth-child(3) .philosophy-box { transition-delay: 0.3s; }
+#philosophy.is-visible .row > .col-md-6:nth-child(4) .philosophy-box { transition-delay: 0.4s; }
+
+#projects.is-visible .row > .col-lg-4:nth-child(1) .project-card { transition-delay: 0.1s; }
+#projects.is-visible .row > .col-lg-4:nth-child(2) .project-card { transition-delay: 0.2s; }
+#projects.is-visible .row > .col-lg-4:nth-child(3) .project-card { transition-delay: 0.3s; }
     </style>
 </head>
 <body>
@@ -321,7 +469,7 @@
                         <a class="nav-link" href="#more-info">More Info</a>
                     </li>
                      <li class="nav-item">
-                        <a class="nav-link" href="#projects">project</a>
+                        <a class="nav-link" href="#projects">projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact</a>
@@ -334,7 +482,7 @@
        <header class="header">
         <img src="./images/pierrot.jpg" alt="Gikundiro Pierrot" class="header-img">
         <h1>Gikundiro Pierrot</h1>
-        <p>Web Developer | Designer | Tech Enthusiast</p>
+        <p><span id="typed-text"></span></p>
     </header>
 
    <div class="container-fluid">
@@ -389,6 +537,7 @@
                 <h3><i class="fas fa-lightbulb"></i> My Philosophy</h3>
                 <p>I believe that the best code is not just functional, but also elegant and easy to maintain. I approach every project with a passion for clean architecture, writing reusable components, and adhering to best practices. For me, development is a craft that requires both technical precision and creative problem-solving.</p>
             </div>
+            
             <div class="info-box">
                 <h3><i class="fas fa-rocket"></i> Project Highlights</h3>
                 <p>Throughout my career, I've had the opportunity to work on a variety of exciting projects. One of my favorites was a full-stack e-commerce platform built with the MERN stack, featuring real-time inventory updates and a seamless checkout experience. Another was a custom database solution for a local library, which streamlined their book-tracking process and improved user engagement.</p>
@@ -402,8 +551,77 @@
                 <p>I have successfully navigated multiple stages of web application development, from initial concept to deployment and scaling. My expertise has allowed me to participate in software development projects and competitions across several areas, broadening my perspective and enriching my skills with international best practices.</p>
             </div>
         </div>
+         <div id="iot-dashboard" class="iot-animation-container section-animated">
+        <div class="container">
+            <h2 class="text-center">Development Concepts</h2>
+            <p class="lead text-center mb-5">Visualizing Modern Software Architectures</p>
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-6 text-center mb-4 mb-lg-0">
+                    <div class="data-flow-animation">
+                        <div class="flow-line flow-line-1"></div>
+                        <div class="flow-line flow-line-2"></div>
+                        <div class="flow-line flow-line-3"></div>
+                        <div class="data-packet packet-1"></div>
+                        <div class="data-packet packet-2"></div>
+                        <div class="data-packet packet-3"></div>
+                        <div class="data-packet packet-4"></div>
+                        <div class="data-packet packet-5"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <canvas id="matrix-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+   <div id="philosophy" class="container mt-5 pt-5 section-animated">
+        <h2 class="text-center">My Philosophy</h2>
+        <p class="lead text-center mb-5">Guiding Principles for My Work</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-15">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="philosophy-box">
+                            <h4><i class="fas fa-lightbulb"></i> My Philosophy</h4>
+                            <p>I believe that the best code is not just functional, but also elegant and easy to maintain. I approach every project with a passion for clean architecture and reusable components.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="philosophy-box">
+                            <h4><i class="fas fa-cogs"></i> My Process</h4>
+                            <p>My process is rooted in collaboration and continuous improvement. I start by deeply understanding the user's needs, then move to rapid prototyping and iterative development.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="philosophy-box">
+                            <h4><i class="fas fa-bullseye"></i> My Goal</h4>
+                            <p>My ultimate goal is to build products that not only meet technical requirements but also provide a seamless and enjoyable user experience. I am driven by solving complex problems.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="philosophy-box">
+                            <h4><i class="fas fa-heart"></i> My Interests</h4>
+                            <p>Beyond coding, I have a keen eye for design and aesthetics. I enjoy creating visually appealing interfaces and exploring the intersection of technology and art.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="philosophy-box">
+                            <h4><i class="fas fa-users"></i> Collaboration</h4>
+                            <p>I thrive in team environments and believe that the best products are built through open communication and shared expertise. I am always ready to learn from and mentor others.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="philosophy-box">
+                            <h4><i class="fas fa-rocket"></i> Innovation</h4>
+                            <p>I am passionate about exploring new technologies and pushing the boundaries of what's possible. I am always looking for creative solutions to challenging problems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
                   <div id="projects" class="projects-container section-animated">
-    <h2 class="text-center mb-5">My Latest Projects</h2>
+    <h2 class="text-center mb-5">My Last Projects</h2>
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card project-card">
@@ -411,7 +629,7 @@
                     <div class="project-image-container">
                         <img src="./images/main44.jpg" class="card-img-top" alt="Project Six">
                         <div class="project-overlay">
-                           PIERROT MOVIE HUB
+                         MOVIE HUB
                         </div>
                     </div>
                 </a>
@@ -423,7 +641,7 @@
                     <div class="project-image-container">
                         <img src="./images/main16.jpg" class="card-img-top" alt="Project Four">
                         <div class="project-overlay">
-                            PIERROT CHIC & MODERN
+                        CHIC & MODERN
                         </div>
                     </div>
                 </a>
@@ -489,11 +707,61 @@
         </div>
     </div>
 
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const animatedSections = document.querySelectorAll('.section-animated');
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+     <script>
+         document.addEventListener("DOMContentLoaded", function() {
+             // Matrix Animation
+             const canvas = document.getElementById('matrix-canvas');
+             if (canvas) {
+                 const ctx = canvas.getContext('2d');
+                 let parentContainer = canvas.parentElement;
+                 canvas.width = parentContainer.offsetWidth;
+                 canvas.height = 300; // Fixed height
+ 
+                 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/{[]};:'\"|\\`~!@#$%^&*()_+-=";
+                 const fontSize = 16;
+                 const columns = canvas.width / fontSize;
+ 
+                 const drops = [];
+                 for (let x = 0; x < columns; x++) {
+                     drops[x] = 1;
+                 }
+ 
+                 function drawMatrix() {
+                     ctx.fillStyle = "rgba(10, 25, 47, 0.05)";
+                     ctx.fillRect(0, 0, canvas.width, canvas.height);
+                     ctx.fillStyle = "#64ffda";
+                     ctx.font = fontSize + "px monospace";
+                     for (let i = 0; i < drops.length; i++) {
+                         const text = chars[Math.floor(Math.random() * chars.length)];
+                         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                             drops[i] = 0;
+                         }
+                         drops[i]++;
+                     }
+                 }
+ 
+                 let matrixInterval;
+                 const matrixObserver = new IntersectionObserver((entries) => {
+                     entries.forEach(entry => {
+                         if (entry.isIntersecting) {
+                             if (!matrixInterval) {
+                                 canvas.width = parentContainer.offsetWidth; // Recalculate on visible
+                                 matrixInterval = setInterval(drawMatrix, 50);
+                             }
+                         } else {
+                             clearInterval(matrixInterval);
+                             matrixInterval = null;
+                         }
+                     });
+                 }, { threshold: 0.1 });
+                 matrixObserver.observe(document.getElementById('iot-dashboard'));
+             }
+ 
+             // Scroll Animations for sections
+             const animatedSections = document.querySelectorAll('.section-animated');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -504,18 +772,15 @@
             animatedSections.forEach(section => {
                 observer.observe(section);
             });
-             var typed = new Typed('#typed-text', {
-                strings: ["Frontend Developer", "Backend Developer", "Full-Stack Engineer"],
+              var typed = new Typed('#typed-text', {
+                strings: ["Web Developer | Designer | Tech Enthusiast", "backend&Frontend Full-Stack Developer"],
                 typeSpeed: 70,
                 backSpeed: 50,
                 loop: true,
-                backDelay: 2000,
+                backDelay: 3000,
             });
         });
 
     </script>
 </body>
-
 </html>
-
-
