@@ -15,7 +15,7 @@
   <meta property="og:description" content="Explore my personal portfolio website.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://murokorepierrot.github.io/">
-  <meta property="og:image" content="https://murokorepierrot.github.io/images/pierrot.jpg">
+  <meta property="og:image" content="https://murokorepierrot.github.io/images/pierrott.jng">
   <meta property="og:image:alt" content="A portrait of Gikundiro Pierrot">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -473,15 +473,70 @@
     transform: translateY(-50%) translateX(-50%);
 }
 
+/* Container positioning */
 .logo-container {
-    width: 100px;
-    height: 100px;
+  position: relative;
+  display: inline-block;
 }
 
+/* GP logo circle background */
 .gp-logo {
-    width: 80px;
-    height: 80px;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e1e2f, #3c3c6e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
+
+/* Stylish GP letters */
+.gp-logo .letters {
+  font-family: 'Poppins', sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #00b4ff, 0 0 20px #007bff;
+  z-index: 2;
+}
+
+/* Decorative animated dots around the logo */
+.dot-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 0% 50%, #00b4ff 2px, transparent 2px),
+              radial-gradient(circle at 25% 25%, #ff006e 2px, transparent 2px),
+              radial-gradient(circle at 50% 0%, #ffd60a 2px, transparent 2px),
+              radial-gradient(circle at 75% 25%, #00ffb3 2px, transparent 2px),
+              radial-gradient(circle at 100% 50%, #ff006e 2px, transparent 2px),
+              radial-gradient(circle at 75% 75%, #ffd60a 2px, transparent 2px),
+              radial-gradient(circle at 50% 100%, #00b4ff 2px, transparent 2px),
+              radial-gradient(circle at 25% 75%, #ff006e 2px, transparent 2px);
+  background-size: 100% 100%;
+  transform: translate(-50%, -50%);
+  animation: rotateDots 8s linear infinite;
+  z-index: 1;
+}
+
+/* Rotating animation */
+@keyframes rotateDots {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 
 .about-image {
     max-width: 100%;
@@ -687,7 +742,7 @@
     </nav>
 
        <header class="header">
-        <img src="./images/pierrot.jpg" alt="Gikundiro Pierrot" class="header-img">
+        <img src="./images/pierrott.png" alt="Gikundiro Pierrot" class="header-img">
         <h1>Gikundiro Pierrot</h1>
         <p><span id="typed-text"></span></p>
     </header>
