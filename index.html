@@ -21,10 +21,10 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Gikundiro Pierrot - Portfolio">
   <meta name="twitter:description" content="Welcome to Gikundiro Pierrot’s personal portfolio – explore my work, skills, and projects.">
-  <meta name="twitter:image" content="https://murokorepierrot.github.io/./images/main17.jpg">
+  <meta name="twitter:image" content="https://murokorepierrot.github.io/./images/main71.png">
 
 
-   <link rel="icon" href="images/main17.jpg" type="image/jpeg">
+   <link rel="icon" href="images/main71.png" type="image/png">
     <style>
         html {
             scroll-behavior: smooth;
@@ -467,76 +467,12 @@
     padding-top: 100px; /* Adjust this value to create space for the logo */
 }
 
+
 .about-image-container .logo-link {
     top: 0;
     z-index: 10;
     transform: translateY(-50%) translateX(-50%);
 }
-
-/* Container positioning */
-.logo-container {
-  position: relative;
-  display: inline-block;
-}
-
-/* GP logo circle background */
-.gp-logo {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1e1e2f, #3c3c6e);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-}
-
-/* Stylish GP letters */
-.gp-logo .letters {
-  font-family: 'Poppins', sans-serif;
-  font-size: 42px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px #00b4ff, 0 0 20px #007bff;
-  z-index: 2;
-}
-
-/* Decorative animated dots around the logo */
-.dot-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(circle at 0% 50%, #00b4ff 2px, transparent 2px),
-              radial-gradient(circle at 25% 25%, #ff006e 2px, transparent 2px),
-              radial-gradient(circle at 50% 0%, #ffd60a 2px, transparent 2px),
-              radial-gradient(circle at 75% 25%, #00ffb3 2px, transparent 2px),
-              radial-gradient(circle at 100% 50%, #ff006e 2px, transparent 2px),
-              radial-gradient(circle at 75% 75%, #ffd60a 2px, transparent 2px),
-              radial-gradient(circle at 50% 100%, #00b4ff 2px, transparent 2px),
-              radial-gradient(circle at 25% 75%, #ff006e 2px, transparent 2px);
-  background-size: 100% 100%;
-  transform: translate(-50%, -50%);
-  animation: rotateDots 8s linear infinite;
-  z-index: 1;
-}
-
-/* Rotating animation */
-@keyframes rotateDots {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
 
 .about-image {
     max-width: 100%;
@@ -557,51 +493,6 @@
             padding: 60px 40px;
             background-color: #1a1a1a;
         }
-        .logo-link {
-  text-decoration: none;
-  display: inline-block;
-}
-
-.logo-container {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.gp-logo {
-  width: 80px;
-  height: 80px;
-  background-color: #FF0000;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  animation: pulse 2s infinite alternate;
-  transition: transform 0.3s ease;
-}
-.about-image-container {
-    padding-top: 20px; /* Adjust this value to create space between logo and image */
-}
-
-.logo-link {
-    display: block;
-    margin-bottom: 20px; /* Adjust this value to control space between logo and image */
-}
-
-.logo-container {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto; /* This centers the logo container horizontally */
-}
-
-.gp-logo {
-    width: 80px;
-    height: 80px;
-}
 
 .about-image {
     max-width: 100%;
@@ -620,28 +511,114 @@
   0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
   100% { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); }
 }
+/* Remove underline from the GP logo link */
+.logo-link {
+  text-decoration: none;  /* removes underline */
+}
 
+/* Optional: keep link colors neutral */
+.logo-link:link,
+.logo-link:visited {
+  color: inherit;  /* keeps the same text color */
+}
+
+/* Optional: no underline even on hover */
+.logo-link:hover,
+.logo-link:active {
+  text-decoration: none;
+}
+
+/* === LOGO CONTAINER === */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 800px; /* Adds depth for 3D rotation */
+}
+
+/* === GP LOGO (3D Balloon Look) === */
+.gp-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #00eaff, #0044ff 70%, #001a66 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 
+    inset -8px -8px 15px rgba(0, 0, 100, 0.5),
+    inset 8px 8px 25px rgba(255, 255, 255, 0.3),
+    0 0 30px rgba(0, 255, 255, 0.4),
+    0 0 60px rgba(0, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  animation: rotateSphere 12s linear infinite;
+}
+
+/* === Light Reflection Effect === */
 .gp-logo::before {
-  content: '';
+  content: "";
   position: absolute;
-  width: 150%;
-  height: 150%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  animation: rotate 4s linear infinite;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.05));
+  transform: skewX(-25deg);
+  animation: lightReflection 4s linear infinite;
+  filter: blur(1px);
 }
 
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* === Shiny Highlight Reflection (like a balloon gloss) === */
+.gp-logo::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  width: 35%;
+  height: 35%;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.7), transparent 70%);
+  border-radius: 50%;
+  filter: blur(4px);
+  opacity: 0.8;
 }
 
-.gp-logo:hover {
-  transform: scale(1.1);
+/* === GP LETTERS === */
+.letters {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;
+  z-index: 5;
+  transform: translateZ(30px); /* pop out slightly to give 3D illusion */
+  pointer-events: none;
 }
 
-.gp-logo:active {
-  transform: scale(0.95);
+/* === ANIMATIONS === */
+
+/* Horizontal Earth-like 3D rotation */
+@keyframes rotateSphere {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
 }
+
+/* Moving light reflection band */
+@keyframes lightReflection {
+  0% { left: -40%; }
+  100% { left: 140%; }
+}
+
+/* Optional smooth entrance */
+.section-animated {
+  animation: fadeInUp 1.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .progress {
     background-color: #e9ecef;
     border-radius: 5px;
@@ -758,7 +735,7 @@
             </div>
           </a>
                 <div class="about-image-container">
-                    <img src="./images/main17.jpg" alt="Gikundiro Pierrot" class="about-image">
+                    <img src="./images/main71.png" alt="Gikundiro Pierrot" class="about-image">
             </div>
         </div>
             <div class="about-text col-lg-8">
@@ -803,7 +780,7 @@
             </div>
         </div>
     </div>
-            <div id="more-info" class="more-info-container section-animated">
+           <div id="more-info" class="more-info-container section-animated">
             <div class="info-box">
                 <h3><i class="fas fa-lightbulb"></i> My Philosophy</h3>
                 <p>I believe that the best code is not just functional, but also elegant and easy to maintain. I approach every project with a passion for clean architecture, writing reusable components, and adhering to best practices. For me, development is a craft that requires both technical precision and creative problem-solving.</p>
@@ -841,7 +818,7 @@
                 </div>
             </div>
         </div>
-                 <div id="projects" class="projects-container section-animated">
+                  <div id="projects" class="projects-container section-animated">
     <h2 class="text-center mb-5">My Last Projects</h2>
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4 mb-4">
@@ -922,9 +899,9 @@
         <p><i class="fas fa-map-marker-alt"></i>Location: Kigali, Rwanda</p>
         <p><i class="fas fa-phone"></i>Phone: 0780212378</p>
         <div class="social-icons mt-4">
-            <a href="https://wa.me/250780212378" target="_blank" aria-label="WhatsApp" title="You chat with us on 250780212378"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://wa.me/250780212378" target="_blank" aria-label="WhatsApp" title="You chat with us on +250780212378"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.facebook.com/Gikundiro pierrot" target="_blank" aria-label="Facebook" title="Find me on Facebook Gikundiro pierrot"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.instagram.com/murokore pierrot" target="_blank" aria-label="Instagram" title="Follow me on Instagram murokore pierrot"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.instagram.com/murokore250" target="_blank" aria-label="Instagram" title="Follow me on Instagram murokore250"><i class="fab fa-instagram"></i></a>
         </div>
     </div>
 
@@ -1102,4 +1079,3 @@
     </script>
 </body>
 </html>
-
