@@ -1,923 +1,1072 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#3d7a3d">
-<title>Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali</title>
-<meta name="description" content="Marie Rose Shop — quality groceries and household essentials in Jabana, Gasabo, Kigali. Rice, flour, cooking oil, drinks, spices and more, at fair prices. Official EBM receipts on every sale.">
-<link rel="canonical" href="https://marieroseshop.rw/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#3d7a3d">
 
-<!-- Favicon: replace /images/favicon.png with a square logo mark (min 512x512px) -->
-<link rel="icon" type="image/png" href="images/favicon.png">
-<link rel="apple-touch-icon" href="images/favicon.png">
+  <!-- Primary Meta Tags -->
+  <title>Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali</title>
+  <meta name="title" content="Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali">
+  <meta name="description" content="Marie Rose Shop — quality groceries and household essentials in Jabana, Gasabo, Kigali. Rice, flour, cooking oil, drinks, spices and more, at fair prices. Official EBM receipts on every sale.">
+  <meta name="keywords" content="Marie Rose Shop, grocery store Kigali, Jabana supermarket, Gasabo shop, household essentials, EBM receipts, quality groceries">
 
-<!-- Social share preview: replace images/og-cover.jpg with a 1200x630 photo of the shop front or shelves -->
-<meta property="og:type" content="business.business">
-<meta property="og:title" content="Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali">
-<meta property="og:description" content="Quality groceries and household essentials in Jabana, Gasabo, Kigali. Fair prices, friendly service, every single day.">
-<meta property="og:image" content="images/og-cover.jpg">
-<meta property="og:locale" content="en_RW">
-<meta name="twitter:card" content="summary_large_image">
+  <!-- Canonical -->
+  <link rel="canonical" href="https://murokorepierrot.github.io/marie-rose-shop/">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Favicon - using logo.png -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="apple-touch-icon" href="images/logo.png">
 
-<link rel="stylesheet" href="style.css">
+  <!-- Open Graph / Facebook - using grucery.png -->
+  <meta property="og:type" content="business.business">
+  <meta property="og:title" content="Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali">
+  <meta property="og:description" content="Quality groceries and household essentials in Jabana, Gasabo, Kigali. Fair prices, friendly service, every single day.">
+  <meta property="og:image" content="https://marieroseshop.rw/images/grucery.png">
+  <meta property="og:image:secure_url" content="https://marieroseshop.rw/images/grucery.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Marie Rose Shop - Your Trusted Neighborhood Shop in Kigali">
+  <meta property="og:url" content="https://murokorepierrot.github.io/marie-rose-shop/">
+  <meta property="og:locale" content="en_RW">
+  <meta property="og:site_name" content="Marie Rose Shop">
 
-<!-- Local business structured data — helps Google show hours, address & rating in search -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "GroceryStore",
-  "name": "Marie Rose Shop",
-  "image": "images/og-cover.jpg",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Jabana, Kabuye Cell",
-    "addressRegion": "Gasabo, Kigali",
-    "addressCountry": "RW"
-  },
-  "openingHoursSpecification": [
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "06:30", "closes": "21:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "08:00", "closes": "20:00" }
-  ],
-  "telephone": "+250789542601"
-}
-</script>
+  <!-- Twitter - using grucery.png -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali">
+  <meta name="twitter:description" content="Quality groceries and household essentials in Jabana, Gasabo, Kigali. Fair prices, friendly service.">
+  <meta name="twitter:image" content="https://marieroseshop.rw/images/grucery.png">
+  <meta name="twitter:image:alt" content="Marie Rose Shop - Your Trusted Neighborhood Shop in Kigali">
+
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="VERIFY_YOUR_SITE">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Structured Data for Google Search -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GroceryStore",
+      "@id": "https://marieroseshop.rw/#shop",
+      "name": "Marie Rose Shop",
+      "logo": "https://marieroseshop.rw/images/logo.png",
+      "image": "https://marieroseshop.rw/images/grucery.png",
+      "url": "https://marieroseshop.rw/",
+      "description": "Quality groceries and household essentials in Jabana, Gasabo, Kigali. Rice, flour, cooking oil, drinks, spices and more, at fair prices. Official EBM receipts on every sale.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Jabana, Kabuye Cell",
+        "addressRegion": "Gasabo, Kigali",
+        "addressCountry": "RW"
+      },
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "06:30", "closes": "21:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "08:00", "closes": "20:00" }
+      ],
+      "telephone": "+250789542601",
+      "priceRange": "$$",
+      "paymentAccepted": ["Cash", "Mobile Money"],
+      "employee": [
+        { "@id": "https://marieroseshop.rw/#marierose" },
+        { "@id": "https://marieroseshop.rw/#pierrot" },
+        { "@id": "https://marieroseshop.rw/#bienfait" },
+        { "@id": "https://marieroseshop.rw/#jeanpierre" }
+      ],
+      "founder": { "@id": "https://marieroseshop.rw/#marierose" }
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://marieroseshop.rw/#marierose",
+          "name": "Marie Rose",
+          "jobTitle": "Owner & Cashier",
+          "worksFor": { "@id": "https://marieroseshop.rw/#shop" },
+          "image": "https://marieroseshop.rw/images/jj.jpeg",
+          "description": "Owns the shop and personally receives and manages all money coming in."
+        },
+        {
+          "@type": "Person",
+          "@id": "https://marieroseshop.rw/#pierrot",
+          "name": "Gikundiro Pierrot",
+          "jobTitle": "EBM Provider",
+          "worksFor": { "@id": "https://marieroseshop.rw/#shop" },
+          "image": "https://marieroseshop.rw/images/ff.jpeg",
+          "description": "Responsible for issuing official EBM receipts to every client."
+        },
+        {
+          "@type": "Person",
+          "@id": "https://marieroseshop.rw/#bienfait",
+          "name": "Gisubizo Bienfait",
+          "jobTitle": "Import & Sourcing",
+          "worksFor": { "@id": "https://marieroseshop.rw/#shop" },
+          "image": "https://marieroseshop.rw/images/yy.jpeg",
+          "description": "Travels abroad to source quality products at wholesale prices."
+        },
+        {
+          "@type": "Person",
+          "@id": "https://marieroseshop.rw/#jeanpierre",
+          "name": "Jean Pierre",
+          "jobTitle": "Import & Sourcing",
+          "worksFor": { "@id": "https://marieroseshop.rw/#shop" },
+          "image": "https://marieroseshop.rw/images/dd.jpeg",
+          "description": "Travels abroad to source quality products at wholesale prices."
+        }
+      ]
+    }
+  </script>
+
+  <style>
+    /* ===== MODERN PROFESSIONAL LOADER ===== */
+    #page-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #fdfcfa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #page-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader-ring {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 4px solid #e8e4df;
+      border-top: 4px solid #3d7a3d;
+      border-right: 4px solid #c8a45c;
+      animation: spin 1s cubic-bezier(0.65, 0.0, 0.35, 1.0) infinite;
+      box-shadow: 0 8px 32px rgba(61, 122, 61, 0.08);
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loader-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: #1a1a1a;
+    }
+    .loader-brand span:first-child {
+      background: #3d7a3d;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .loader-brand em {
+      color: #c8a45c;
+      font-style: normal;
+      font-weight: 500;
+    }
+    .loader-progress {
+      width: 200px;
+      height: 3px;
+      background: #e8e4df;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .loader-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #3d7a3d, #c8a45c);
+      border-radius: 20px;
+      transition: width 0.2s ease;
+    }
+    .loader-label {
+      font-size: 0.8rem;
+      color: #888;
+      letter-spacing: 0.3px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: -8px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- SCROLL PROGRESS BAR -->
-<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-
-<!-- PAGE LOADER -->
-<div id="page-loader">
-  <div class="loader-basket"><span></span><span></span><span></span></div>
-</div>
-
-<!-- HEADER / NAV -->
-<header class="site-header" id="top">
-  <div class="header-inner">
-    <a href="#top" class="logo">
-      <span class="logo-mark">MR</span>
-      <span class="logo-text">Marie Rose <em>Shop</em></span>
-    </a>
-
-    <!-- Product search bar (dropdown container added) -->
-    <div class="nav-search" id="navSearch">
-      <input type="text" id="productSearch" autocomplete="off"
-             placeholder="Search products… e.g. rice, oil, milk" aria-label="Search products">
-      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <button type="button" class="search-clear" id="searchClear" aria-label="Clear search">×</button>
-      <!-- Live suggestions dropdown -->
-      <ul class="search-dropdown" id="searchDropdown" role="listbox" aria-label="Product suggestions"></ul>
+  <!-- ===== MODERN LOADER ===== -->
+  <div id="page-loader" role="status" aria-live="polite">
+    <div class="loader-ring"></div>
+    <div class="loader-brand">
+      <span>MR</span> Marie Rose <em>Shop</em>
     </div>
-
-    <nav class="main-nav" id="mainNav">
-      <a href="#about">About</a>
-      <a href="#products">Products</a>
-      <a href="#how-to-shop">How to Shop</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#team">Our Team</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Visit Us</a>
-    </nav>
-
-    <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="loader-progress">
+      <div class="loader-progress-bar" id="loaderProgressBar"></div>
+    </div>
+    <div class="loader-label" id="loaderLabel">Loading essentials …</div>
   </div>
-</header>
 
-<!-- HERO -->
-<section class="hero">
-  <!-- AI-generated hero background image -->
- <img src="images/mb.png" class="hero-img" alt="Marie Rose Shop front" loading="eager">
-  <div class="hero-overlay" aria-hidden="true"></div>
+  <!-- ===== SCROLL PROGRESS BAR ===== -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-  <div class="hero-content">
-    <p class="eyebrow">Jabana Sector · Kabuye Cell · Gasabo, Kigali</p>
-    <h1>Your Trusted Neighborhood<br>Shop in Kigali</h1>
-    <p class="tagline">Quality products, fair prices, friendly service — every single day.</p>
-
-    <div class="hero-hours">
-      <span class="hours-dot" id="hoursDot" aria-hidden="true"></span>
-      <span class="hours-text" id="hoursText">Open now · Mon–Sat 6:30 AM–9:00 PM · Sun 8:00 AM–8:00 PM</span>
-    </div>
-
-    <div class="cta-row">
-      <a href="#products" class="btn btn-primary">Browse Our Products</a>
-      <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
-        <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
-        Chat on WhatsApp
+  <!-- ===== HEADER / NAV ===== -->
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a href="#top" class="logo">
+        <span class="logo-mark">MR</span>
+        <span class="logo-text">Marie Rose <em>Shop</em></span>
       </a>
-      <a href="#contact" class="btn btn-ghost">Visit Our Shop</a>
+
+      <div class="nav-search" id="navSearch">
+        <input type="text" id="productSearch" autocomplete="off"
+               placeholder="Search products… e.g. rice, oil, milk" aria-label="Search products">
+        <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <button type="button" class="search-clear" id="searchClear" aria-label="Clear search">×</button>
+        <ul class="search-dropdown" id="searchDropdown" role="listbox" aria-label="Product suggestions"></ul>
+      </div>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#about">About</a>
+        <a href="#products">Products</a>
+        <a href="#how-to-shop">How to Shop</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#team">Our Team</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Visit Us</a>
+      </nav>
+
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-  </div>
-</section>
+  </header>
 
-<!-- TRUST BAR -->
-<section class="trust-bar" aria-label="Trust badges">
-  <div class="trust-inner">
-    <div class="trust-item reveal"><span class="trust-icon">✅</span><span>EBM Verified Receipts</span></div>
-    <div class="trust-item reveal"><span class="trust-icon">🌍</span><span>Direct Import Sourcing</span></div>
-    <div class="trust-item reveal"><span class="trust-icon">💰</span><span>Fair Fixed Prices</span></div>
-    <div class="trust-item reveal"><span class="trust-icon">🔄</span><span>Restocked Weekly</span></div>
-  </div>
-</section>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <img src="images/mb.png" class="hero-img" alt="Marie Rose Shop front" loading="eager">
+    <div class="hero-overlay" aria-hidden="true"></div>
 
-<div class="weave-divider" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Jabana Sector · Kabuye Cell · Gasabo, Kigali</p>
+      <h1>Your Trusted Neighborhood <br>Shop in Kigali</h1>
+      <p class="tagline">Quality products, fair prices, friendly service — every single day.</p>
 
-<!-- ABOUT -->
-<section class="about" id="about">
-  <div class="section-inner about-grid">
-    <div class="about-copy">
-      <p class="eyebrow">Our Story</p>
-      <h2>Started with one shelf.<br>Built on trust.</h2>
-      <p>Marie Rose Shop opened its doors in Kabuye, right here in Jabana Sector, as a small family stall selling a few sacks of rice and flour to neighbours. Today it has grown into a full household-goods and grocery shop — but the idea hasn't changed: stock what families actually need, price it fairly, and treat every customer like a neighbour, because they are.</p>
-      <p>Behind the counter is a small, dedicated team: <strong>Marie Rose</strong>, the owner, who receives and manages the shop's finances herself; <strong>Gikundiro Pierrot</strong>, who handles every sale through the EBM (Electronic Billing Machine) so every client gets a proper, official receipt; and two team members who travel abroad to source quality stock at wholesale prices.</p>
-
-      <ul class="mission-list">
-        <li><strong>Our mission</strong> — put trustworthy, everyday essentials within easy reach of every household in Kabuye and beyond.</li>
-        <li><strong>Our values</strong> — honesty at the till, consistency on the shelf, and respect for every customer who walks in.</li>
-      </ul>
-
-      <div class="about-badges">
-        <div class="about-badge"><span class="badge-num">EBM</span><span>Every sale is officially receipted</span></div>
-        <div class="about-badge"><span class="badge-num" data-count="4">0</span><span>Dedicated team members</span></div>
-        <div class="about-badge"><span class="badge-num" data-count="100" data-suffix="%">0</span><span>Imported wholesale quality</span></div>
+      <div class="hero-hours">
+        <span class="hours-dot" id="hoursDot" aria-hidden="true"></span>
+        <span class="hours-text" id="hoursText">Open now · Mon–Sat 7:00 AM–21:30 PM · Sun 7:30 AM–21:00 PM</span>
       </div>
 
-      <div class="payment-note">
-        <p class="eyebrow">We Accept</p>
-        <div class="payment-pills">
-          <span class="payment-pill">💵 Cash</span>
-          <span class="payment-pill">📱 MTN MoMo 0789542601</span>
-          <span class="payment-pill">📱 MoMo Pay 2003223</span>
-          <span class="payment-pill">🧾 EBM Receipt Always Included</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="about-media">
- <img src="images/lk.png" alt="Marie Rose Shop interior" loading="lazy">
-
-      <div class="about-map-card">
-        <p class="eyebrow">Find Us</p>
-        <p class="map-address">Kabuye Cell, Jabana Sector<br>Gasabo District, Kigali City, Rwanda</p>
-        <div class="map-embed">
-          <iframe title="Map showing Jabana Sector, Gasabo, Kigali"
-            src="https://maps.google.com/maps?q=Jabana%2C%20Gasabo%2C%20Kigali%2C%20Rwanda&output=embed"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Jabana%2C%20Gasabo%2C%20Kigali%2C%20Rwanda" target="_blank" rel="noopener" class="map-link">Get directions →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SPECIAL OFFER -->
-<section class="special-offer">
-  <div class="section-inner">
-    <div class="offer-card reveal">
-      <div class="offer-badge">This Week's Special</div>
-      <h2>Family Value Bundle</h2>
-      <p>Get a full sack of premium rice + 5L cooking oil + 2kg sugar at a special bundle price. Ask at the counter or message us on WhatsApp.</p>
-      <a href="https://wa.me/250789542601?text=Hello, I'm interested in the Family Value Bundle." target="_blank" rel="noopener" class="btn btn-primary">Claim This Offer on WhatsApp</a>
-      <div class="offer-countdown" id="offerCountdown">Offer refreshed weekly — ask at the counter</div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY CHOOSE US -->
-<section class="why-us">
-  <div class="section-inner">
-    <p class="eyebrow center">What Sets Us Apart</p>
-    <h2 class="center">Why Kabuye Shops With Us</h2>
-    <div class="why-grid">
-      <div class="why-card reveal"><span class="why-icon">✅</span><h3>Quality Guaranteed</h3><p>Our team sources stock directly from trusted wholesale suppliers abroad — not middlemen.</p></div>
-      <div class="why-card reveal"><span class="why-icon">💰</span><h3>Affordable Prices</h3><p>Fair, transparent prices with an official EBM receipt on every purchase.</p></div>
-      <div class="why-card reveal"><span class="why-icon">⚡</span><h3>Fast Service</h3><p>Well-organised shelves and a quick till mean you're in and out without the wait.</p></div>
-      <div class="why-card reveal"><span class="why-icon">🤝</span><h3>Friendly Staff</h3><p>Marie Rose and the team know their customers by name — a neighbourhood shop first.</p></div>
-    </div>
-  </div>
-</section>
-
-<div class="weave-divider" aria-hidden="true"></div>
-
-<!-- GOOD TO KNOW -->
-<section class="good-to-know">
-  <div class="section-inner">
-    <p class="eyebrow center">Good To Know</p>
-    <h2 class="center">Shopping With Marie Rose Shop</h2>
-    <div class="gtk-grid">
-      <div class="gtk-card reveal">
-        <span class="gtk-icon">🏬</span>
-        <h3>In-Store Only</h3>
-        <p>We're a walk-in neighbourhood shop — browse the shelves, pick what you need, and pay at the till the same visit.</p>
-      </div>
-      <div class="gtk-card reveal">
-        <span class="gtk-icon">🌍</span>
-        <h3>Sourced Abroad, Priced Fairly</h3>
-        <p>Our team travels to bring back quality goods at wholesale prices, so savings reach you, not middlemen.</p>
-      </div>
-      <div class="gtk-card reveal">
-        <span class="gtk-icon">📦</span>
-        <h3>Restocked Often</h3>
-        <p>Shelves are refreshed regularly, so there's usually something new to find alongside the everyday essentials.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="weave-divider" aria-hidden="true"></div>
-
-<!-- GALLERY -->
-<section class="gallery" id="gallery">
-  <div class="section-inner">
-    <p class="eyebrow center">A Look Inside</p>
-    <h2 class="center">Our Shop, In Pictures</h2>
-    <p class="section-lede center">A glimpse of our shelves, our storefront, and the people who keep it running every day.</p>
-
-    <div class="gallery-grid">
-      <div class="gallery-item reveal">
-        <img src="images/lk.png" alt="Inside Marie Rose Shop, shelves stocked with groceries" loading="lazy">
-      </div>
-      <div class="gallery-item reveal">
-        <img src="images/ds.jpg" alt="Marie Rose Shop storefront in Kabuye" loading="lazy">
-      </div>
-       <div class="gallery-item reveal">
-        <img src="images/fd.jpg" alt="Marie Rose Shop storefront in Kabuye" loading="lazy">
-      </div>
-      <div class="gallery-item reveal">
-        <img src="images/web.jpg" alt="Marie Rose Shop team at work" loading="lazy">
-      </div>
-           <div class="gallery-item reveal"><img src="images/vb.jpg" alt="Description" loading="lazy"></div>
-         <div class="gallery-item"><img src="images/bn.avif" alt="Description" loading="lazy"></div>
-      </div>
-    </div>
-</section>
-
-<!-- PRODUCTS -->
-<section class="products" id="products">
-  <div class="section-inner">
-    <p class="eyebrow center">On Our Shelves</p>
-    <h2 class="center">Everything Your Kitchen Needs</h2>
-    <p class="section-lede center">Real stock, restocked often. Each category shows one item first — tap "View more" to see the full shelf, or search above. Tap "Add to list" to plan your visit.</p>
-
-    <!-- No-results message -->
-    <p class="no-results" id="noResults" hidden>No products match "<span id="noResultsTerm"></span>". Try another word.</p>
-
-    <div class="categories-stage">
-
-         <div class="category-block" data-category="grains">
-        <!-- UPDATED TOTAL COUNT TO 8 ITEMS -->
-        <h3 class="category-heading">🌾 Grains &amp; Staples <span class="category-count">8 items</span></h3>
-        <div class="product-grid" data-category="grains">
-
-          <div class="product-card" data-name="rice sacks premium">
-            <span class="product-badge popular">Popular</span>
-            <div class="product-photo-slot">
-              <img src="images/yours.webp" alt="Sacks of rice" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Sacks of Rice</h4>
-            <p>Premium quality rice, sold by sack or kilo.</p>
-            <button class="add-to-list" data-item="Sacks of Rice" aria-label="Add Sacks of Rice to shopping list">＋ Add to list</button>
-          </div>
-
-            <div class="product-card" data-name="wheat flour">
-            <div class="product-photo-slot">
-              <img src="images/ss.jpg" alt="Sacks of wheat flour" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Sacks of Wheat Flour</h4>
-            <p>Fine wheat flour, sold by sack or kilo.</p>
-            <button class="add-to-list" data-item="Sacks of Wheat Flour" aria-label="Add Sacks of Wheat Flour to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="maize flour sembe">
-            <div class="product-photo-slot">
-              <img src="images/they.webp" alt="Sacks of maize flour" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Sacks of Maize Flour</h4>
-            <p>Finely milled maize flour for everyday cooking.</p>
-            <button class="add-to-list" data-item="Sacks of Maize Flour" aria-label="Add Sacks of Maize Flour to shopping list">＋ Add to list</button>
-          </div>
-
-
-          <div class="product-card" data-name="cane sugar">
-            <div class="product-photo-slot">
-              <img src="images/qq.jpg" alt="Bags of cane sugar" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Cane Sugar</h4>
-            <p>Pure granulated cane sugar, sold by kilo.</p>
-            <button class="add-to-list" data-item="Cane Sugar" aria-label="Add Cane Sugar to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="dried beans">
-            <div class="product-photo-slot gen-p">
-              <img src="images/rt.jpg" alt="Bags of cane sugar" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Dried Beans</h4>
-            <p>Sold loose by the kilo, several varieties.</p>
-            <button class="add-to-list" data-item="Dried Beans" aria-label="Add Dried Beans to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="salt">
-            <div class="product-photo-slot gen-p">
-              <img src="images/yu.webp" alt="Bags of cane sugar" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Cooking Salt</h4>
-            <p>Iodised table salt, small and large packs.</p>
-            <button class="add-to-list" data-item="Cooking Salt" aria-label="Add Cooking Salt to shopping list">＋ Add to list</button>
-          </div>
-
-            <div class="product-card" data-name="millet grain sacks">
-            <div class="product-photo-slot gen-p">
-             <img src="images/io.jpg" alt="Bags of cane sugar" loading="lazy">
-             <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Sacks of Millet Grain</h4>
-            <p>Nutritious whole millet grains, sold by sack or loose kilo.</p>
-            <button class="add-to-list" data-item="Sacks of Millet Grain" aria-label="Add Sacks of Millet Grain to shopping list">＋ Add to list</button>
-          </div>
-
-          <!-- NEW GRAIN ITEM 1: SACKS OF SORGHUM FLOUR -->
-          <div class="product-card" data-name="sorghum flour sacks">
-            <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-               <img src="images/ui.webp" alt="Bags of cane sugar" loading="lazy">
-               <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Sacks of Sorghum Flour</h4>
-            <p>High-quality ground sorghum, ideal for traditional porridge.</p>
-            <button class="add-to-list" data-item="Sacks of Sorghum Flour" aria-label="Add Sacks of Sorghum Flour to shopping list">＋ Add to list</button>
-          </div>
-
-
-        </div>
-        <div class="view-more-wrap">
-          <button class="view-more-btn" data-grid="grains" data-more-label="View more Grains &amp; Staples">
-            <span class="btn-label">View more Grains &amp; Staples</span><span class="chev">▾</span>
-          </button>
-        </div>
-      </div>
-
-  <!-- BEVERAGES -->
-      <div class="category-block" data-category="beverages">
-        <!-- UPDATED TOTAL COUNT TO 8 ITEMS -->
-        <h3 class="category-heading">🥤 Beverages & Drinks  <span class="category-count">8 items</span></h3>
-        <div class="product-grid" data-category="beverages">
-
-          <div class="product-card" data-name="fanta sodas soft drinks">
-            <span class="product-badge popular">Popular</span>
-            <div class="product-photo-slot">
-              <img src="images/he.webp" alt="Fanta and sodas" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Fanta &amp; Sodas</h4>
-            <p>Cold refreshing soft drinks.</p>
-            <button class="add-to-list" data-item="Fanta & Sodas" aria-label="Add Fanta & Sodas to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="assorted juices afia">
-            <div class="product-photo-slot">
-              <img src="images/she.jpg" alt="Assorted fruit juices" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Assorted Juices</h4>
-            <p>Different fruit juices available.</p>
-            <button class="add-to-list" data-item="Assorted Juices" aria-label="Add Assorted Juices to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="tea leaves safari">
-            <div class="product-photo-slot">
-              <img src="images/our.webp" alt="Tea leaves" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Tea Leaves</h4>
-            <p>Quality black tea leaves.</p>
-            <button class="add-to-list" data-item="Tea Leaves" aria-label="Add Tea Leaves to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="milk cartons">
-            <div class="product-photo-slot">
-              <img src="images/ours.jpg" alt="Cartons of milk" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Cartons of Milk</h4>
-            <p>Fresh long-life milk cartons.</p>
-            <button class="add-to-list" data-item="Cartons of Milk" aria-label="Add Cartons of Milk to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="bottled water">
-            <div class="product-photo-slot gen-p">
-             <img src="images/as.webp" alt="Cartons of milk" loading="lazy">
-             <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Bottled Water</h4>
-            <p>Still water, various bottle sizes.</p>
-            <button class="add-to-list" data-item="Bottled Water" aria-label="Add Bottled Water to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="instant coffee">
-            <div class="product-photo-slot gen-p">
-               <img src="images/qw.jpg" alt="Cartons of milk" loading="lazy">
-               <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Instant Coffee</h4>
-            <p>Quick-brew coffee sachets and jars.</p>
-            <button class="add-to-list" data-item="Instant Coffee" aria-label="Add Instant Coffee to shopping list">＋ Add to list</button>
-          </div>
-
-          <!-- NEW BEVERAGE ITEM 1: ENERGY DRINKS -->
-          <div class="product-card" data-name="energy drinks boost">
-            <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-          <img src="images/we.webp" alt="Cartons of milk" loading="lazy">
-          <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Energy Drinks</h4>
-            <p>Refreshing, high-energy carbonated beverages.</p>
-            <button class="add-to-list" data-item="Energy Drinks" aria-label="Add Energy Drinks to shopping list">＋ Add to list</button>
-          </div>
-
-          <!-- NEW BEVERAGE ITEM 2: GINGER TEA MIX -->
-          <div class="product-card" data-name="ginger tea tangawizi powder">
-            <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-              <img src="images/er.webp" alt="Cartons of milk" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Ginger Tea Mix (Tangawizi)</h4>
-            <p>Spicy instant ginger tea blends and infusions.</p>
-            <button class="add-to-list" data-item="Ginger Tea Mix (Tangawizi)" aria-label="Add Ginger Tea Mix to shopping list">＋ Add to list</button>
-          </div>
-
-        </div>
-        <div class="view-more-wrap">
-          <button class="view-more-btn" data-grid="beverages" data-more-label="View more Beverages">
-            <span class="btn-label">View more Beverages</span><span class="chev">▾</span>
-          </button>
-        </div>
-      </div>
-
-
-      <!-- COOKING -->
-      <div class="category-block" data-category="cooking">
-        <!-- UPDATED TOTAL COUNT TO 12 ITEMS -->
-        <h3 class="category-heading">🍳 Cooking Essentials <span class="category-count">12 items</span></h3>
-        <div class="product-grid" data-category="cooking">
-
-          <div class="product-card" data-name="cooking oil vegetable">
-            <span class="product-badge popular">Popular</span>
-            <div class="product-photo-slot">
-              <img src="images/sa.jpg" alt="Cooking oil" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Cooking Oil</h4>
-            <p>Pure vegetable cooking oil.</p>
-            <button class="add-to-list" data-item="Cooking Oil" aria-label="Add Cooking Oil to shopping list">＋ Add to list</button>
-          </div>
-
-
-          <div class="product-card" data-name="tomato ketchup">
-            <div class="product-photo-slot">
-              <img src="images/her.webp" alt="Ketchup" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Ketchup</h4>
-            <p>Pure &amp; fresh tomato ketchup.</p>
-            <button class="add-to-list" data-item="Ketchup" aria-label="Add Ketchup to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="soy sauce">
-            <div class="product-photo-slot">
-              <img src="images/their.jpg" alt="Soy sauce" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Soy Sauce</h4>
-            <p>Perfect flavour enhancer.</p>
-            <button class="add-to-list" data-item="Soy Sauce" aria-label="Add Soy Sauce to shopping list">＋ Add to list</button>
-          </div>
-
-            <div class="product-card" data-name="white vinegar cider">
-            <div class="product-photo-slot gen-p">
-               <img src="images/hj.jpg" alt="Cartons of biscuits" loading="lazy">
-               <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Vinegar</h4>
-            <p>Pure white or apple cider cooking vinegar.</p>
-            <button class="add-to-list" data-item="Vinegar" aria-label="Add Vinegar to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="spices seasoning">
-            <div class="product-photo-slot">
-              <img src="images/we.jpeg" alt="Spices" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Spices</h4>
-            <p>Seasonings for delicious meals.</p>
-            <button class="add-to-list" data-item="Spices" aria-label="Add Spices to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="mayonnaise">
-            <div class="product-photo-slot">
-              <img src="images/you.webp" alt="Mayonnaise" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Mayonnaise</h4>
-            <p>Pure &amp; fresh mayonnaise.</p>
-            <button class="add-to-list" data-item="Mayonnaise" aria-label="Add Mayonnaise to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="blue band margarine">
-            <div class="product-photo-slot">
-              <img src="images/him.jpg" alt="Blue Band margarine" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Blue Band</h4>
-            <p>Margarine for bread and cooking.</p>
-            <button class="add-to-list" data-item="Blue Band" aria-label="Add Blue Band to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="biscuits cartons">
-            <div class="product-photo-slot">
-              <img src="images/it.jpg" alt="Cartons of biscuits" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Cartons of Biscuits</h4>
-            <p>Best quality of biscuits.</p>
-            <button class="add-to-list" data-item="Cartons of Biscuits" aria-label="Add Cartons of Biscuits to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="bubble gum mrberry">
-            <div class="product-photo-slot">
-              <img src="images/ll.jpg" alt="Bubble gums" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Bubble Gums</h4>
-            <p>Mr Berry's Big Boss.</p>
-            <button class="add-to-list" data-item="Bubble Gums" aria-label="Add Bubble Gums to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="pasta spaghetti">
-            <div class="product-photo-slot gen-p">
-              <img src="images/sd.jpg" alt="Cartons of biscuits" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Pasta &amp; Spaghetti</h4>
-            <p>Assorted dry pasta shapes and sizes.</p>
-            <button class="add-to-list" data-item="Pasta & Spaghetti" aria-label="Add Pasta & Spaghetti to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="tomato paste tin">
-            <div class="product-photo-slot gen-p">
-            <img src="images/fg.jpg" alt="Cartons of biscuits" loading="lazy">
-            <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Tinned Tomato Paste</h4>
-            <p>Concentrated tomato paste tins.</p>
-            <button class="add-to-list" data-item="Tinned Tomato Paste" aria-label="Add Tinned Tomato Paste to shopping list">＋ Add to list</button>
-          </div>
-
-          <!-- NEW COOKING ESSENTIAL ITEM 1: BAKING POWDER -->
-          <div class="product-card" data-name="baking powder leavening">
-            <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-            <img src="images/gh.jpg" alt="Cartons of biscuits" loading="lazy">
-            <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Baking Powder</h4>
-            <p>Quality raising agent for mandazi and cakes.</p>
-            <button class="add-to-list" data-item="Baking Powder" aria-label="Add Baking Powder to shopping list">＋ Add to list</button>
-          </div>
-
-        </div>
-        <div class="view-more-wrap">
-          <button class="view-more-btn" data-grid="cooking" data-more-label="View more Cooking Essentials">
-            <span class="btn-label">View more Cooking Essentials</span><span class="chev">▾</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- HOUSEHOLD -->
-      <div class="category-block" data-category="household">
-        <!-- UPDATED TOTAL COUNT TO 8 ITEMS -->
-        <h3 class="category-heading">🧺 Universal & Clean <span class="category-count">8 items</span></h3>
-        <div class="product-grid" data-category="household">
-
-           <div class="product-card" data-name="sta soft fabric softener">
-            <div class="product-photo-slot">
-              <img src="images/jk.jpg" alt="Sta-Soft fabric softener" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Sta-Soft Fabric Softener</h4>
-            <p>Spring fresh liquid fabric softener.</p>
-            <button class="add-to-list" data-item="Sta-Soft Fabric Softener" aria-label="Add Sta-Soft Fabric Softener to shopping list">＋ Add to list</button>
-          </div>
-             <div class="product-card" data-name="bar soap bathing">
-             <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-              <img src="images/lz.jpg" alt="Sta-Soft fabric softener" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Bathing Soap</h4>
-            <p>Assorted bar soaps for the whole family.</p>
-            <button class="add-to-list" data-item="Bathing Soap" aria-label="Add Bathing Soap to shopping list">＋ Add to list</button>
-          </div>
-
-          
-
-          <div class="product-card" data-name="duru soap ocean breeze">
-            <div class="product-photo-slot">
-              <img src="images/uu.jpg" alt="Duru ocean breeze soap" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Duru Soap</h4>
-            <p>Ocean breeze scented laundry soap.</p>
-            <button class="add-to-list" data-item="Duru Soap" aria-label="Add Duru Soap to shopping list">＋ Add to list</button>
-          </div>
-            <div class="product-card" data-name="omo powder detergent bucket">
-            <span class="product-badge popular">Popular</span>
-            <div class="product-photo-slot">
-              <img src="images/ee.jpg" alt="Omo powder detergent, small bucket" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Omo Powder (Small Bucket)</h4>
-            <p>Powdered detergent in a convenient small tub.</p>
-            <button class="add-to-list" data-item="Omo Powder (Small Bucket)" aria-label="Add Omo Powder to shopping list">＋ Add to list</button>
-          </div>
-           <div class="product-card" data-name="hand sanitizer gel antiseptic">
-           <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-              <img src="images/xc.jpg" alt="Sta-Soft fabric softener" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Hand Sanitizer</h4>
-            <p>Antiseptic gel for quick and easy hand hygiene.</p>
-            <button class="add-to-list" data-item="Hand Sanitizer" aria-label="Add Hand Sanitizer to shopping list">＋ Add to list</button>
-          </div>
-
-             <div class="product-card" data-name="shampoo hair care conditioner">
-             <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-              <img src="images/zx.jpg" alt="Sta-Soft fabric softener" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Hair Shampoo</h4>
-            <p>Nourishing shampoo for clean and healthy hair.</p>
-            <button class="add-to-list" data-item="Hair Shampoo" aria-label="Add Hair Shampoo to shopping list">＋ Add to list</button>
-          </div>
-
-            <div class="product-card" data-name="toilet tissue paper">
-            <span class="product-badge new">New</span>
-            <div class="product-photo-slot gen-p">
-              <img src="images/kl.jpg" alt="Sta-Soft fabric softener" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Toilet Tissue</h4>
-            <p>Soft tissue rolls, sold in packs.</p>
-            <button class="add-to-list" data-item="Toilet Tissue" aria-label="Add Toilet Tissue to shopping list">＋ Add to list</button>
-          </div>
-
-          <div class="product-card" data-name="colgate toothpaste">
-            <span class="product-badge popular">Popular</span>
-            <div class="product-photo-slot">
-              <img src="images/oo.jpg" alt="Colgate toothpaste" loading="lazy">
-              <span class="stock-badge">In Stock</span>
-            </div>
-            <h4>Colgate Toothpaste</h4>
-            <p>MaxFresh toothpaste, family size.</p>
-            <button class="add-to-list" data-item="Colgate Toothpaste" aria-label="Add Colgate Toothpaste to shopping list">＋ Add to list</button>
-          </div>
-
-         
-        </div>
-        <div class="view-more-wrap">
-          <button class="view-more-btn" data-grid="household" data-more-label="View more Household &amp; Care">
-            <span class="btn-label">View more Household &amp; Care</span><span class="chev">▾</span>
-          </button>
-        </div>
-      </div>
-    </div>
-<!-- /categories-stage -->
-
-    <div class="products-cta">
-      <p>Don't see what you're looking for? We restock often and carry more than what's listed here.</p>
-      <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
-        <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
-        Ask us on WhatsApp
-      </a>
-    </div>
-  </div>
-</section>
-
-<div class="weave-divider" aria-hidden="true"></div>
-
-<!-- HOW TO SHOP -->
-<section class="how-to-shop" id="how-to-shop">
-  <div class="section-inner">
-    <p class="eyebrow center">Simple & Easy</p>
-    <h2 class="center">How to Shop With Us</h2>
-    <div class="steps-grid">
-      <div class="step-card reveal">
-        <span class="step-num">1</span>
-        <h3>Visit the Shop</h3>
-        <p>Walk in anytime during opening hours. We're easy to find in Kabuye, Jabana.</p>
-      </div>
-      <div class="step-card reveal">
-        <span class="step-num">2</span>
-        <h3>Browse & Pick</h3>
-        <p>All products are neatly organised by category. Take your time or ask for help.</p>
-      </div>
-      <div class="step-card reveal">
-        <span class="step-num">3</span>
-        <h3>Pay & Get Receipt</h3>
-        <p>Pay with cash, MTN MoMo, or Airtel Money. Every sale gets an official EBM receipt.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="weave-divider" aria-hidden="true"></div>
-
-<!-- TESTIMONIALS -->
-<section class="reviews" id="reviews">
-  <div class="section-inner">
-    <p class="eyebrow center">What Our Customers Say</p>
-    <h2 class="center">Trusted by Kabuye, One Purchase at a Time</h2>
-    <div class="review-grid">
-      <blockquote class="review-card reveal"><p>"Best shop in Gasabo — always fresh products, and Marie Rose herself makes sure you're treated well."</p><footer>— A. Uwase, Kabuye resident</footer></blockquote>
-      <blockquote class="review-card reveal"><p>"I like that every purchase comes with a proper EBM receipt. Feels like a real, organised business."</p><footer>— J. Bizimana, regular customer</footer></blockquote>
-      <blockquote class="review-card reveal"><p>"Prices are fair and they rarely run out of stock. My go-to shop for oil, rice and flour."</p><footer>— C. Mukamana, Jabana Sector</footer></blockquote>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq" id="faq">
-  <div class="section-inner faq-inner">
-    <p class="eyebrow center">Common Questions</p>
-    <h2 class="center">Frequently Asked Questions</h2>
-    <div class="faq-list">
-      <details class="faq-item reveal">
-        <summary>Do you offer home delivery?</summary>
-        <p>Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery, but you can call or WhatsApp us to check stock availability before visiting.</p>
-      </details>
-      <details class="faq-item reveal">
-        <summary>What payment methods do you accept?</summary>
-        <p>We accept cash, MTN Mobile Money (MoMo Pay), and Airtel Money. Every payment comes with an official EBM receipt.</p>
-      </details>
-      <details class="faq-item reveal">
-        <summary>Can I request a product that is not on your shelves?</summary>
-        <p>Yes! If you need something specific, let us know via WhatsApp or at the counter. Our sourcing team travels regularly and can often bring it in.</p>
-      </details>
-      <details class="faq-item reveal">
-        <summary>Are your prices negotiable?</summary>
-        <p>We keep our prices fair and transparent for everyone. The price on the shelf is the final price — no haggling needed.</p>
-      </details>
-      <details class="faq-item reveal">
-        <summary>Do you sell in bulk or wholesale?</summary>
-        <p>Yes — many items like rice, flour, and oil are available in sacks and larger containers at wholesale-friendly prices. Ask at the counter for bulk pricing.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- TEAM -->
-<section class="team" id="team">
-  <div class="section-inner">
-    <p class="eyebrow center">Meet The Team</p>
-    <h2 class="center">The People Behind Marie Rose Shop</h2>
-
- <img src="images/web.jpg" alt="Marie Rose Shop team" loading="lazy"> 
-  
-
-    <div class="team-grid">
-      <div class="team-card reveal">
-        <div><img src="images/jj.jpeg" alt="Marie Rose, owner" loading="lazy"></div>
-        <h4>Marie Rose</h4><p class="team-role">Owner &amp; Cashier</p>
-        <p>Owns the shop and personally receives and manages all money coming in.</p></div>
-      <div class="team-card reveal">
-        <div><img src="images/ff.jpeg" alt="Gikundiro Pierrot, EBM provider" loading="lazy"></div>
-        <h4>Gikundiro Pierrot</h4><p class="team-role">EBM Provider</p>
-        <p>Responsible for issuing official EBM receipts to every client.</p></div>
-      <div class="team-card reveal">
-        <div><img src="images/yy.jpeg" alt="Gisubizo Bienfait, sourcing" loading="lazy"></div>
-        <h4>Gisubizo Bienfait</h4><p class="team-role">Import &amp; Sourcing</p>
-        <p>Travels abroad to source quality products at wholesale prices.</p></div>
-      <div class="team-card reveal">
-        <div><img src="images/dd.jpeg" alt="Jean Pierre, sourcing" loading="lazy"></div>
-        <h4>Jean Pierre</h4><p class="team-role">Import &amp; Sourcing</p>
-        <p>Travels abroad to source quality products at wholesale prices.</p></div>
-    </div>
-    <p class="team-note">✏️ Replace placeholder names/avatars with the real team when ready.</p>
-  </div>
-</section>
-
-<!-- SHOPPING LIST -->
-<section class="shopping-list" id="shopping-list">
-  <div class="section-inner">
-    <p class="eyebrow center">Plan Your Visit</p>
-    <h2 class="center">Your Digital Shopping List</h2>
-    <p class="section-lede center">Tap "Add to list" on any product to build your shopping list before you visit. Your list is saved on this device.</p>
-    <div class="list-app">
-      <div class="list-input-row">
-        <input type="text" id="listInput" placeholder="Add an item (e.g., Rice, Oil, Soap)..." autocomplete="off">
-        <button id="listAdd" class="btn btn-primary">Add</button>
-      </div>
-      <ul id="listItems" class="list-items"></ul>
-      <div class="list-empty" id="listEmpty">Your list is empty. Browse products above and click "Add to list".</div>
-      <div class="list-actions" id="listActions" style="display:none;">
-        <button id="listCopy" class="btn btn-ghost">Copy List</button>
-        <button id="listClear" class="btn btn-ghost">Clear All</button>
-        <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp" id="listWhatsApp">Send List via WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="weave-divider" aria-hidden="true"></div>
-
-<!-- REQUEST PRODUCT -->
-<section class="request-product" id="request">
-  <div class="section-inner">
-    <div class="request-card reveal">
-      <div class="request-text">
-        <p class="eyebrow">Can't Find Something?</p>
-        <h2>Request a Product</h2>
-        <p>If you need an item we don't currently stock, let us know. Our import team travels regularly and can often source it on their next trip.</p>
-        <form id="requestForm" class="request-form">
-          <input type="text" id="reqName" placeholder="Your name" required>
-          <input type="text" id="reqItem" placeholder="Product you are looking for" required>
-          <button type="submit" class="btn btn-primary">Send Request via WhatsApp</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="weave-divider" aria-hidden="true"></div>
-
-<!-- FOOTER -->
-<footer class="site-footer" id="contact">
-  <div class="section-inner footer-grid">
-    <div>
-      <p class="eyebrow">Come Say Hello</p>
-      <h2>Visit Marie Rose Shop</h2>
-      <p class="footer-address">Kabuye Cell, Jabana Sector<br>Gasabo District, Kigali City, Rwanda</p>
-      <div class="footer-hours">
-        <strong>Opening Hours</strong>
-        <ul>
-          <li><span>Mon – Sat</span><span>6:30 AM – 9:00 PM</span></li>
-          <li><span>Sunday</span><span>8:00 AM – 8:00 PM</span></li>
-        </ul>
-      </div>
       <div class="cta-row">
+        <a href="#products" class="btn btn-primary">Browse Our Products</a>
         <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
           <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
           Chat on WhatsApp
         </a>
-        <a href="tel:+250789542601" class="btn btn-ghost">Call the Shop</a>
-      </div>
-
-      <div class="footer-form">
-        <h4>Or send us a quick message</h4>
-        <form id="contactForm">
-          <input type="text" id="cfName" placeholder="Your name" required>
-          <textarea id="cfMessage" placeholder="What do you need?" required></textarea>
-          <button type="submit">Send via WhatsApp</button>
-        </form>
-        <p class="form-note">Opens WhatsApp with your message pre-filled — nothing is stored on this site.</p>
+        <a href="#contact" class="btn btn-ghost">Visit Our Shop</a>
       </div>
     </div>
-    <div class="footer-media">
-        <img src="images/jg.png" alt="Marie Rose Shop exterior" loading="lazy">
+  </section>
+
+  <!-- ===== TRUST BAR ===== -->
+  <section class="trust-bar" aria-label="Trust badges">
+    <div class="trust-inner">
+      <div class="trust-item reveal"><span class="trust-icon">✅</span><span>EBM Verified Receipts</span></div>
+      <div class="trust-item reveal"><span class="trust-icon">🌍</span><span>Direct Import Sourcing</span></div>
+      <div class="trust-item reveal"><span class="trust-icon">💰</span><span>Fair Fixed Prices</span></div>
+      <div class="trust-item reveal"><span class="trust-icon">🔄</span><span>Restocked Weekly</span></div>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© <span id="year"></span> Marie Rose Shop — Kabuye, Jabana, Gasabo, Kigali. Built with care.</p>
-  </div>
-</footer>
+  </section>
 
-<a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat with us on WhatsApp">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
-</a>
+  <div class="weave-divider" aria-hidden="true"></div>
 
-<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+  <!-- ===== ABOUT ===== -->
+  <section class="about" id="about">
+    <div class="section-inner about-grid">
+      <div class="about-copy">
+        <p class="eyebrow">Our Story</p>
+        <h2>Started with one shelf.<br>Built on trust.</h2>
+        <p>Marie Rose Shop opened its doors in Kabuye, right here in Jabana Sector, as a small family stall selling a few sacks of rice and flour to neighbours. Today it has grown into a full household-goods and grocery shop — but the idea hasn't changed: stock what families actually need, price it fairly, and treat every customer like a neighbour, because they are.</p>
+        <p>Behind the counter is a small, dedicated team: <strong>Marie Rose</strong>, the owner, who receives and manages the shop's finances herself; <strong>Gikundiro Pierrot</strong>, who handles every sale through the EBM (Electronic Billing Machine) so every client gets a proper, official receipt; and two team members who travel abroad to source quality stock at wholesale prices.</p>
 
-<div class="toast" id="searchToast" role="status" aria-live="polite" aria-atomic="true"></div>
+        <ul class="mission-list">
+          <li><strong>Our mission</strong> — put trustworthy, everyday essentials within easy reach of every household in Kabuye and beyond.</li>
+          <li><strong>Our values</strong> — honesty at the till, consistency on the shelf, and respect for every customer who walks in.</li>
+        </ul>
 
-<script src="script.js"></script>
+        <div class="about-badges">
+          <div class="about-badge"><span class="badge-num">EBM</span><span>Every sale is officially receipted</span></div>
+          <div class="about-badge"><span class="badge-num" data-count="4">0</span><span>Dedicated team members</span></div>
+          <div class="about-badge"><span class="badge-num" data-count="100" data-suffix="%">0</span><span>Imported wholesale quality</span></div>
+        </div>
+
+        <div class="payment-note">
+          <p class="eyebrow">We Accept</p>
+          <div class="payment-pills">
+            <span class="payment-pill">💵 Cash</span>
+            <span class="payment-pill">📱 MTN MoMo 0789542601</span>
+            <span class="payment-pill">📱 MoMo Pay 2003223</span>
+            <span class="payment-pill">🧾 EBM Receipt Always Included</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-media">
+        <img src="images/lk.png" alt="Marie Rose Shop interior" loading="lazy">
+
+        <div class="about-map-card">
+          <p class="eyebrow">Find Us</p>
+          <p class="map-address">Kabuye Cell, Jabana Sector<br>Gasabo District, Kigali City, Rwanda</p>
+          <div class="map-embed">
+            <iframe title="Map showing Jabana Sector, Gasabo, Kigali"
+              src="https://maps.google.com/maps?q=Jabana%2C%20Gasabo%2C%20Kigali%2C%20Rwanda&output=embed"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=Jabana%2C%20Gasabo%2C%20Kigali%2C%20Rwanda" target="_blank" rel="noopener" class="map-link">Get directions →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SPECIAL OFFER ===== -->
+  <section class="special-offer">
+    <div class="section-inner">
+      <div class="offer-card reveal">
+        <div class="offer-badge">This Week's Special</div>
+        <h2>Family Value Bundle</h2>
+        <p>Get a full sack of premium rice + 5L cooking oil + 2kg sugar at a special bundle price. Ask at the counter or message us on WhatsApp.</p>
+        <a href="https://wa.me/250789542601?text=Hello, I'm interested in the Family Value Bundle." target="_blank" rel="noopener" class="btn btn-primary">Claim This Offer on WhatsApp</a>
+        <div class="offer-countdown" id="offerCountdown">Offer refreshed weekly — ask at the counter</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY CHOOSE US ===== -->
+  <section class="why-us">
+    <div class="section-inner">
+      <p class="eyebrow center">What Sets Us Apart</p>
+      <h2 class="center">Why Kabuye Shops With Us</h2>
+      <div class="why-grid">
+        <div class="why-card reveal"><span class="why-icon">✅</span><h3>Quality Guaranteed</h3><p>Our team sources stock directly from trusted wholesale suppliers abroad — not middlemen.</p></div>
+        <div class="why-card reveal"><span class="why-icon">💰</span><h3>Affordable Prices</h3><p>Fair, transparent prices with an official EBM receipt on every purchase.</p></div>
+        <div class="why-card reveal"><span class="why-icon">⚡</span><h3>Fast Service</h3><p>Well-organised shelves and a quick till mean you're in and out without the wait.</p></div>
+        <div class="why-card reveal"><span class="why-icon">🤝</span><h3>Friendly Staff</h3><p>Marie Rose and the team know their customers by name — a neighbourhood shop first.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== GOOD TO KNOW ===== -->
+  <section class="good-to-know">
+    <div class="section-inner">
+      <p class="eyebrow center">Good To Know</p>
+      <h2 class="center">Shopping With Marie Rose Shop</h2>
+      <div class="gtk-grid">
+        <div class="gtk-card reveal">
+          <span class="gtk-icon">🏬</span>
+          <h3>In-Store Only</h3>
+          <p>We're a walk-in neighbourhood shop — browse the shelves, pick what you need, and pay at the till the same visit.</p>
+        </div>
+        <div class="gtk-card reveal">
+          <span class="gtk-icon">🌍</span>
+          <h3>Sourced Abroad, Priced Fairly</h3>
+          <p>Our team travels to bring back quality goods at wholesale prices, so savings reach you, not middlemen.</p>
+        </div>
+        <div class="gtk-card reveal">
+          <span class="gtk-icon">📦</span>
+          <h3>Restocked Often</h3>
+          <p>Shelves are refreshed regularly, so there's usually something new to find alongside the everyday essentials.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery" id="gallery">
+    <div class="section-inner">
+      <p class="eyebrow center">A Look Inside</p>
+      <h2 class="center">Our Shop, In Pictures</h2>
+      <p class="section-lede center">A glimpse of our shelves, our storefront, and the people who keep it running every day.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-item reveal">
+          <img src="images/lk.png" alt="Inside Marie Rose Shop, shelves stocked with groceries" loading="lazy">
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/ds.jpg" alt="Marie Rose Shop storefront in Kabuye" loading="lazy">
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/fd.jpg" alt="Marie Rose Shop storefront in Kabuye" loading="lazy">
+        </div>
+        <div class="gallery-item reveal">
+          <img src="images/web.jpg" alt="Marie Rose Shop team at work" loading="lazy">
+        </div>
+        <div class="gallery-item reveal"><img src="images/vb.jpg" alt="Description" loading="lazy"></div>
+        <div class="gallery-item"><img src="images/bn.avif" alt="Description" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCTS ===== -->
+  <section class="products" id="products">
+    <div class="section-inner">
+      <p class="eyebrow center">On Our Shelves</p>
+      <h2 class="center">Everything Your Kitchen Needs</h2>
+      <p class="section-lede center">Real stock, restocked often. Each category shows items first — tap "View more" to see the full shelf, or search above. Tap "Add to list" to plan your visit.</p>
+
+      <p class="no-results" id="noResults" hidden>No products match "<span id="noResultsTerm"></span>". Try another word.</p>
+
+      <div class="categories-stage">
+
+        <div class="category-block" data-category="grains">
+          <h3 class="category-heading">🌾 Grains &amp; Staples <span class="category-count">8 items</span></h3>
+          <div class="product-grid" data-category="grains">
+
+            <div class="product-card" data-name="rice sacks premium">
+              <span class="product-badge popular">Popular</span>
+              <div class="product-photo-slot">
+                <img src="images/yours.webp" alt="Sacks of rice" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Sacks of Rice</h4>
+              <p>Premium quality rice, sold by sack or kilo.</p>
+              <button class="add-to-list" data-item="Sacks of Rice" aria-label="Add Sacks of Rice to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="wheat flour">
+              <div class="product-photo-slot">
+                <img src="images/ss.jpg" alt="Sacks of wheat flour" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Sacks of Wheat Flour</h4>
+              <p>Fine wheat flour, sold by sack or kilo.</p>
+              <button class="add-to-list" data-item="Sacks of Wheat Flour" aria-label="Add Sacks of Wheat Flour to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="maize flour sembe">
+              <div class="product-photo-slot">
+                <img src="images/they.webp" alt="Sacks of maize flour" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Sacks of Maize Flour</h4>
+              <p>Finely milled maize flour for everyday cooking.</p>
+              <button class="add-to-list" data-item="Sacks of Maize Flour" aria-label="Add Sacks of Maize Flour to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="cane sugar">
+              <div class="product-photo-slot">
+                <img src="images/qq.jpg" alt="Bags of cane sugar" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Cane Sugar</h4>
+              <p>Pure granulated cane sugar, sold by kilo.</p>
+              <button class="add-to-list" data-item="Cane Sugar" aria-label="Add Cane Sugar to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="dried beans">
+              <div class="product-photo-slot gen-p">
+                <img src="images/rt.jpg" alt="Bags of cane sugar" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Dried Beans</h4>
+              <p>Sold loose by the kilo, several varieties.</p>
+              <button class="add-to-list" data-item="Dried Beans" aria-label="Add Dried Beans to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="salt">
+              <div class="product-photo-slot gen-p">
+                <img src="images/yu.webp" alt="Bags of cane sugar" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Cooking Salt</h4>
+              <p>Iodised table salt, small and large packs.</p>
+              <button class="add-to-list" data-item="Cooking Salt" aria-label="Add Cooking Salt to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="millet grain sacks">
+              <div class="product-photo-slot gen-p">
+                <img src="images/io.jpg" alt="Bags of cane sugar" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Sacks of Millet Grain</h4>
+              <p>Nutritious whole millet grains, sold by sack or loose kilo.</p>
+              <button class="add-to-list" data-item="Sacks of Millet Grain" aria-label="Add Sacks of Millet Grain to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="sorghum flour sacks">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/ui.webp" alt="Bags of cane sugar" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Sacks of Sorghum Flour</h4>
+              <p>High-quality ground sorghum, ideal for traditional porridge.</p>
+              <button class="add-to-list" data-item="Sacks of Sorghum Flour" aria-label="Add Sacks of Sorghum Flour to shopping list">＋ Add to list</button>
+            </div>
+
+          </div>
+          <div class="view-more-wrap">
+            <button class="view-more-btn" data-grid="grains" data-more-label="View more Grains &amp; Staples">
+              <span class="btn-label">View more Grains &amp; Staples</span><span class="chev">▾</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- BEVERAGES -->
+        <div class="category-block" data-category="beverages">
+          <h3 class="category-heading">🥤 Beverages & Drinks <span class="category-count">8 items</span></h3>
+          <div class="product-grid" data-category="beverages">
+
+            <div class="product-card" data-name="fanta sodas soft drinks">
+              <span class="product-badge popular">Popular</span>
+              <div class="product-photo-slot">
+                <img src="images/he.webp" alt="Fanta and sodas" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Fanta &amp; Sodas</h4>
+              <p>Cold refreshing soft drinks.</p>
+              <button class="add-to-list" data-item="Fanta & Sodas" aria-label="Add Fanta & Sodas to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="assorted juices afia">
+              <div class="product-photo-slot">
+                <img src="images/she.jpg" alt="Assorted fruit juices" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Assorted Juices</h4>
+              <p>Different fruit juices available.</p>
+              <button class="add-to-list" data-item="Assorted Juices" aria-label="Add Assorted Juices to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="tea leaves safari">
+              <div class="product-photo-slot">
+                <img src="images/our.webp" alt="Tea leaves" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Tea Leaves</h4>
+              <p>Quality black tea leaves.</p>
+              <button class="add-to-list" data-item="Tea Leaves" aria-label="Add Tea Leaves to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="milk cartons">
+              <div class="product-photo-slot">
+                <img src="images/ours.jpg" alt="Cartons of milk" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Cartons of Milk</h4>
+              <p>Fresh long-life milk cartons.</p>
+              <button class="add-to-list" data-item="Cartons of Milk" aria-label="Add Cartons of Milk to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="bottled water">
+              <div class="product-photo-slot gen-p">
+                <img src="images/as.webp" alt="Cartons of milk" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Bottled Water</h4>
+              <p>Still water, various bottle sizes.</p>
+              <button class="add-to-list" data-item="Bottled Water" aria-label="Add Bottled Water to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="instant coffee">
+              <div class="product-photo-slot gen-p">
+                <img src="images/qw.jpg" alt="Cartons of milk" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Instant Coffee</h4>
+              <p>Quick-brew coffee sachets and jars.</p>
+              <button class="add-to-list" data-item="Instant Coffee" aria-label="Add Instant Coffee to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="energy drinks boost">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/we.webp" alt="Cartons of milk" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Energy Drinks</h4>
+              <p>Refreshing, high-energy carbonated beverages.</p>
+              <button class="add-to-list" data-item="Energy Drinks" aria-label="Add Energy Drinks to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="ginger tea tangawizi powder">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/er.webp" alt="Cartons of milk" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Ginger Tea Mix (Tangawizi)</h4>
+              <p>Spicy instant ginger tea blends and infusions.</p>
+              <button class="add-to-list" data-item="Ginger Tea Mix (Tangawizi)" aria-label="Add Ginger Tea Mix to shopping list">＋ Add to list</button>
+            </div>
+
+          </div>
+          <div class="view-more-wrap">
+            <button class="view-more-btn" data-grid="beverages" data-more-label="View more Beverages">
+              <span class="btn-label">View more Beverages</span><span class="chev">▾</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- COOKING -->
+        <div class="category-block" data-category="cooking">
+          <h3 class="category-heading">🍳 Cooking Essentials <span class="category-count">12 items</span></h3>
+          <div class="product-grid" data-category="cooking">
+
+            <div class="product-card" data-name="cooking oil vegetable">
+              <span class="product-badge popular">Popular</span>
+              <div class="product-photo-slot">
+                <img src="images/sa.jpg" alt="Cooking oil" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Cooking Oil</h4>
+              <p>Pure vegetable cooking oil.</p>
+              <button class="add-to-list" data-item="Cooking Oil" aria-label="Add Cooking Oil to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="tomato ketchup">
+              <div class="product-photo-slot">
+                <img src="images/her.webp" alt="Ketchup" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Ketchup</h4>
+              <p>Pure &amp; fresh tomato ketchup.</p>
+              <button class="add-to-list" data-item="Ketchup" aria-label="Add Ketchup to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="soy sauce">
+              <div class="product-photo-slot">
+                <img src="images/their.jpg" alt="Soy sauce" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Soy Sauce</h4>
+              <p>Perfect flavour enhancer.</p>
+              <button class="add-to-list" data-item="Soy Sauce" aria-label="Add Soy Sauce to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="white vinegar cider">
+              <div class="product-photo-slot gen-p">
+                <img src="images/hj.jpg" alt="Cartons of biscuits" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Vinegar</h4>
+              <p>Pure white or apple cider cooking vinegar.</p>
+              <button class="add-to-list" data-item="Vinegar" aria-label="Add Vinegar to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="spices seasoning">
+              <div class="product-photo-slot">
+                <img src="images/we.jpeg" alt="Spices" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Spices</h4>
+              <p>Seasonings for delicious meals.</p>
+              <button class="add-to-list" data-item="Spices" aria-label="Add Spices to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="mayonnaise">
+              <div class="product-photo-slot">
+                <img src="images/you.webp" alt="Mayonnaise" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Mayonnaise</h4>
+              <p>Pure &amp; fresh mayonnaise.</p>
+              <button class="add-to-list" data-item="Mayonnaise" aria-label="Add Mayonnaise to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="blue band margarine">
+              <div class="product-photo-slot">
+                <img src="images/him.jpg" alt="Blue Band margarine" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Blue Band</h4>
+              <p>Margarine for bread and cooking.</p>
+              <button class="add-to-list" data-item="Blue Band" aria-label="Add Blue Band to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="biscuits cartons">
+              <div class="product-photo-slot">
+                <img src="images/it.jpg" alt="Cartons of biscuits" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Cartons of Biscuits</h4>
+              <p>Best quality of biscuits.</p>
+              <button class="add-to-list" data-item="Cartons of Biscuits" aria-label="Add Cartons of Biscuits to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="bubble gum mrberry">
+              <div class="product-photo-slot">
+                <img src="images/ll.jpg" alt="Bubble gums" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Bubble Gums</h4>
+              <p>Mr Berry's Big Boss.</p>
+              <button class="add-to-list" data-item="Bubble Gums" aria-label="Add Bubble Gums to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="pasta spaghetti">
+              <div class="product-photo-slot gen-p">
+                <img src="images/sd.jpg" alt="Cartons of biscuits" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Pasta &amp; Spaghetti</h4>
+              <p>Assorted dry pasta shapes and sizes.</p>
+              <button class="add-to-list" data-item="Pasta & Spaghetti" aria-label="Add Pasta & Spaghetti to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="tomato paste tin">
+              <div class="product-photo-slot gen-p">
+                <img src="images/fg.jpg" alt="Cartons of biscuits" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Tinned Tomato Paste</h4>
+              <p>Concentrated tomato paste tins.</p>
+              <button class="add-to-list" data-item="Tinned Tomato Paste" aria-label="Add Tinned Tomato Paste to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="baking powder leavening">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/gh.jpg" alt="Cartons of biscuits" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Baking Powder</h4>
+              <p>Quality raising agent for mandazi and cakes.</p>
+              <button class="add-to-list" data-item="Baking Powder" aria-label="Add Baking Powder to shopping list">＋ Add to list</button>
+            </div>
+
+          </div>
+          <div class="view-more-wrap">
+            <button class="view-more-btn" data-grid="cooking" data-more-label="View more Cooking Essentials">
+              <span class="btn-label">View more Cooking Essentials</span><span class="chev">▾</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- HOUSEHOLD -->
+        <div class="category-block" data-category="household">
+          <h3 class="category-heading">🧺 Universal & Clean <span class="category-count">8 items</span></h3>
+          <div class="product-grid" data-category="household">
+
+            <div class="product-card" data-name="sta soft fabric softener">
+              <div class="product-photo-slot">
+                <img src="images/jk.jpg" alt="Sta-Soft fabric softener" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Sta-Soft Fabric Softener</h4>
+              <p>Spring fresh liquid fabric softener.</p>
+              <button class="add-to-list" data-item="Sta-Soft Fabric Softener" aria-label="Add Sta-Soft Fabric Softener to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="bar soap bathing">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/lz.jpg" alt="Sta-Soft fabric softener" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Bathing Soap</h4>
+              <p>Assorted bar soaps for the whole family.</p>
+              <button class="add-to-list" data-item="Bathing Soap" aria-label="Add Bathing Soap to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="duru soap ocean breeze">
+              <div class="product-photo-slot">
+                <img src="images/uu.jpg" alt="Duru ocean breeze soap" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Duru Soap</h4>
+              <p>Ocean breeze scented laundry soap.</p>
+              <button class="add-to-list" data-item="Duru Soap" aria-label="Add Duru Soap to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="omo powder detergent bucket">
+              <span class="product-badge popular">Popular</span>
+              <div class="product-photo-slot">
+                <img src="images/ee.jpg" alt="Omo powder detergent, small bucket" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Omo Powder (Small Bucket)</h4>
+              <p>Powdered detergent in a convenient small tub.</p>
+              <button class="add-to-list" data-item="Omo Powder (Small Bucket)" aria-label="Add Omo Powder to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="hand sanitizer gel antiseptic">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/xc.jpg" alt="Sta-Soft fabric softener" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Hand Sanitizer</h4>
+              <p>Antiseptic gel for quick and easy hand hygiene.</p>
+              <button class="add-to-list" data-item="Hand Sanitizer" aria-label="Add Hand Sanitizer to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="shampoo hair care conditioner">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/zx.jpg" alt="Sta-Soft fabric softener" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Hair Shampoo</h4>
+              <p>Nourishing shampoo for clean and healthy hair.</p>
+              <button class="add-to-list" data-item="Hair Shampoo" aria-label="Add Hair Shampoo to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="toilet tissue paper">
+              <span class="product-badge new">New</span>
+              <div class="product-photo-slot gen-p">
+                <img src="images/kl.jpg" alt="Sta-Soft fabric softener" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Toilet Tissue</h4>
+              <p>Soft tissue rolls, sold in packs.</p>
+              <button class="add-to-list" data-item="Toilet Tissue" aria-label="Add Toilet Tissue to shopping list">＋ Add to list</button>
+            </div>
+
+            <div class="product-card" data-name="colgate toothpaste">
+              <span class="product-badge popular">Popular</span>
+              <div class="product-photo-slot">
+                <img src="images/oo.jpg" alt="Colgate toothpaste" loading="lazy">
+                <span class="stock-badge">In Stock</span>
+              </div>
+              <h4>Colgate Toothpaste</h4>
+              <p>MaxFresh toothpaste, family size.</p>
+              <button class="add-to-list" data-item="Colgate Toothpaste" aria-label="Add Colgate Toothpaste to shopping list">＋ Add to list</button>
+            </div>
+
+          </div>
+          <div class="view-more-wrap">
+            <button class="view-more-btn" data-grid="household" data-more-label="View more Household &amp; Care">
+              <span class="btn-label">View more Household &amp; Care</span><span class="chev">▾</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="products-cta">
+        <p>Don't see what you're looking for? We restock often and carry more than what's listed here.</p>
+        <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
+          <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
+          Ask us on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== HOW TO SHOP ===== -->
+  <section class="how-to-shop" id="how-to-shop">
+    <div class="section-inner">
+      <p class="eyebrow center">Simple & Easy</p>
+      <h2 class="center">How to Shop With Us</h2>
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <span class="step-num">1</span>
+          <h3>Visit the Shop</h3>
+          <p>Walk in anytime during opening hours. We're easy to find in Kabuye, Jabana.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">2</span>
+          <h3>Browse & Pick</h3>
+          <p>All products are neatly organised by category. Take your time or ask for help.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">3</span>
+          <h3>Pay & Get Receipt</h3>
+          <p>Pay with cash, MTN MoMo, or Airtel Money. Every sale gets an official EBM receipt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="reviews" id="reviews">
+    <div class="section-inner">
+      <p class="eyebrow center">What Our Customers Say</p>
+      <h2 class="center">Trusted by Kabuye, One Purchase at a Time</h2>
+      <div class="review-grid">
+        <blockquote class="review-card reveal"><p>"Best shop in Gasabo — always fresh products, and Marie Rose herself makes sure you're treated well."</p><footer>— A. Uwase, Kabuye resident</footer></blockquote>
+        <blockquote class="review-card reveal"><p>"I like that every purchase comes with a proper EBM receipt. Feels like a real, organised business."</p><footer>— J. Bizimana, regular customer</footer></blockquote>
+        <blockquote class="review-card reveal"><p>"Prices are fair and they rarely run out of stock. My go-to shop for oil, rice and flour."</p><footer>— C. Mukamana, Jabana Sector</footer></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq" id="faq">
+    <div class="section-inner faq-inner">
+      <p class="eyebrow center">Common Questions</p>
+      <h2 class="center">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary>Do you offer home delivery?</summary>
+          <p>Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery, but you can call or WhatsApp us to check stock availability before visiting.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>What payment methods do you accept?</summary>
+          <p>We accept cash, MTN Mobile Money (MoMo Pay), and Airtel Money. Every payment comes with an official EBM receipt.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Can I request a product that is not on your shelves?</summary>
+          <p>Yes! If you need something specific, let us know via WhatsApp or at the counter. Our sourcing team travels regularly and can often bring it in.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Are your prices negotiable?</summary>
+          <p>We keep our prices fair and transparent for everyone. The price on the shelf is the final price — no haggling needed.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Do you sell in bulk or wholesale?</summary>
+          <p>Yes — many items like rice, flour, and oil are available in sacks and larger containers at wholesale-friendly prices. Ask at the counter for bulk pricing.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM ===== -->
+  <section class="team" id="team">
+    <div class="section-inner">
+      <p class="eyebrow center">Meet The Team</p>
+      <h2 class="center">The People Behind Marie Rose Shop</h2>
+
+      <img src="images/web.jpg" alt="Marie Rose Shop team" loading="lazy">
+
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div><img src="images/jj.jpeg" alt="Marie Rose, owner" loading="lazy"></div>
+          <h4>Marie Rose</h4><p class="team-role">Owner &amp; Cashier</p>
+          <p>Owns the shop and personally receives and manages all money coming in.</p>
+        </div>
+        <div class="team-card reveal">
+          <div><img src="images/ff.jpeg" alt="Gikundiro Pierrot, EBM provider" loading="lazy"></div>
+          <h4>Gikundiro Pierrot</h4><p class="team-role">EBM Provider</p>
+          <p>Responsible for issuing official EBM receipts to every client.</p>
+        </div>
+        <div class="team-card reveal">
+          <div><img src="images/yy.jpeg" alt="Gisubizo Bienfait, sourcing" loading="lazy"></div>
+          <h4>Gisubizo Bienfait</h4><p class="team-role">Import &amp; Sourcing</p>
+          <p>Travels abroad to source quality products at wholesale prices.</p>
+        </div>
+        <div class="team-card reveal">
+          <div><img src="images/dd.jpeg" alt="Jean Pierre, sourcing" loading="lazy"></div>
+          <h4>Jean Pierre</h4><p class="team-role">Import &amp; Sourcing</p>
+          <p>Travels abroad to source quality products at wholesale prices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SHOPPING LIST ===== -->
+  <section class="shopping-list" id="shopping-list">
+    <div class="section-inner">
+      <p class="eyebrow center">Plan Your Visit</p>
+      <h2 class="center">Your Digital Shopping List</h2>
+      <p class="section-lede center">Tap "Add to list" on any product to build your shopping list before you visit. Your list is saved on this device.</p>
+      <div class="list-app">
+        <div class="list-input-row">
+          <input type="text" id="listInput" placeholder="Add an item (e.g., Rice, Oil, Soap)..." autocomplete="off">
+          <button id="listAdd" class="btn btn-primary">Add</button>
+        </div>
+        <ul id="listItems" class="list-items"></ul>
+        <div class="list-empty" id="listEmpty">Your list is empty. Browse products above and click "Add to list".</div>
+        <div class="list-actions" id="listActions" style="display:none;">
+          <button id="listCopy" class="btn btn-ghost">Copy List</button>
+          <button id="listClear" class="btn btn-ghost">Clear All</button>
+          <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp" id="listWhatsApp">Send List via WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== REQUEST PRODUCT ===== -->
+  <section class="request-product" id="request">
+    <div class="section-inner">
+      <div class="request-card reveal">
+        <div class="request-text">
+          <p class="eyebrow">Can't Find Something?</p>
+          <h2>Request a Product</h2>
+          <p>If you need an item we don't currently stock, let us know. Our import team travels regularly and can often source it on their next trip.</p>
+          <form id="requestForm" class="request-form">
+            <input type="text" id="reqName" placeholder="Your name" required>
+            <input type="text" id="reqItem" placeholder="Product you are looking for" required>
+            <button type="submit" class="btn btn-primary">Send Request via WhatsApp</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" id="contact">
+    <div class="section-inner footer-grid">
+      <div>
+        <p class="eyebrow">Come Say Hello</p>
+        <h2>Visit Marie Rose Shop</h2>
+        <p class="footer-address">Kabuye Cell, Jabana Sector<br>Gasabo District, Kigali City, Rwanda</p>
+        <div class="footer-hours">
+          <strong>Opening Hours</strong>
+          <ul>
+            <li><span>Mon – Sat</span><span>7:00 AM – 21:30 PM</span></li>
+            <li><span>Sunday</span><span>7:00 AM – 21:00 PM</span></li>
+          </ul>
+        </div>
+        <div class="cta-row">
+          <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
+            <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
+            Chat on WhatsApp
+          </a>
+          <a href="tel:+250789542601" class="btn btn-ghost">Call the Shop</a>
+        </div>
+
+        <div class="footer-form">
+          <h4>Or send us a quick message</h4>
+          <form id="contactForm">
+            <input type="text" id="cfName" placeholder="Your name" required>
+            <textarea id="cfMessage" placeholder="What do you need?" required></textarea>
+            <button type="submit">Send via WhatsApp</button>
+          </form>
+          <p class="form-note">Opens WhatsApp with your message pre-filled — nothing is stored on this site.</p>
+        </div>
+      </div>
+      <div class="footer-media">
+        <img src="images/mb.png" alt="Marie Rose Shop exterior" loading="lazy">
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Marie Rose Shop — Kabuye, Jabana, Gasabo, Kigali. Built with care.</p>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat with us on WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
+  </a>
+
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+  <div class="toast" id="searchToast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
