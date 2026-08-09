@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://murokorepierrot.github.io/marie-rose-shop/sitemap.xml
