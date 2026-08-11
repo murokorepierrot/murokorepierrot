@@ -615,6 +615,19 @@
       frElements.forEach(el => el.style.removeProperty('display'));
     }
   }
+    /* ===== SEARCH DROPDOWN WIDTH FIX ===== */
+  // Force the search dropdown to be the same width as the search input
+  if (productSearchInput && searchDropdown) {
+    const resizeDropdown = () => {
+      const rect = productSearchInput.getBoundingClientRect();
+      searchDropdown.style.width = rect.width + 'px';
+      searchDropdown.style.minWidth = '300px'; // Ensures it doesn't get too small
+    };
+    
+    // Set width on load and whenever the window resizes
+    window.addEventListener('resize', resizeDropdown);
+    setTimeout(resizeDropdown, 100); // Run shortly after load
+  }
 
   langBtns.forEach(btn => {
     btn.addEventListener('click', function() {
@@ -626,3 +639,61 @@
   setLanguage('en');
 
 })();
+  /* ===========================================================
+     GALLERY LIGHTBOX LOGIC
+     =========================================================== */
+  let lightboxIndex = 0;
+  const lightboxOverlay = document.getElementById('lightboxOverlay');
+  const lightboxImage = document.getElementById('lightboxImage');
+  const galleryImages = document.querySelectorAll('.gallery-item img');
+
+  window.openLightbox = function(index) {
+    if(!galleryImages.length) return;
+    lightboxIndex = index;
+    updateLightboxImage();
+    lightboxOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling behind lightbox
+  }
+
+  window.closeLightbox = function() {
+    lightboxOverlay.classList.remove('open');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+
+  window.changeLightbox = function(direction) {
+    lightboxIndex += direction;
+    if (lightboxIndex >= galleryImages.length) lightboxIndex = 0;
+    if (lightboxIndex < 0) lightboxIndex = galleryImages.length - 1;
+    updateLightboxImage();
+  }
+
+  function updateLightboxImage() {
+    lightboxImage.src = galleryImages[lightboxIndex].src;
+    lightboxImage.alt = galleryImages[lightboxIndex].alt;
+  }
+
+  // Add touch/swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  if (lightboxOverlay) {
+    lightboxOverlay.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+    
+    lightboxOverlay.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, {passive: true});
+  }
+
+  function handleSwipe() {
+    if (touchStartX - touchEndX > 50) {
+      // Swipe Left - Next Image
+      changeLightbox(1);
+    }
+    if (touchEndX - touchStartX > 50) {
+      // Swipe Right - Previous Image
+      changeLightbox(-1);
+    }
+  }
