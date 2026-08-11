@@ -139,8 +139,7 @@
   }
 
   /* ===========================================================
-     PRODUCT SEARCH — Professional search with scroll, highlight,
-     keyboard navigation, and toast notifications.
+     PRODUCT SEARCH
      =========================================================== */
   var productSearchInput = document.getElementById('productSearch');
   var searchDropdown = document.getElementById('searchDropdown');
@@ -177,6 +176,7 @@
     document.querySelectorAll('.product-card.search-highlight').forEach(function(c) { c.classList.remove('search-highlight'); });
   }
 
+  /* 1. Expand a specific category and turn the button into "Collapse" */
   function expandCategory(card) {
     var categoryBlock = card.closest('.category-block');
     if (!categoryBlock) return;
@@ -190,6 +190,35 @@
     }
   }
 
+  /* 2. Reset the page entirely */
+  function resetSearchMode() {
+    if (searchDropdown) searchDropdown.classList.remove('visible');
+    if (categoriesStage) {
+      categoriesStage.classList.remove('search-active');
+      document.querySelectorAll('.category-block').forEach(function(cat) {
+        cat.classList.remove('expanded');
+        var btn = cat.querySelector('.view-more-btn');
+        if (btn) {
+          var label = btn.querySelector('.btn-label');
+          if (label) label.textContent = btn.dataset.moreLabel || 'View more';
+        }
+      });
+      productGrids.forEach(function(grid) {
+        grid.querySelectorAll('.product-card').forEach(function(card) {
+          card.style.display = '';
+          card.classList.remove('search-highlight');
+          if (card._hlTimer) clearTimeout(card._hlTimer);
+        });
+      });
+    }
+    if (noResults) noResults.hidden = true;
+    if (productSearchInput) {
+      productSearchInput.value = '';
+      if (searchClear) searchClear.style.display = 'none';
+    }
+  }
+
+  /* 3. Search and scroll directly to the Collapse button */
   function scrollToFirstMatch(term) {
     clearHighlights();
     if (!term) return;
@@ -208,7 +237,10 @@
 
     if (firstMatch) {
       expandCategory(firstMatch);
-      firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var categoryBlock = firstMatch.closest('.category-block');
+      if (categoryBlock) {
+        categoryBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       firstMatch.classList.add('search-highlight');
       var t = setTimeout(function() {
         firstMatch.classList.remove('search-highlight');
@@ -216,7 +248,7 @@
       firstMatch._hlTimer = t;
 
       if (matchCount > 1) {
-        showToast('Found ' + matchCount + ' matching products — scrolled to the first one.');
+        showToast('Found ' + matchCount + ' matching products.');
       } else {
         showToast('Found 1 matching product.');
       }
@@ -284,26 +316,7 @@
       if (searchClear) searchClear.style.display = term ? 'block' : 'none';
 
       if (!term) {
-        if (searchDropdown) searchDropdown.classList.remove('visible');
-        if (categoriesStage) {
-          categoriesStage.classList.remove('search-active');
-          document.querySelectorAll('.category-block').forEach(function(cat) {
-            cat.classList.remove('expanded');
-            var btn = cat.querySelector('.view-more-btn');
-            if (btn) {
-              var label = btn.querySelector('.btn-label');
-              if (label) label.textContent = btn.dataset.moreLabel || 'View more';
-            }
-          });
-          productGrids.forEach(function(grid) {
-            grid.querySelectorAll('.product-card').forEach(function(card) {
-              card.style.display = '';
-              card.classList.remove('search-highlight');
-              if (card._hlTimer) clearTimeout(card._hlTimer);
-            });
-          });
-        }
-        if (noResults) noResults.hidden = true;
+        resetSearchMode();
         return;
       }
 
@@ -311,8 +324,7 @@
       showDropdown(matches);
 
       if (categoriesStage) categoriesStage.classList.add('search-active');
-      document.querySelectorAll('.category-block').forEach(function(cat) { cat.classList.add('expanded'); });
-
+      
       var foundAny = false;
       productGrids.forEach(function(grid) {
         grid.querySelectorAll('.product-card').forEach(function(card) {
@@ -377,14 +389,8 @@
 
   if (searchClear) {
     searchClear.addEventListener('click', function() {
-      if (productSearchInput) {
-        productSearchInput.value = '';
-        productSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
-        productSearchInput.focus();
-      }
-      if (searchDropdown) searchDropdown.classList.remove('visible');
-      clearHighlights();
-      activeSuggestionIndex = -1;
+      resetSearchMode();
+      if (productSearchInput) productSearchInput.focus();
     });
   }
 
@@ -581,5 +587,42 @@
       this.reset();
     });
   }
+
+  /* ===========================================================
+     LANGUAGE TOGGLE FUNCTIONALITY
+     =========================================================== */
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const enElements = document.querySelectorAll('.lang-en');
+  const rwElements = document.querySelectorAll('.lang-rw');
+  const frElements = document.querySelectorAll('.lang-fr');
+
+  function setLanguage(lang) {
+    langBtns.forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[data-lang="${lang}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    if (lang === 'en') {
+      enElements.forEach(el => el.style.display = '');
+      rwElements.forEach(el => el.style.display = 'none');
+      frElements.forEach(el => el.style.display = 'none');
+    } else if (lang === 'rw') {
+      enElements.forEach(el => el.style.display = 'none');
+      rwElements.forEach(el => el.style.display = '');
+      frElements.forEach(el => el.style.display = 'none');
+    } else if (lang === 'fr') {
+      enElements.forEach(el => el.style.display = 'none');
+      rwElements.forEach(el => el.style.display = 'none');
+      frElements.forEach(el => el.style.display = '');
+    }
+  }
+
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const lang = this.getAttribute('data-lang');
+      setLanguage(lang);
+    });
+  });
+
+  setLanguage('en');
 
 })();
