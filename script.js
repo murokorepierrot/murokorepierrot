@@ -602,17 +602,17 @@
     if (activeBtn) activeBtn.classList.add('active');
 
     if (lang === 'en') {
-      enElements.forEach(el => el.style.display = '');
+      enElements.forEach(el => el.style.removeProperty('display'));
       rwElements.forEach(el => el.style.display = 'none');
       frElements.forEach(el => el.style.display = 'none');
     } else if (lang === 'rw') {
       enElements.forEach(el => el.style.display = 'none');
-      rwElements.forEach(el => el.style.display = '');
+      rwElements.forEach(el => el.style.removeProperty('display'));
       frElements.forEach(el => el.style.display = 'none');
     } else if (lang === 'fr') {
       enElements.forEach(el => el.style.display = 'none');
       rwElements.forEach(el => el.style.display = 'none');
-      frElements.forEach(el => el.style.display = '');
+      frElements.forEach(el => el.style.removeProperty('display'));
     }
   }
 
