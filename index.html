@@ -207,7 +207,7 @@
   </style>
 </head>
 <body>
-
+  
   <!-- ===== MODERN LOADER ===== -->
   <div id="page-loader" role="status" aria-live="polite">
     <div class="loader-ring"></div>
@@ -296,7 +296,7 @@
       
       <h1 class="lang-en">Your Trusted Neighborhood <br>Shop in Kigali</h1>
       <h1 class="lang-rw" style="display:none;">Iduka ryizewe <br>mu mujyi wa Kigali</h1>
-      <h1 class="lang-fr" style="display:none;">Votre boutique de quartier <br>de confiance à Kigali</h1>
+      <h1 class="lang-fr" style="display:none;">Votre Comptoir <br>de confiance à Kigali</h1>
       
       <p class="tagline lang-en">Quality products, fair prices, friendly service — every single day.</p>
       <p class="tagline lang-rw" style="display:none;">Ibicuruzwa byiza, ibiciro byiza, serivisi nziza —bihoraho.</p>
@@ -346,9 +346,18 @@
         <p class="eyebrow lang-rw" style="display:none;">Inkuru yacu</p>
         <p class="eyebrow lang-fr" style="display:none;">Notre histoire</p>
         
-        <h2 class="lang-en">We can do all things through christ, who strengthens us. <p class="scripture-ref lang-en">Philippians 4:13</p></h2>
-        <h2 class="lang-rw" style="display:none;">Dushobozwa byose na kristo.<br>uduha imbaraga. <p class="scripture-ref lang-rw" style="display:none;">Abafilipi 4:13</p></h2>
-        <h2 class="lang-fr" style="display:none;">Nous pouvons tout faire grâce au Christ, qui nous donne la force. <p class="scripture-ref lang-fr" style="display:none;">Philippiens 4:13</p></h2>
+       <h2 class="lang-en">
+  <span class="about-scripture-text">We can do all things through Christ, who strengthens us.</span>
+  <span class="about-scripture-ref">Philippians 4:13</span>
+</h2>
+     <h2 class="lang-rw" style="display:none;">
+  <span class="about-scripture-text">Dushobozwa byose na Kristo, uduha imbaraga. 
+  <span class="about-scripture-ref">Abafilipi 4:13</span></span>
+</h2>
+       <h2 class="lang-fr" style="display:none;">
+  <span class="about-scripture-text">Nous pouvons tout faire grâce au Christ, qui nous donne la force. 
+  <span class="about-scripture-ref">Philippiens 4:13</span></span>
+</h2>
         
         <p class="lang-en">Marie Rose Shop opened its doors in Kabuye, right here in Jabana Sector, as a small family stall selling a few sacks of rice and flour to neighbours. Today it has grown into a full household-goods and grocery shop — but the idea hasn't changed: stock what families actually need, price it fairly, and treat every customer like a neighbour, because they are.</p>
         <p class="lang-rw" style="display:none;">Iduka Marie Rose Shop ryafunguye imiryango i Kabuye, hano mu Murenge wa Jabana,  ryatangiye ari butiki k'umuryango igurisha ibicuruzwa bya detaye no kubiro nk'umuceri n'ifu ku baturanyi. Uyu munsi ryaragutse riba iduka ryuzuye ry'ibicuruzwa nk'ibikoresho byo murugo iby'isuku n'ibiribwa — ariko intego yacu ntiyahindutse: kugurisha ibicuruzwa byacu ku giciro cyo hasi dore ko tubyikurira mu mahanga.</p>
@@ -955,7 +964,7 @@
       
       <h2 class="center lang-en">The People Behind Marie Rose Shop</h2>
       <h2 class="center lang-rw" style="display:none;">itsinda ry'abafatanyabikorwa ba Marie Rose</h2>
-      <h2 class="center lang-fr" style="display:none;">Les personnes derrière Marie Rose Shop</h2>
+      <h2 class="center lang-fr" style="display:none;">Le groupe des partenaires de Marie Rose</h2>
 
             <!-- Big Top Team Photo - Clickable -->
         <div onclick="openLightbox(this)">
@@ -1138,9 +1147,64 @@
   </div>
 </footer>
 
-<a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat with us on WhatsApp">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
-  </a>
+   <!-- ===== AI ASSISTANT CHAT WIDGET ===== -->
+  <div id="ai-chat-widget">
+    <!-- Floating Toggle Button (Green Circle) -->
+    <button id="ai-chat-toggle" aria-label="Open AI Assistant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </button>
+
+    <!-- The Chat Popup Window -->
+    <div id="ai-chat-popup" class="chat-hidden">
+      <div class="chat-header">
+        <div class="chat-title">
+          <span class="chat-avatar">🤖</span>
+          <div>
+            <!-- Language-Specific Name -->
+            <span class="chat-name lang-en">Marie's AI Assistant</span>
+            <span class="chat-name lang-rw" style="display:none;">Umuyobozi wa AI wa Marie</span>
+            <span class="chat-name lang-fr" style="display:none;">Assistant IA de Marie</span>
+            
+            <span class="chat-status lang-en">Online</span>
+            <span class="chat-status lang-rw" style="display:none;">Muri kondo</span>
+            <span class="chat-status lang-fr" style="display:none;">En ligne</span>
+          </div>
+        </div>
+        <button id="chat-close-btn">&times;</button>
+      </div>
+      <div class="chat-body">
+        <!-- English Greeting -->
+        <div class="chat-message bot lang-en">
+          <div class="bubble">Hello! 👋 I'm the virtual assistant for Marie Rose Shop. How can I help you today?</div>
+        </div>
+        <div class="chat-message bot lang-en">
+          <div class="bubble">You can ask me about our products, store hours, location, or current stock!</div>
+        </div>
+        
+        <!-- Kinyarwanda Greeting -->
+        <div class="chat-message bot lang-rw" style="display:none;">
+          <div class="bubble">Muraho! 👋 Ndi umuyobozi wa AI w'iduka rya Marie Rose. Nakubafasha iki uyu munsi?</div>
+        </div>
+        <div class="chat-message bot lang-rw" style="display:none;">
+          <div class="bubble">Mushobora kumbaza ibijyanye n'ibicuruzwa byacu, amasaha yo gufungura, aho duherereye, cyangwa ibikubiye mu iduka!</div>
+        </div>
+
+        <!-- French Greeting -->
+        <div class="chat-message bot lang-fr" style="display:none;">
+          <div class="bubble">Bonjour ! 👋 Je suis l'assistant virtuel de la boutique Marie Rose. Comment puis-je vous aider aujourd'hui ?</div>
+        </div>
+        <div class="chat-message bot lang-fr" style="display:none;">
+          <div class="bubble">Vous pouvez me poser des questions sur nos produits, nos heures d'ouverture, notre emplacement ou notre stock actuel !</div>
+        </div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off">
+        <button id="chat-send-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
