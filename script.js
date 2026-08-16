@@ -176,7 +176,6 @@
     document.querySelectorAll('.product-card.search-highlight').forEach(function(c) { c.classList.remove('search-highlight'); });
   }
 
-  /* 1. Expand a specific category and turn the button into "Collapse" */
   function expandCategory(card) {
     var categoryBlock = card.closest('.category-block');
     if (!categoryBlock) return;
@@ -190,7 +189,6 @@
     }
   }
 
-  /* 2. Reset the page entirely */
   function resetSearchMode() {
     if (searchDropdown) searchDropdown.classList.remove('visible');
     if (categoriesStage) {
@@ -218,7 +216,6 @@
     }
   }
 
-  /* 3. Search and scroll directly to the Collapse button */
   function scrollToFirstMatch(term) {
     clearHighlights();
     if (!term) return;
@@ -394,7 +391,6 @@
     });
   }
 
-  /* ===== Click outside to close dropdowns & mobile menu ===== */
   document.addEventListener('click', function(e) {
     if (searchDropdown && !searchDropdown.contains(e.target) && e.target !== productSearchInput) {
       searchDropdown.classList.remove('visible');
@@ -409,7 +405,6 @@
     }
   });
 
-  /* ===== View More / Collapse ===== */
   document.querySelectorAll('.view-more-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var parent = this.closest('.category-block');
@@ -425,7 +420,6 @@
     });
   });
 
-  /* ===== Scroll Reveal Animations ===== */
   var revealObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
@@ -436,7 +430,6 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
 
-  /* ===== Animated Counters (About badges) ===== */
   var counters = document.querySelectorAll('.badge-num[data-count]');
   var counterObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -460,7 +453,6 @@
   }, { threshold: 0.5 });
   counters.forEach(function(c) { counterObserver.observe(c); });
 
-  /* ===== Shopping List (localStorage) ===== */
   var STORAGE_KEY = 'marierose_shopping_list';
   var listInput = document.getElementById('listInput');
   var listAdd = document.getElementById('listAdd');
@@ -524,7 +516,6 @@
       }
     });
   }
-  /* Add-to-list buttons on product cards */
   document.querySelectorAll('.add-to-list').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var item = this.dataset.item;
@@ -538,7 +529,6 @@
       }.bind(this), 2000);
     });
   });
-  /* Copy list to clipboard */
   if (listCopy) {
     listCopy.addEventListener('click', function() {
       var items = loadList();
@@ -565,7 +555,6 @@
       }
     });
   }
-  /* Clear list */
   if (listClear) {
     listClear.addEventListener('click', function() {
       saveList([]);
@@ -574,7 +563,6 @@
   }
   renderList();
 
-  /* ===== Request Product Form -> WhatsApp ===== */
   var requestForm = document.getElementById('requestForm');
   if (requestForm) {
     requestForm.addEventListener('submit', function(e) {
@@ -588,9 +576,6 @@
     });
   }
 
-  /* ===========================================================
-     LANGUAGE TOGGLE FUNCTIONALITY
-     =========================================================== */
   const langBtns = document.querySelectorAll('.lang-btn');
   const enElements = document.querySelectorAll('.lang-en');
   const rwElements = document.querySelectorAll('.lang-rw');
@@ -615,18 +600,14 @@
       frElements.forEach(el => el.style.removeProperty('display'));
     }
   }
-    /* ===== SEARCH DROPDOWN WIDTH FIX ===== */
-  // Force the search dropdown to be the same width as the search input
   if (productSearchInput && searchDropdown) {
     const resizeDropdown = () => {
       const rect = productSearchInput.getBoundingClientRect();
       searchDropdown.style.width = rect.width + 'px';
-      searchDropdown.style.minWidth = '300px'; // Ensures it doesn't get too small
+      searchDropdown.style.minWidth = '300px';
     };
-    
-    // Set width on load and whenever the window resizes
     window.addEventListener('resize', resizeDropdown);
-    setTimeout(resizeDropdown, 100); // Run shortly after load
+    setTimeout(resizeDropdown, 100);
   }
 
   langBtns.forEach(btn => {
@@ -641,7 +622,7 @@
 })();
 
 /* ============================================================
-   LIGHTBOX - Category-Specific Grouping (Fixed)
+   LIGHTBOX - Category-Specific Grouping
    ============================================================ */
 (function() {
   'use strict';
@@ -654,7 +635,6 @@
 
   if (!overlay) return;
 
-  // Variable to hold ONLY the images from the clicked category
   let currentGalleryImages = [];
   let currentIndex = 0;
 
@@ -666,7 +646,6 @@
     lightboxImg.src = currentGalleryImages[currentIndex].src;
     lightboxImg.alt = currentGalleryImages[currentIndex].alt || 'Image';
     
-    // Show/hide navigation arrows
     if (prevBtn) {
       prevBtn.style.display = currentIndex === 0 ? 'none' : 'flex';
     }
@@ -675,7 +654,6 @@
     }
   }
 
-  // Open Lightbox function
   window.openLightbox = function(element) {
     let img;
     if (element.tagName === 'IMG') {
@@ -686,21 +664,16 @@
     
     if (!img) return;
 
-    // 1. Get the group of the clicked image (e.g., "gallery", "grains", "beverages")
     const group = img.getAttribute('data-group');
     if (!group) {
-        // Fallback if data-group is missing: Build list from all images on page
         currentGalleryImages = Array.from(document.querySelectorAll('.gallery-item img, .product-photo-slot img, .team-card img'));
     } else {
-        // 2. Find ALL images with the exact same data-group (including Team images)
         const allImages = document.querySelectorAll('.gallery-item img, .product-photo-slot img, .team-card img, .about-media img, .team-big-img, .footer-media img');
         currentGalleryImages = Array.from(allImages).filter(imgEl => imgEl.getAttribute('data-group') === group);
     }
 
-    // 3. Find the index of the clicked image within this filtered list
     currentIndex = currentGalleryImages.indexOf(img);
     
-    // Prevent errors if the image wasn't found
     if (currentIndex === -1 && currentGalleryImages.length > 0) {
         currentIndex = 0;
     }
@@ -710,13 +683,11 @@
     document.body.style.overflow = 'hidden';
   };
 
-  // Close Lightbox
   window.closeLightbox = function() {
     overlay.classList.remove('open');
     document.body.style.overflow = '';
   };
 
-  // Change image (next/prev)
   window.changeLightbox = function(direction) {
     if (!currentGalleryImages.length) return;
     currentIndex += direction;
@@ -727,7 +698,6 @@
     updateLightboxImage();
   };
 
-  // Event Listeners
   if (closeBtn) {
     closeBtn.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -749,14 +719,12 @@
     });
   }
 
-  // Click on overlay background to close
   overlay.addEventListener('click', function(e) {
     if (e.target === overlay) {
       closeLightbox();
     }
   });
 
-  // Keyboard navigation
   document.addEventListener('keydown', function(e) {
     if (!overlay.classList.contains('open')) return;
     if (e.key === 'Escape') {
@@ -768,7 +736,6 @@
     }
   });
 
-  // Touch swipe support
   let touchStartX = 0;
   let touchEndX = 0;
   
@@ -790,8 +757,12 @@
 
 })();
 
-/* ===== AI ASSISTANT CHAT WIDGET LOGIC (MULTI-LINGUAL) ===== */
+/* ============================================================
+   PROFESSIONAL AI CHAT ASSISTANT (MULTI-LINGUAL MASTER)
+   ============================================================ */
 (function() {
+  'use strict';
+
   const toggleBtn = document.getElementById('ai-chat-toggle');
   const popup = document.getElementById('ai-chat-popup');
   const closeBtn = document.getElementById('chat-close-btn');
@@ -799,12 +770,7 @@
   const chatInput = document.getElementById('chat-input');
   const chatBody = document.getElementById('ai-chat-popup').querySelector('.chat-body');
 
-  // Function to detect the current active language
-  function getCurrentLanguage() {
-    const activeBtn = document.querySelector('.lang-btn.active');
-    if (activeBtn) return activeBtn.getAttribute('data-lang');
-    return 'en'; // Default to English
-  }
+  if (!toggleBtn) return;
 
   // Toggle open/close
   function toggleChat() {
@@ -818,7 +784,7 @@
     }
   }
 
-  if (toggleBtn) toggleBtn.addEventListener('click', toggleChat);
+  toggleBtn.addEventListener('click', toggleChat);
   if (closeBtn) closeBtn.addEventListener('click', toggleChat);
 
   function addMessage(text, sender, isHTML = false) {
@@ -833,202 +799,244 @@
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // ==========================================
-  //  MULTI-LINGUAL AI LOGIC ENGINE
-  // ==========================================
-  function getAIResponse(query) {
-    const lang = getCurrentLanguage(); // Detect language
-    const q = query.toLowerCase();
-
-    // --- Response Dictionary ---
-    const responses = {
-      // ENGLISH DICTIONARY
-      en: {
-        intro: "I'm Marie Rose's AI Assistant! 🤖 I'm here to help you with information about our shop, products, location, and hours. How can I assist you today?",
-        hours: "We are open 7 days a week! 🕘<br><br>• <b>Mon - Sat:</b> 7:00 AM – 9:30 PM<br>• <b>Sunday:</b> 7:30 AM – 9:00 PM",
-        location: "We are located at <b>Kabuye Cell, Jabana Sector, Gasabo District, Kigali City, Rwanda</b>.<br><br>You can find us just <b>below the Kabuye Parish Church</b>. Come say hello! 😊",
-        payment: "We accept multiple payment methods for your convenience:<br>• 💵 <b>Cash</b><br>• 📱 <b>MTN MoMo:</b> 0789542601<br>• 📱 <b>MoMo Pay:</b> 2003223<br>• 🧾 <b>EBM Receipt:</b> Official receipts provided for every purchase!",
-        stock: "We have a wide variety of fresh stock! 🛒 Here are our main categories:<br><br>🌾 <b>Grains & Staples:</b> Rice, wheat flour, maize flour, sugar, beans, salt.<br>🥤 <b>Beverages:</b> Fanta, juices, tea, milk, bottled water, coffee.<br>🍳 <b>Cooking Essentials:</b> Cooking oil, ketchup, soy sauce, pasta, spices, tomato paste.<br>🧺 <b>Universal & Clean:</b> Soaps, detergents, tissues, toothpaste, shampoo.",
-        contact: "You can reach us anytime! 📞<br><br>• <b>Call or WhatsApp:</b> +250 789 542 601<br>• <b>Visit us:</b> Kabuye, just below the Kabuye Parish Church.<br><br>We respond to messages quickly! 💬",
-        ebm: "Yes! We take tax compliance very seriously. 🧾<br><br><b>Every single sale</b> comes with an official <b>EBM (Electronic Billing Machine) receipt</b>. You can trust us for transparency!",
-        
-        // FAQ ANSWERS
-        delivery: "Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery, but you can call or WhatsApp us to check stock availability before visiting.",
-        request_item: "Yes! If you need something specific, let us know via WhatsApp or at the counter. Our sourcing team travels regularly and can often bring it in.",
-        negotiable: "We keep our prices fair and transparent for everyone. The price on the shelf is the final price — no haggling needed.",
-        wholesale: "Yes — many items like rice, flour, and oil are available in sacks and larger containers at wholesale-friendly prices. Ask at the counter for bulk pricing.",
-        
-        // BACKGROUND STORY
-        story: "Marie Rose Shop opened its doors in Kabuye, right here in Jabana Sector, as a small family stall selling a few sacks of rice and flour to neighbours. Today it has grown into a full household-goods and grocery shop — but the idea hasn't changed: stock what families actually need, price it fairly, and treat every customer like a neighbour, because they are. Behind the counter is a small, dedicated team: Marie Rose, the owner, who receives and manages the shop's finances herself; Gikundiro Pierrot, who handles every sale through the EBM (Electronic Billing Machine) so every client gets a proper, official receipt; and two team members who travel abroad to source quality stock at wholesale prices.",
-        
-        // DEVELOPER INFO
-        developer: "The developer who developed me is called Gikundiro Pierrot. He specializes in creating and designing robust, scalable websites and databases. His expertise spans the full development lifecycle, from concept to deployment.",
-        
-        // POLITE / GREETING / HARASSMENT HANDLING
-        greeting: "Hi! 👋 You are free to ask anything related to the Marie Rose website. What can I help you with today?",
-        morning: "Good morning! ☀️ You are free to ask anything related to the Marie Rose website. How can I assist you today?",
-        afternoon: "Good afternoon! ☀️ You are free to ask anything related to the Marie Rose website. How can I assist you today?",
-        evening: "Good evening! 🌙 You are free to ask anything related to the Marie Rose website. How can I assist you today?",
-        thanks: "You are very welcome! 😊 Have a blessed day!",
-        abuse: "I am not here to insult you. Please be respectful. How can I help you with our shop?",
-        fallback: "That's a great question! 🤔<br><br>While I don't have the specific answer to that right now, you can <b>call or WhatsApp us directly at +250 789 542 601</b>, or visit our shop in Kabuye (just below the Kabuye Parish Church). The team is always happy to help! 😊"
-      },
-
-      // KINYARWANDA DICTIONARY
-      rw: {
-        intro: "Ndi umuyobozi wa AI wa Marie! 🤖 Ndi hano kugira ngo nkubafashe amakuru ajyanye n'iduka ryacu, ibicuruzwa, aho duherereye, n'amasaha. Nakubafasha iki?",
-        hours: "Dufunguye iminsi 7 mu cyumweru! 🕘<br><br>• <b>Kuwa mbere - Kuwa gatandatu:</b> 7:00 AM – 9:30 PM<br>• <b>Ku cyumweru:</b> 7:30 AM – 9:00 PM",
-        location: "Tuherereye i <b>Kabuye, Umurenge wa Jabana, Akarere ka Gasabo, Umujyi wa Kigali, Rwanda</b>.<br><br>Mushobora kutubona hepfo y'<b>Itorero rya Kabuye (Paroisse)</b>. Mwize kudusura! 😊",
-        payment: "Twakira uburyo bwinshi bwo kwishyura:<br>• 💵 <b>Amafaranga (Cash)</b><br>• 📱 <b>MTN MoMo:</b> 0789542601<br>• 📱 <b>MoMo Pay:</b> 2003223<br>• 🧾 <b>EBM Receipt:</b> Buri kigurishwa cyose giterwa inyemezabwishyu ya EBM!",
-        stock: "Dufite ibicuruzwa binyuranye! 🛒 Dufite ibyiciro bikurikira:<br><br>🌾 <b>Ibinyampeke:</b> Umuceri, ifu y'ingano, ifu y'ibigori, isukari, ibishyimbo, umunyu.<br>🥤 <b>Ibinyobwa:</b> Fanta, amajus, icyayi, amata, amazi y'icupa, ikawa.<br>🍳 <b>Ibikoresho byo guteka:</b> Amavuta, ketchup, soya sauce, pasta, ibirungo.<br>🧺 <b>Isukura & Ubuziranire:</b> Isabune, Omo, tissues, toothpaste, shampoing.",
-        contact: "Mushobora kutugiraho ibihe byose! 📞<br><br>• <b>Guhamagara cyangwa WhatsApp:</b> +250 789 542 601<br>• <b>Kudusura:</b> Kabuye, munsi y'Itorero rya Kabuye.<br><br>Turasubiza vuba! 💬",
-        ebm: "Yego! Dukurikiza amategeko y'ubusoresha cyane. 🧾<br><br><b>Buri kigurishwa cyose</b> gitangwa n'inyemezabwishyu ya <b>EBM (Electronic Billing Machine)</b>. Mwizere neza!",
-        
-        // FAQ ANSWERS
-        delivery: "Kuri ubu, dukora nk'iduka ryo mu gace ryakira abakiriya batugana. Ntabwo dutanga serivisi yo kugeza ibicuruzwa mu rugo, ariko ushaka ibicuruzwa mwaduhamagara cyangwa mukatwandikira kuri WhatsApp mukabanza kumenya ko ibyo mukeneye bihari mbere yo kudusura.",
-        request_item: "Yego! Niba ukeneye ikintu runaka, tubwire kuri WhatsApp cyangwa ku murongo wa telephone. Itsinda ryacu rijya kurangura hanze kenshi, rikaba rishobora kukibazanira.",
-        negotiable: "Dushyiraho ibiciro byiza kandi byo hasi kuri buri wese. Igiciro kiri ku bicuruzwa ni cyo giciro cyanyuma — nta guciririkanya kundi.",
-        wholesale: "Yego — ibintu byinshi nk'umuceri, ifu, n'amavuta biboneka mu mifuka minini ku giciro cyiza cyo kurangura. Baza ku murongo wa telephone kugira ngo ubone ibiciro by'ubwinshi.",
-        
-        // BACKGROUND STORY
-        story: "Iduka Marie Rose Shop ryafunguye imiryango i Kabuye, hano mu Murenge wa Jabana, ryatangiye ari butiki k'umuryango igurisha ibicuruzwa bya detaye no kubiro nk'umuceri n'ifu ku baturanyi. Uyu munsi ryaragutse riba iduka ryuzuye ry'ibicuruzwa nk'ibikoresho byo murugo iby'isuku n'ibiribwa — ariko intego yacu ntiyahindutse: kugurisha ibicuruzwa byacu ku giciro cyo hasi dore ko tubyikurira mu mahanga. Imbere mw'iduka hari itsinda rito ry'abanyamwete: Marie Rose, wakira amafaranga akaba ari na we ucunga umutungo w'iduka; Gikundiro Pierrot, ukurikirana buri kigurishwa cyose akoresheje imashini ya EBM (Electronic Billing Machine) kugira ngo buri mukiriya ahabwe Inyemezabwishyu ikwiye; ndetse n'abafatanyabikorwa babiri bajya kurangura ibicuruzwa mu mahanga.",
-        
-        // DEVELOPER INFO
-        developer: "Umukoresha wanjye wampfundishije ni Gikundiro Pierrot. Yihanga mu gukora no gushushanya urubuga rukomeye kandi rwiza, ndetse no mu bubiko bw'amakuru. Ubuhamya bwe bugera ku nzego zose zo gukora urubuga, kuva mu gitekerezo kugeza mu gukoresha.",
-        
-        // POLITE / GREETING / HARASSMENT HANDLING
-        greeting: "Muraho! 👋 Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na website ya Marie Rose. Nakubafasha iki uyu munsi?",
-        morning: "Mwaramutse! ☀️ Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na website ya Marie Rose. Nakubafasha iki uyu munsi?",
-        afternoon: "Mwiriwe! ☀️ Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na website ya Marie Rose. Nakubafasha iki uyu munsi?",
-        evening: "Muraho! 🌙 Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na website ya Marie Rose. Nakubafasha iki uyu munsi?",
-        thanks: "Murakoze cyane! 😊 Mube numunsi mwiza!",
-        abuse: "Ntabwo ndi hano ngo nkubabye. Nimusabwa kwitonda. Nakubafasha iki ku byerekeye iduka ryacu?",
-        fallback: "Ikibazo cyiza! 🤔<br><br>Nubwo nta nyishu nyuzuye nfite ubu, mushobora <b>guhama cyangwa kutwandikira kuri WhatsApp kuri +250 789 542 601</b>, cyangwa kudusura mu iduka i Kabuye (munsi y'Itorero rya Kabuye). Itsinda ryacu rishobora kubafasha! 😊"
-      },
-
-      // FRENCH DICTIONARY
-      fr: {
-        intro: "Je suis l'assistant IA de Marie ! 🤖 Je suis là pour vous aider avec des informations sur notre boutique, nos produits, notre emplacement et nos heures. Comment puis-je vous aider aujourd'hui ?",
-        hours: "Nous sommes ouverts 7 jours sur 7 ! 🕘<br><br>• <b>Lun - Sam:</b> 7h00 – 21h30<br>• <b>Dimanche:</b> 7h30 – 21h00",
-        location: "Nous sommes situés à <b>Kabuye, Secteur Jabana, District de Gasabo, Ville de Kigali, Rwanda</b>.<br><br>Vous pouvez nous trouver juste <b>en dessous de l'église paroissiale de Kabuye</b>. Venez nous dire bonjour ! 😊",
-        payment: "Nous acceptons plusieurs modes de paiement pour votre commodité :<br>• 💵 <b>Espèces</b><br>• 📱 <b>MTN MoMo :</b> 0789542601<br>• 📱 <b>MoMo Pay :</b> 2003223<br>• 🧾 <b>Reçu EBM :</b> Des reçus officiels fournis pour chaque achat !",
-        stock: "Nous avons une grande variété de produits frais ! 🛒 Voici nos principales catégories :<br><br>🌾 <b>Grains et de base :</b> Riz, farine de blé, farine de maïs, sucre, haricots, sel.<br>🥤 <b>Boissons :</b> Fanta, jus, thé, lait, eau en bouteille, café.<br>🍳 <b>Essentiels de cuisine :</b> Huile de cuisson, ketchup, sauce soja, pâtes, épices.<br>🧺 <b>Universel et Propreté :</b> Savons, détergents, mouchoirs, dentifrice, shampoing.",
-        contact: "Vous pouvez nous joindre à tout moment ! 📞<br><br>• <b>Appeler ou WhatsApp :</b> +250 789 542 601<br>• <b>Nous visiter :</b> Kabuye, juste en dessous de l'église paroissiale de Kabuye.<br><br>Nous répondons rapidement ! 💬",
-        ebm: "Oui ! Nous prenons la conformité fiscale très au sérieux. 🧾<br><br><b>Chaque vente</b> est accompagnée d'un <b>reçu EBM (Machine de Facturation Électronique) officiel</b>. Vous pouvez nous faire confiance pour la transparence !",
-        
-        // FAQ ANSWERS
-        delivery: "Actuellement, nous fonctionnons comme une boutique de quartier. Nous ne proposons pas de livraison à domicile, mais vous pouvez nous appeler ou nous contacter sur WhatsApp pour vérifier la disponibilité des stocks avant votre visite.",
-        request_item: "Oui ! Si vous avez besoin d'un produit spécifique, faites-le nous savoir via WhatsApp ou au comptoir. Notre équipe d'approvisionnement voyage régulièrement et peut souvent le ramener.",
-        negotiable: "Nous maintenons des prix équitables et transparents pour tout le monde. Le prix indiqué sur l'étagère est le prix final — pas besoin de marchander.",
-        wholesale: "Oui — de nombreux articles comme le riz, la farine et l'huile sont disponibles en sacs et en grands contenants à des prix de gros avantageux. Renseignez-vous au comptoir pour les tarifs de gros.",
-        
-        // BACKGROUND STORY
-        story: "Marie Rose Shop a ouvert ses portes à Kabuye, dans le secteur de Jabana, comme une petite échoppe familiale vendant quelques sacs de riz et de farine aux voisins. Aujourd'hui, elle est devenue une boutique d'épicerie et d'articles ménagers complète — mais l'idée n'a pas changé : stocker ce dont les familles ont besoin, à un prix juste, et traiter chaque client comme un voisin. Derrière le comptoir se trouve une petite équipe dévouée : Marie Rose, la propriétaire, qui gère elle-même les finances du magasin ; Gikundiro Pierrot, qui gère chaque vente via la machine EBM afin que chaque client reçoive un reçu officiel ; et deux membres de l'équipe qui se rendent à l'étranger pour se procurer des produits de qualité à des prix de gros.",
-        
-        // DEVELOPER INFO
-        developer: "Le développeur qui m'a créée s'appelle Gikundiro Pierrot. Il est spécialisé dans la création et la conception de sites Web et de bases de données robustes et évolutifs. Son expertise couvre l'ensemble du cycle de développement, du concept au déploiement.",
-        
-        // POLITE / GREETING / HARASSMENT HANDLING
-        greeting: "Salut ! 👋 Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?",
-        morning: "Bonjour ! ☀️ Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?",
-        afternoon: "Bon après-midi ! ☀️ Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?",
-        evening: "Bonsoir ! 🌙 Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?",
-        thanks: "Je vous en prie ! 😊 Passez une excellente journée !",
-        abuse: "Je ne suis pas là pour vous insulter. Veuillez être respectueux. Comment puis-je vous aider avec notre boutique ?",
-        fallback: "Excellente question ! 🤔<br><br>Bien que je n'aie pas la réponse spécifique pour le moment, vous pouvez <b>nous appeler ou nous envoyer un WhatsApp au +250 789 542 601</b>, ou visiter notre boutique à Kabuye (juste en dessous de l'église paroissiale de Kabuye). L'équipe sera ravie de vous aider ! 😊"
-      }
-    };
-
-    // --- Keyword Matching per Language ---
-    const currentResponses = responses[lang];
-
-    // English Keywords
-    if (lang === 'en') {
-      if (q.includes('hi') || q.includes('hello') || q.includes('hey') || q.includes('yo')) return currentResponses.greeting;
-      if (q.includes('morning')) return currentResponses.morning;
-      if (q.includes('afternoon')) return currentResponses.afternoon;
-      if (q.includes('evening')) return currentResponses.evening;
-      
-      if (q.includes('thank') || q.includes('thx')) return currentResponses.thanks;
-      if (q.includes('fuck') || q.includes('stupid') || q.includes('idiot') || q.includes('bastard') || q.includes('dumb')) return currentResponses.abuse;
-      
-      if (q.includes('who are you') || q.includes('what are you') || q.includes('your name')) return currentResponses.intro;
-      if (q.includes('hour') || q.includes('open') || q.includes('close') || q.includes('time')) return currentResponses.hours;
-      if (q.includes('location') || q.includes('where') || q.includes('address') || q.includes('find')) return currentResponses.location;
-      if (q.includes('pay') || q.includes('payment') || q.includes('cash') || q.includes('momo')) return currentResponses.payment;
-      if (q.includes('stock') || q.includes('have') || q.includes('sell') || q.includes('product') || q.includes('items') || q.includes('available')) return currentResponses.stock;
-      if (q.includes('contact') || q.includes('call') || q.includes('whatsapp') || q.includes('message')) return currentResponses.contact;
-      if (q.includes('ebm') || q.includes('receipt')) return currentResponses.ebm;
-      
-      if (q.includes('delivery') || q.includes('home') || q.includes('deliver')) return currentResponses.delivery;
-      if (q.includes('request') || q.includes('specific') || q.includes('not on shelf')) return currentResponses.request_item;
-      if (q.includes('negotiable') || q.includes('haggle') || q.includes('bargain')) return currentResponses.negotiable;
-      if (q.includes('wholesale') || q.includes('bulk')) return currentResponses.wholesale;
-      
-      if (q.includes('background') || q.includes('story') || q.includes('history') || q.includes('origin')) return currentResponses.story;
-      
-      if (q.includes('developed you') || q.includes('created you') || q.includes('developer') || q.includes('who built')) return currentResponses.developer;
-      if (q.includes('gikundiro') || q.includes('pierrot')) return currentResponses.developer;
-    } 
-    // Kinyarwanda Keywords
-    else if (lang === 'rw') {
-      if (q.includes('muraho') || q.includes('mwiriwe') || q.includes('mwaramutse') || q.includes('hi')) return currentResponses.greeting;
-      if (q.includes('mwaramutse')) return currentResponses.morning;
-      if (q.includes('mwiriwe')) return currentResponses.afternoon;
-      
-      if (q.includes('urakoze') || q.includes('murakoze') || q.includes('thx')) return currentResponses.thanks;
-      if (q.includes('ukunyomo') || q.includes('ubwenge') || q.includes('ikinyoma') || q.includes('umuswa')) return currentResponses.abuse;
-      
-      if (q.includes('uri nde') || q.includes('ni nde') || q.includes('izina')) return currentResponses.intro;
-      if (q.includes('amasaha') || q.includes('gufungura') || q.includes('gufunga') || q.includes('saa')) return currentResponses.hours;
-      if (q.includes('ahe') || q.includes('herereye') || q.includes('adresse') || q.includes('shaka')) return currentResponses.location;
-      if (q.includes('kwishyura') || q.includes('amafaranga') || q.includes('momo') || q.includes('ishyura')) return currentResponses.payment;
-      if (q.includes('ibicuruzwa') || q.includes('bikubiye') || q.includes('mugurisha') || q.includes('igurishwa')) return currentResponses.stock;
-      if (q.includes('tuvugishe') || q.includes('hamagara') || q.includes('whatsapp') || q.includes('gutumanira')) return currentResponses.contact;
-      if (q.includes('ebm') || q.includes('inyemezabwishyu')) return currentResponses.ebm;
-      
-      if (q.includes('gutwara') || q.includes('kugera') || q.includes('gurisha mu rugo')) return currentResponses.delivery;
-      if (q.includes('gusaba') || q.includes('keneye') || q.includes('kidafite')) return currentResponses.request_item;
-      if (q.includes('guciririkanya') || q.includes('kugurisha') || q.includes('bargain')) return currentResponses.negotiable;
-      if (q.includes('kurangura') || q.includes('wholesale')) return currentResponses.wholesale;
-      
-      if (q.includes('inkuru') || q.includes('amateka') || q.includes('byatangiriye') || q.includes('background')) return currentResponses.story;
-      
-      if (q.includes('wakureze') || q.includes('wakoze') || q.includes('umurenge') || q.includes('gikundiro') || q.includes('pierrot')) return currentResponses.developer;
-    } 
-    // French Keywords
-    else if (lang === 'fr') {
-      if (q.includes('salut') || q.includes('bonjour') || q.includes('coucou') || q.includes('hey') || q.includes('hi')) return currentResponses.greeting;
-      if (q.includes('bonjour') && q.includes('matin')) return currentResponses.morning;
-      if (q.includes('bonjour') && (q.includes('après-midi') || q.includes('apres-midi'))) return currentResponses.afternoon;
-      if (q.includes('bonsoir')) return currentResponses.evening;
-      
-      if (q.includes('merci') || q.includes('thx')) return currentResponses.thanks;
-      if (q.includes('insulte') || q.includes('con') || q.includes('idiot') || q.includes('salopard')) return currentResponses.abuse;
-      
-      if (q.includes('qui êtes-vous') || q.includes('qui es-tu') || q.includes('ton nom')) return currentResponses.intro;
-      if (q.includes('heure') || q.includes('ouvert') || q.includes('fermé') || q.includes('ouverture')) return currentResponses.hours;
-      if (q.includes('localisation') || q.includes('où') || q.includes('adresse') || q.includes('trouver')) return currentResponses.location;
-      if (q.includes('payer') || q.includes('paiement') || q.includes('espèces') || q.includes('momo')) return currentResponses.payment;
-      if (q.includes('stock') || q.includes('produits') || q.includes('vendre') || q.includes('articles') || q.includes('disponibles')) return currentResponses.stock;
-      if (q.includes('contacter') || q.includes('appeler') || q.includes('whatsapp') || q.includes('message')) return currentResponses.contact;
-      if (q.includes('ebm') || q.includes('reçu')) return currentResponses.ebm;
-      
-      if (q.includes('livraison') || q.includes('domicile') || q.includes('livrer')) return currentResponses.delivery;
-      if (q.includes('demander') || q.includes('spécifique') || q.includes('pas sur les étagères')) return currentResponses.request_item;
-      if (q.includes('négociable') || q.includes('marchander')) return currentResponses.negotiable;
-      if (q.includes('gros') || q.includes('en vrac')) return currentResponses.wholesale;
-      
-      if (q.includes('histoire') || q.includes('contexte') || q.includes('origine') || q.includes('background')) return currentResponses.story;
-      
-      if (q.includes('développé') || q.includes('créé') || q.includes('développeur') || q.includes('gikundiro') || q.includes('pierrot')) return currentResponses.developer;
+  // -----------------------------------------------------------
+  // DETECT CURRENT LANGUAGE
+  // -----------------------------------------------------------
+  function getCurrentLanguage() {
+    // Look for the active language button in the header
+    const activeLangBtn = document.querySelector('.lang-btn.active');
+    if (activeLangBtn) {
+      return activeLangBtn.getAttribute('data-lang');
     }
-
-    // Fallback (Always returns the language-specific fallback)
-    return currentResponses.fallback;
+    return 'en'; // Default to English
   }
 
-  // Handle user query
+  // -----------------------------------------------------------
+  // MULTI-LINGUAL KNOWLEDGE BASE (3 Separate Brains)
+  // -----------------------------------------------------------
+  function getAIResponse(query) {
+    const lang = getCurrentLanguage(); // Detect language
+    const q = query.toLowerCase().trim();
+
+    // --------------------------------------------
+    // BRAIN 1: ENGLISH LANGUAGE
+    // --------------------------------------------
+    if (lang === 'en') {
+      // GREETINGS
+      if (q === 'hi' || q === 'hello' || q === 'hey' || q === 'yo' || q === 'wssp' || q === 'sup' || q === 'hy' || q.includes('good morning') || q.includes('good afternoon') || q.includes('good evening')) {
+        return "Hello! 👋 You are free to ask anything about Marie Rose Shop. What can I help you with today?";
+      }
+      // INSULTS
+      if (q.includes('fuck') || q.includes('fack') || q.includes('fu*k') || q.includes('f\*\*k') || q.includes('stupid') || q.includes('st*pid') || q.includes('st\*\*id') || q.includes('idiot') || q.includes('id\*\*t') || q.includes('id\*ot') || q.includes('bastard') || q.includes('dumb') || q.includes('dumbass') || q.includes('bullshit') || q.includes('shit') || q.includes('piss') || q.includes('moron') || q.includes('suck') || q.includes('asshole') || q.includes('a\*\*hole')) {
+        return "I'm not here to insult or fight, please. I am here to help you with your shopping at Marie Rose Shop. How can I assist you today?";
+      }
+      // THANK YOU
+      if (q.includes('thank') || q.includes('thx') || q.includes('thanks') || q.includes('thank you')) {
+        return "You are very welcome! 😊 Thank you for choosing Marie Rose Shop. Have a blessed day!";
+      }
+      if (q === 'bye' || q === 'goodbye' || q === 'see ya') {
+        return "Goodbye! 😊 If you need anything else, just type 'Hi' to start a new chat. Have a blessed day!";
+      }
+      // IDENTIFICATION
+      if (q.includes('who are you') || q.includes('what are you') || q.includes('your name') || q.includes('who is this')) {
+        return "I am the official AI Assistant for Marie Rose Shop! 🤖 I was created to help our customers get instant answers about our products, location, and services.";
+      }
+      // LOGISTICS / WALK-IN / PARKING
+      if (q.includes('appointment') || q.includes('walk in') || q.includes('walk-in') || q.includes('just come') || q.includes('need to book')) {
+        return "Yes, absolutely! We are a walk-in neighbourhood shop. You can walk in anytime during our opening hours. No appointment is needed!";
+      }
+      if (q.includes('park') || q.includes('parking') || q.includes('car')) {
+        return "Yes, there is street parking available right in front of our shop. You can also park near the Kabuye Parish Church and walk over.";
+      }
+      // STORE HOURS
+      if (q.includes('hour') || q.includes('open') || q.includes('close') || q.includes('time') || q.includes('when do you') || q.includes('are you open today')) {
+        return "We are open 7 days a week! 🕘<br><br>• <b>Monday - Saturday:</b> 7:00 AM – 9:30 PM<br>• <b>Sunday:</b> 7:30 AM – 9:00 PM";
+      }
+      // LOCATION / DIRECTIONS
+      if (q.includes('location') || q.includes('where') || q.includes('address') || q.includes('find') || q.includes('are you located') || q.includes('live') || q.includes('how do i get') || q.includes('directions') || q.includes('map')) {
+        return "We are located at <b>Kabuye Cell, Jabana Sector, Gasabo District, Kigali City, Rwanda</b>.<br><br>You can find us just <b>below the Kabuye Parish Church</b>. If you are using a map, search for 'Kabuye Parish Church'. We are easy to spot! 😊";
+      }
+      // PAYMENT
+      if (q.includes('pay') || q.includes('payment') || q.includes('cash') || q.includes('momo') || q.includes('mobile money') || q.includes('airtel')) {
+        return "We accept cash, MTN Mobile Money (MoMo Pay), and Airtel Money. Every payment comes with an official EBM receipt.";
+      }
+      // DELIVERY
+      if (q.includes('delivery') || q.includes('home') || q.includes('deliver') || q.includes('shipping') || q.includes('ship') || q.includes('send') || q.includes('transport')) {
+        return "Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery, but you can call or WhatsApp us to check stock availability before visiting.";
+      }
+      // REQUESTS
+      if (q.includes('request') || q.includes('specific') || q.includes('not on shelf') || q.includes('custom order') || q.includes('find something') || q.includes('bring in')) {
+        return "Yes! If you need something specific, let us know via WhatsApp or at the counter. Our sourcing team travels regularly and can often bring it in.";
+      }
+      // NEGOTIABLE / DISCOUNTS
+      if (q.includes('negotiable') || q.includes('bargain') || q.includes('haggle') || q.includes('discount') || q.includes('cheap')) {
+        return "We keep our prices fair and transparent for everyone. The price on the shelf is the final price — no haggling needed.";
+      }
+      // WHOLESALE
+      if (q.includes('wholesale') || q.includes('bulk') || q.includes('large quantity') || q.includes('sack') || q.includes('bag')) {
+        return "Yes — many items like rice, flour, and oil are available in sacks and larger containers at wholesale-friendly prices. Ask at the counter for bulk pricing.";
+      }
+      // PRODUCTS / STOCK
+      if (q.includes('stock') || q.includes('product') || q.includes('sell') || q.includes('items') || q.includes('available') || q.includes('what do you have') || q.includes('got') || q.includes('supply')) {
+        return "We have a wide variety of fresh stock! 🛒 Here are our main categories:<br><br>🌾 <b>Grains & Staples:</b> Premium Rice, Wheat Flour, Maize Flour, Sugar, Beans, Salt.<br><br>🥤 <b>Beverages:</b> Fanta, Assorted Juices, Tea, Milk, Bottled Water, Coffee.<br><br>🍳 <b>Cooking Essentials:</b> Cooking Oil, Ketchup, Soy Sauce, Pasta, Spices, Tomato Paste.<br><br>🧺 <b>Household & Care:</b> Soaps, Detergents, Tissues, Toothpaste, Shampoo.";
+      }
+      // SPECIFIC PRODUCTS
+      if (q.includes('rice') || q.includes('rise')) { return "Yes! We have premium quality sacks of rice available. We sell it by the sack or by the kilo. Come visit us to see our fresh supply!"; }
+      if (q.includes('oil') || q.includes('blue band') || q.includes('margarine')) { return "Yes, we stock pure vegetable cooking oil and Blue Band margarine! We have it in different sizes. Let us know if you need a specific brand."; }
+      if (q.includes('fanta') || q.includes('soda') || q.includes('drink') || q.includes('coke') || q.includes('sprite') || q.includes('coca cola')) { return "Yes, we stock Fanta and other sodas. We keep them cold and ready for you! We also carry fresh juices and bottled water."; }
+      // EBM & RECEIPTS
+      if (q.includes('ebm') || q.includes('receipt') || q.includes('tax')) { return "Yes! We take tax compliance very seriously. 🧾<br><br><b>Every single sale</b> comes with an official <b>EBM (Electronic Billing Machine) receipt</b>. You can always trust us for transparency!"; }
+      // CONTACT INFO
+      if (q.includes('contact') || q.includes('call') || q.includes('whatsapp') || q.includes('message') || q.includes('phone') || q.includes('number')) { return "You can reach us anytime! 📞<br><br>• <b>Call or WhatsApp:</b> +250 789 542 601<br>• <b>Visit us:</b> Kabuye, just below the Kabuye Parish Church.<br><br>We respond to messages quickly! 💬"; }
+      // DEVELOPER
+      if (q.includes('developed') || q.includes('created') || q.includes('developer') || q.includes('who built') || q.includes('gikundiro') || q.includes('pierrot')) { return "The developer who built this website and created me (the AI Assistant) is called <b>Gikundiro Pierrot</b>. He specializes in creating robust, scalable websites and databases. His expertise covers the entire web development lifecycle! 🚀"; }
+      // TRUST
+      if (q.includes('safe') || q.includes('trust') || q.includes('legit') || q.includes('real')) { return "Yes, 100%! Marie Rose Shop is a trusted neighbourhood shop in Kabuye. We take compliance very seriously and provide official EBM receipts for every sale. You are in good hands! 😊"; }
+      
+      // FALLBACK ENGLISH
+      return "While I don't have the specific answer to that right now, you can call or WhatsApp us directly at +250 789 542 601, or visit our shop in Kabuye (just below the Kabuye Parish Church). The team is always happy to help! 😊";
+    }
+
+    // --------------------------------------------
+    // BRAIN 2: KINYARWANDA LANGUAGE
+    // --------------------------------------------
+    else if (lang === 'rw') {
+      // GREETINGS
+      if (q === 'muraho' || q === 'mwaramutse' || q === 'mwiriwe' || q === 'bonjour' || q.includes('mwaramutse')) {
+        return "Muraho! 👋 Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na Marie Rose Shop. Nakubafasha iki uyu munsi?";
+      }
+      // INSULTS
+      if (q.includes('ukunyomo') || q.includes('ubwenge') || q.includes('ikinyoma') || q.includes('umuswa') || q.includes('fuck') || q.includes('stupid')) {
+        return "Ntabwo ndi hano ngo nkubye cyangwa ngo muhangane. Ndi hano kugira ngo nkubafashe mu iserukiramuco rya Marie Rose Shop. Nakubafasha iki?";
+      }
+      // THANK YOU
+      if (q.includes('urakoze') || q.includes('murakoze') || q.includes('thx')) {
+        return "Murakoze cyane! 😊 Mube numunsi mwiza!";
+      }
+      if (q === 'bye' || q === 'goodbye') {
+        return "Muraho! 😊 Niba ukeneye ikindi, andika 'Muraho' kugira ngo ukomeze ikiganiro. Mube numunsi mwiza!";
+      }
+      // IDENTIFICATION
+      if (q.includes('uri nde') || q.includes('ni nde') || q.includes('izina')) {
+        return "Ndi umuyobozi wa AI wa Marie Rose Shop! 🤖 Nakozwe kugira ngo nkubafashe gusubiza byihuse ibibazo by'ibicuruzwa, aho duherereye, n'amasaha.";
+      }
+      // STORE HOURS
+      if (q.includes('amasaha') || q.includes('gufungura') || q.includes('gufunga') || q.includes('saa') || q.includes('irafungura')) {
+        return "Dufunguye iminsi 7 mu cyumweru! 🕘<br><br>• <b>Kuwa mbere - Kuwa gatandatu:</b> 7:00 AM – 9:30 PM<br>• <b>Ku cyumweru:</b> 7:30 AM – 9:00 PM";
+      }
+      // LOCATION
+      if (q.includes('herereye') || q.includes('ahe') || q.includes('adresse') || q.includes('shaka') || q.includes('ho')) {
+        return "Tuherereye i <b>Kabuye, Umurenge wa Jabana, Akarere ka Gasabo, Umujyi wa Kigali, Rwanda</b>.<br><br>Mushobora kutubona hepfo y'<b>Itorero rya Kabuye (Paroisse)</b>. Ni byoroshye kutubona! 😊";
+      }
+      // PAYMENT
+      if (q.includes('kwishyura') || q.includes('amafaranga') || q.includes('momo') || q.includes('ishyura')) {
+        return "Twakira amafaranga (Cash), MTN Mobile Money (MoMo Pay), na Airtel Money. Buri kigurishwa cyose giterwa inyemezabwishyu ya EBM.";
+      }
+      // DELIVERY
+      if (q.includes('gutwara') || q.includes('kugera') || q.includes('gurisha mu rugo')) {
+        return "Kuri ubu, dukora nk'iduka ryo mu gace ryakira abakiriya batugana. Ntabwo dutanga serivisi yo kugeza ibicuruzwa mu rugo, ariko mwaduhamagara cyangwa mukatwandikira kuri WhatsApp mumenye ko ibyo mukeneye bihari.";
+      }
+      // REQUESTS
+      if (q.includes('gusaba') || q.includes('keneye') || q.includes('kidafite')) {
+        return "Yego! Niba ukeneye ikintu runaka, tubwire kuri WhatsApp cyangwa ku murongo wa telephone. Itsinda ryacu rijya kurangura hanze kenshi, rikaba rishobora kukibazanira.";
+      }
+      // WHOLESALE
+      if (q.includes('kurangura') || q.includes('wholesale') || q.includes('sack')) {
+        return "Yego — ibintu byinshi nk'umuceri, ifu, n'amavuta biboneka mu mifuka minini ku giciro cyiza cyo kurangura. Baza ku murongo wa telephone kugira ngo ubone ibiciro by'ubwinshi.";
+      }
+      // PRODUCTS / STOCK
+      if (q.includes('ibicuruzwa') || q.includes('bikubiye') || q.includes('mugurisha') || q.includes('igurishwa')) {
+        return "Dufite ibicuruzwa binyuranye! 🛒 Dufite ibyiciro bikurikira:<br><br>🌾 <b>Ibinyampeke:</b> Umuceri, ifu y'ingano, ifu y'ibigori, isukari, ibishyimbo, umunyu.<br>🥤 <b>Ibinyobwa:</b> Fanta, amajus, icyayi, amata, amazi y'icupa, ikawa.<br>🍳 <b>Ibikoresho byo guteka:</b> Amavuta, ketchup, soya sauce, pasta, ibirungo.<br>🧺 <b>Isukura & Ubuziranire:</b> Isabune, Omo, tissues, toothpaste, shampoing.";
+      }
+      // EBM
+      if (q.includes('ebm') || q.includes('inyemezabwishyu')) {
+        return "Yego! Dukurikiza amategeko y'ubusoresha cyane. 🧾<br><br><b>Buri kigurishwa cyose</b> gitangwa n'inyemezabwishyu ya <b>EBM (Electronic Billing Machine)</b>. Mwizere neza!";
+      }
+      // CONTACT
+      if (q.includes('tuvugishe') || q.includes('hamagara') || q.includes('whatsapp') || q.includes('gutumanira')) {
+        return "Mushobora kutugiraho ibihe byose! 📞<br><br>• <b>Guhamagara cyangwa WhatsApp:</b> +250 789 542 601<br>• <b>Kudusura:</b> Kabuye, munsi y'Itorero rya Kabuye.<br><br>Turasubiza vuba! 💬";
+      }
+      // DEVELOPER
+      if (q.includes('wakureze') || q.includes('wakoze') || q.includes('umurenge') || q.includes('gikundiro') || q.includes('pierrot')) {
+        return "Umukoresha wakoze urubuga ni Gikundiro Pierrot. Yihanga mu gukora no gushushanya urubuga rukomeye kandi rwiza, ndetse no mu bubiko bw'amakuru. Ubuhamya bwe bugera ku nzego zose zo gukora urubuga! 🚀";
+      }
+      
+      // FALLBACK KINYARWANDA
+      return "Nubwo nta nyishu nyuzuye nfite ubu, mushobora guhamagara cyangwa kutwandikira kuri WhatsApp kuri +250 789 542 601, cyangwa kudusura mu iduka i Kabuye (munsi y'Itorero rya Kabuye). Itsinda ryacu rishobora kubafasha! 😊";
+    }
+
+    // --------------------------------------------
+    // BRAIN 3: FRENCH LANGUAGE
+    // --------------------------------------------
+    else if (lang === 'fr') {
+      // GREETINGS
+      if (q === 'bonjour' || q === 'salut' || q === 'coucou' || q === 'hey' || q.includes('bonjour') || q.includes('bonsoir') || q.includes('bon après-midi')) {
+        return "Bonjour ! 👋 Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?";
+      }
+      // INSULTS
+      if (q.includes('insulte') || q.includes('con') || q.includes('idiot') || q.includes('salopard') || q.includes('merde') || q.includes('fuck') || q.includes('pute')) {
+        return "Je ne suis pas là pour vous insulter ou me battre, s'il vous plaît. Je suis là pour vous aider avec vos achats à la boutique Marie Rose. Comment puis-je vous aider aujourd'hui ?";
+      }
+      // THANK YOU
+      if (q.includes('merci') || q.includes('thx') || q.includes('merci beaucoup')) {
+        return "Je vous en prie ! 😊 Passez une excellente journée !";
+      }
+      if (q === 'bye' || q === 'au revoir') {
+        return "Au revoir ! 😊 Si vous avez besoin d'autre chose, tapez simplement 'Bonjour' pour commencer une nouvelle conversation. Passez une bonne journée !";
+      }
+      // IDENTIFICATION
+      if (q.includes('qui êtes-vous') || q.includes('qui es-tu') || q.includes('ton nom')) {
+        return "Je suis l'assistant IA officiel de Marie Rose Shop ! 🤖 J'ai été créé pour aider nos clients à obtenir des réponses instantanées sur nos produits, notre emplacement et nos services.";
+      }
+      // STORE HOURS
+      if (q.includes('heure') || q.includes('ouvert') || q.includes('fermé') || q.includes('ouverture')) {
+        return "Nous sommes ouverts 7 jours sur 7 ! 🕘<br><br>• <b>Lundi - Samedi :</b> 7h00 – 21h30<br>• <b>Dimanche :</b> 7h30 – 21h00";
+      }
+      // LOCATION
+      if (q.includes('localisation') || q.includes('où') || q.includes('adresse') || q.includes('trouver')) {
+        return "Nous sommes situés à <b>Kabuye, Secteur Jabana, District de Gasabo, Ville de Kigali, Rwanda</b>.<br><br>Vous pouvez nous trouver juste <b>en dessous de l'église paroissiale de Kabuye</b>. C'est très facile à repérer ! 😊";
+      }
+      // PAYMENT
+      if (q.includes('payer') || q.includes('paiement') || q.includes('espèces') || q.includes('momo')) {
+        return "Nous acceptons les espèces, MTN Mobile Money (MoMo Pay) et Airtel Money. Chaque paiement est accompagné d'un reçu EBM officiel.";
+      }
+      // DELIVERY
+      if (q.includes('livraison') || q.includes('domicile') || q.includes('livrer')) {
+        return "Actuellement, nous fonctionnons comme une boutique de quartier. Nous ne proposons pas de livraison à domicile, mais vous pouvez nous appeler ou nous contacter sur WhatsApp pour vérifier la disponibilité des stocks.";
+      }
+      // REQUESTS
+      if (q.includes('demander') || q.includes('spécifique') || q.includes('pas sur les étagères')) {
+        return "Oui ! Si vous avez besoin d'un produit spécifique, faites-le nous savoir via WhatsApp ou au comptoir. Notre équipe d'approvisionnement voyage régulièrement et peut souvent le ramener.";
+      }
+      // WHOLESALE
+      if (q.includes('gros') || q.includes('en vrac')) {
+        return "Oui — de nombreux articles comme le riz, la farine et l'huile sont disponibles en sacs et en grands contenants à des prix de gros avantageux. Renseignez-vous au comptoir pour les tarifs de gros.";
+      }
+      // PRODUCTS
+      if (q.includes('stock') || q.includes('produits') || q.includes('vendre') || q.includes('articles') || q.includes('disponibles')) {
+        return "Nous avons une grande variété de produits frais ! 🛒 Voici nos principales catégories :<br><br>🌾 <b>Grains et de base :</b> Riz, farine de blé, farine de maïs, sucre, haricots, sel.<br>🥤 <b>Boissons :</b> Fanta, jus, thé, lait, eau en bouteille, café.<br>🍳 <b>Essentiels de cuisine :</b> Huile de cuisson, ketchup, sauce soja, pâtes, épices.<br>🧺 <b>Universel et Propreté :</b> Savons, détergents, mouchoirs, dentifrice, shampoing.";
+      }
+      // EBM
+      if (q.includes('ebm') || q.includes('reçu')) {
+        return "Oui ! Nous prenons la conformité fiscale très au sérieux. 🧾<br><br><b>Chaque vente</b> est accompagnée d'un <b>reçu EBM (Machine de Facturation Électronique) officiel</b>. Vous pouvez nous faire confiance pour la transparence !";
+      }
+      // CONTACT
+      if (q.includes('contacter') || q.includes('appeler') || q.includes('whatsapp') || q.includes('message')) {
+        return "Vous pouvez nous joindre à tout moment ! 📞<br><br>• <b>Appeler ou WhatsApp :</b> +250 789 542 601<br>• <b>Nous visiter :</b> Kabuye, juste en dessous de l'église paroissiale de Kabuye.<br><br>Nous répondons rapidement ! 💬";
+      }
+      // DEVELOPER
+      if (q.includes('développé') || q.includes('créé') || q.includes('développeur') || q.includes('gikundiro') || q.includes('pierrot')) {
+        return "Le développeur qui a créé ce site Web et m'a créé (l'assistant IA) s'appelle <b>Gikundiro Pierrot</b>. Il est spécialisé dans la création de sites Web et de bases de données robustes et évolutifs ! 🚀";
+      }
+      
+      // FALLBACK FRENCH
+      return "Bien que je n'aie pas la réponse spécifique pour le moment, vous pouvez nous appeler ou nous envoyer un WhatsApp au +250 789 542 601, ou visiter notre boutique à Kabuye (juste en dessous de l'église paroissiale de Kabuye). L'équipe sera ravie de vous aider ! 😊";
+    }
+  }
+
+  // ----------------------------
+  // MODERN USER INPUT HANDLER (WITH TYPING INDICATOR)
+  // ----------------------------
   function handleUserQuery() {
     const query = chatInput.value.trim();
     if (!query) return;
@@ -1036,17 +1044,28 @@
     addMessage(query, 'user');
     chatInput.value = '';
 
-    // Simulate AI "thinking"
+    // Add a professional "Typing..." indicator
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'chat-message bot';
+    typingDiv.innerHTML = `<div class="bubble typing-indicator"><span>.</span><span>.</span><span>.</span></div>`;
+    chatBody.appendChild(typingDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    // Simulate AI thinking with a small delay
     setTimeout(() => {
+      // Remove typing indicator
+      typingDiv.remove();
+
       const response = getAIResponse(query);
       addMessage(response, 'bot', true);
-    }, 600);
+    }, 800);
   }
 
   if (sendBtn) sendBtn.addEventListener('click', handleUserQuery);
   if (chatInput) {
-    chatInput.addEventListener('keydown', (e) => {
+    chatInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') handleUserQuery();
     });
   }
+
 })();
