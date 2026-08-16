@@ -2879,7 +2879,6 @@ html {
   opacity: 0.5;
 }
 
-
 /* ===== AI CHAT WIDGET STYLES ===== */
 #ai-chat-widget {
   position: fixed;
@@ -3053,20 +3052,269 @@ html {
 }
 #chat-send-btn:hover { background: #1ebe57; }
 
-/* ===== MOBILE RESPONSIVE FIXES (UPDATED) ===== */
+/* ===== MOBILE RESPONSIVE FIXES (CORNER CHAT BUBBLE) ===== */
 @media (max-width: 480px) {
   #ai-chat-popup {
-    position: fixed; /* Forces it to cover the screen properly on mobile */
-    width: 100vw;
-    height: 100vh; /* Takes up the full screen */
+    position: fixed;
+    width: 320px;          /* Perfect chat width for mobile */
+    height: 400px;         /* Perfect height - does NOT cover full screen */
+    max-width: 90vw;
+    bottom: 80px;          /* Sits perfectly above the green button */
+    right: 16px;           /* Sticks to the right side */
+    border-radius: 16px;
+    z-index: 10000;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    transform-origin: bottom right;
+  }
+  
+  /* Hide the button when chat is open for a clean look */
+  #ai-chat-popup.chat-open + #ai-chat-toggle {
+    display: none;
+  }
+
+  #ai-chat-toggle {
+    width: 54px;
+    height: 54px;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* ===== TYPING INDICATOR ANIMATION ===== */
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  font-size: 1.2rem;
+}
+.typing-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #888;
+  border-radius: 50%;
+  animation: typingDot 1.4s infinite ease-in-out both;
+}
+.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingDot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+/* ============================================
+   WHATSAPP FLOATING BUTTON
+   ============================================ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.6);
+}
+.whatsapp-float svg {
+  width: 28px;
+  height: 28px;
+  fill: white;
+}
+/* ============================================
+   AI CHAT WIDGET STYLES (Replaces WhatsApp Button)
+   ============================================ */
+#ai-chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Toggle Button */
+#ai-chat-toggle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  border: none;
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#ai-chat-toggle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.6);
+}
+#ai-chat-toggle svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Chat Popup (Hidden by default) */
+#ai-chat-popup {
+  position: absolute;
+  bottom: 75px;
+  right: 0;
+  width: 340px;
+  max-width: 90vw;
+  height: 450px;
+  background: #1e1e1e;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  transform-origin: bottom right;
+}
+#ai-chat-popup.chat-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+#ai-chat-popup.chat-open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+/* Chat Header */
+.chat-header {
+  background: #2c2c2c;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.chat-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-avatar { font-size: 1.4rem; }
+.chat-name {
+  display: block;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.chat-status {
+  display: block;
+  color: #25d366;
+  font-size: 0.7rem;
+}
+#chat-close-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #aaa;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s;
+}
+#chat-close-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+
+/* Chat Body */
+.chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-message {
+  display: flex;
+  width: 100%;
+}
+.chat-message.bot { justify-content: flex-start; }
+.chat-message.user { justify-content: flex-end; }
+.bubble {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+.chat-message.bot .bubble {
+  background: #2c2c2c;
+  color: #e0e0e0;
+  border-bottom-left-radius: 4px;
+}
+.chat-message.user .bubble {
+  background: #25d366;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+/* Chat Footer */
+.chat-footer {
+  padding: 12px 16px;
+  background: #2c2c2c;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+#chat-input {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#chat-input:focus { border-color: #25d366; }
+#chat-send-btn {
+  background: #25d366;
+  border: none;
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#chat-send-btn:hover { background: #1ebe57; }
+
+/* Mobile Responsive Fixes */
+@media (max-width: 480px) {
+  #ai-chat-popup {
+    position: fixed;
+    width: 90vw;
+    height: 80vh;
     max-width: 100vw;
-    bottom: 0;
-    right: 0;
-    border-radius: 0; /* Removes rounded corners on edges for a clean look */
-    transform-origin: bottom center;
+    bottom: 80px;
+    right: 5vw;
+    left: 5vw;
+    border-radius: 16px;
     z-index: 10000;
   }
-  /* Hides the green button while the chat is open so it doesn't get in the way */
   #ai-chat-popup.chat-open + #ai-chat-toggle {
     display: none;
   }
@@ -3075,6 +3323,5 @@ html {
     height: 54px;
     bottom: 20px;
     right: 20px;
-    z-index: 9999;
   }
 }
