@@ -1147,64 +1147,38 @@
   </div>
 </footer>
 
-   <!-- ===== AI ASSISTANT CHAT WIDGET ===== -->
-  <div id="ai-chat-widget">
-    <!-- Floating Toggle Button (Green Circle) -->
-    <button id="ai-chat-toggle" aria-label="Open AI Assistant">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-    </button>
-
-    <!-- The Chat Popup Window -->
-    <div id="ai-chat-popup" class="chat-hidden">
-      <div class="chat-header">
-        <div class="chat-title">
-          <span class="chat-avatar">🤖</span>
-          <div>
-            <!-- Language-Specific Name -->
-            <span class="chat-name lang-en">Marie's AI Assistant</span>
-            <span class="chat-name lang-rw" style="display:none;">Umuyobozi wa AI wa Marie</span>
-            <span class="chat-name lang-fr" style="display:none;">Assistant IA de Marie</span>
-            
-            <span class="chat-status lang-en">Online</span>
-            <span class="chat-status lang-rw" style="display:none;">Muri kondo</span>
-            <span class="chat-status lang-fr" style="display:none;">En ligne</span>
-          </div>
-        </div>
-        <button id="chat-close-btn">&times;</button>
-      </div>
-      <div class="chat-body">
-        <!-- English Greeting -->
-        <div class="chat-message bot lang-en">
-          <div class="bubble">Hello! 👋 I'm the virtual assistant for Marie Rose Shop. How can I help you today?</div>
-        </div>
-        <div class="chat-message bot lang-en">
-          <div class="bubble">You can ask me about our products, store hours, location, or current stock!</div>
-        </div>
-        
-        <!-- Kinyarwanda Greeting -->
-        <div class="chat-message bot lang-rw" style="display:none;">
-          <div class="bubble">Muraho! 👋 Ndi umuyobozi wa AI w'iduka rya Marie Rose. Nakubafasha iki uyu munsi?</div>
-        </div>
-        <div class="chat-message bot lang-rw" style="display:none;">
-          <div class="bubble">Mushobora kumbaza ibijyanye n'ibicuruzwa byacu, amasaha yo gufungura, aho duherereye, cyangwa ibikubiye mu iduka!</div>
-        </div>
-
-        <!-- French Greeting -->
-        <div class="chat-message bot lang-fr" style="display:none;">
-          <div class="bubble">Bonjour ! 👋 Je suis l'assistant virtuel de la boutique Marie Rose. Comment puis-je vous aider aujourd'hui ?</div>
-        </div>
-        <div class="chat-message bot lang-fr" style="display:none;">
-          <div class="bubble">Vous pouvez me poser des questions sur nos produits, nos heures d'ouverture, notre emplacement ou notre stock actuel !</div>
+ <!-- NEW CODE - KEEP THIS -->
+<div id="ai-chat-widget">
+  <button id="ai-chat-toggle" aria-label="Open AI Assistant">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  </button>
+  <div id="ai-chat-popup" class="chat-hidden">
+    <div class="chat-header">
+      <div class="chat-title">
+        <span class="chat-avatar">🤖</span>
+        <div>
+          <span class="chat-name">Marie's AI Assistant</span>
+          <span class="chat-status">Online</span>
         </div>
       </div>
-      <div class="chat-footer">
-        <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off">
-        <button id="chat-send-btn">
-          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        </button>
+      <button id="chat-close-btn">&times;</button>
+    </div>
+    <div class="chat-body">
+      <div class="chat-message bot">
+        <div class="bubble">Hello! 👋 I'm the virtual assistant for Marie Rose Shop. How can I help you today?</div>
+      </div>
+      <div class="chat-message bot">
+        <div class="bubble">You can ask me about our products, store hours, location, or current stock!</div>
       </div>
     </div>
+    <div class="chat-footer">
+      <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off">
+      <button id="chat-send-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
   </div>
+</div>
 
   <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
