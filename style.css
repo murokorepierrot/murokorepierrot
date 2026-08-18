@@ -647,6 +647,54 @@ a:hover { color: var(--leaf-dark); }
 }
 
 /* ============================================
+   TESTIMONIALS
+   ============================================ */
+.testimonials { padding: 70px 0 76px; background: var(--paper); }
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 36px;
+}
+.testimonial-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 26px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--gold);
+}
+.testimonial-stars {
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+.testimonial-quote {
+  font-size: .92rem;
+  line-height: 1.6;
+  color: var(--ink);
+  font-style: italic;
+  margin: 0;
+}
+.testimonial-author {
+  margin: 4px 0 0;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+@media (max-width: 860px) {
+  .testimonial-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================
    WHY US
    ============================================ */
 .why-us { padding: 70px 0; background: white; }
