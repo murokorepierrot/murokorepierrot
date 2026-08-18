@@ -1,0 +1,53 @@
+{
+  "name": "Marie Rose Shop | Jabana, Kigali",
+  "short_name": "Marie Rose Shop",
+  "description": "Quality groceries and household essentials in Jabana, Gasabo, Kigali. Fair prices, friendly service, every single day.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#faf7f0",
+  "theme_color": "#3d7a3d",
+  "lang": "en",
+  "categories": ["shopping", "food", "business"],
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Products",
+      "short_name": "Products",
+      "url": "./index.html#products",
+      "description": "See what's on the shelves"
+    },
+    {
+      "name": "Chat on WhatsApp",
+      "short_name": "WhatsApp",
+      "url": "https://wa.me/250789542601",
+      "description": "Message the shop directly"
+    },
+    {
+      "name": "Get Directions",
+      "short_name": "Directions",
+      "url": "./index.html#contact",
+      "description": "Find the shop location"
+    }
+  ]
+}
