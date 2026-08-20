@@ -834,6 +834,12 @@
       if (q.includes('thank') || q.includes('thx') || q.includes('thanks') || q.includes('thank you')) {
         return "You are very welcome! 😊 Thank you for choosing Marie Rose Shop. Have a blessed day!";
       }
+      if (q.includes('sure') || q.includes('forsure') || q.includes('truth') || q.includes('realy')) {
+        return "Absolutely. I stand by this information, and it is 100% reliable.";
+      }
+      if (q.includes('how are you') || q.includes('how do you feel') || q.includes('how are you going') || q.includes('what is going on')) {
+        return "i'm fine";
+      }
       if (q === 'bye' || q === 'goodbye' || q === 'see ya') {
         return "Goodbye! 😊 If you need anything else, just type 'Hi' to start a new chat. Have a blessed day!";
       }
@@ -902,7 +908,7 @@
     // --------------------------------------------
     else if (lang === 'rw') {
       // GREETINGS
-      if (q === 'muraho' || q === 'mwaramutse' || q === 'mwiriwe' || q === 'bonjour' || q.includes('mwaramutse')) {
+      if (q === 'muraho' || q === 'mwaramutse' || q === 'mwiriwe' || q === 'amakuru' ||  q === 'bonjour' || q === 'bite' || q.includes('mwaramutse')) {
         return "Muraho! 👋 Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na Marie Rose Shop. Nakubafasha iki uyu munsi?";
       }
       // INSULTS
@@ -1067,5 +1073,88 @@
       if (e.key === 'Enter') handleUserQuery();
     });
   }
+
+  /* ===== CLICK-TO-FRONT CARDS =====
+     Same idea as the gallery lightbox: clicking a card brings it
+     forward in a full-screen overlay, above everything else on the
+     page, instead of just a small lift within its grid.
+     Applies to: testimonial cards ("What Customers Say") and
+     why-us cards ("Why Kabuye Shops With Us"). */
+  function initClickToFrontCards(selector) {
+    const cards = document.querySelectorAll(selector);
+    if (!cards.length) return;
+
+    const overlay = document.getElementById('cardFocusOverlay');
+    const content = document.getElementById('cardFocusContent');
+    const closeBtn = document.getElementById('cardFocusClose');
+    if (!overlay || !content || !closeBtn) return;
+
+    let activeCard = null;
+    let originalParent = null;
+    let originalNextSibling = null;
+
+    function openCard(card) {
+      // Remember exactly where the card lives so we can put it back.
+      activeCard = card;
+      originalParent = card.parentNode;
+      originalNextSibling = card.nextSibling;
+
+      content.appendChild(card);
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      card.setAttribute('aria-pressed', 'true');
+      closeBtn.focus();
+    }
+
+    function closeCard() {
+      if (!activeCard) return;
+      if (originalNextSibling) {
+        originalParent.insertBefore(activeCard, originalNextSibling);
+      } else {
+        originalParent.appendChild(activeCard);
+      }
+      activeCard.setAttribute('aria-pressed', 'false');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      activeCard = null;
+      originalParent = null;
+      originalNextSibling = null;
+    }
+
+    cards.forEach(function(card) {
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-pressed', 'false');
+
+      card.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openCard(card);
+      });
+
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openCard(card);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', closeCard);
+
+    // Clicking the dark backdrop (but not the card itself) closes it.
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeCard();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeCard();
+    });
+  }
+
+  initClickToFrontCards('.testimonial-card');
+  initClickToFrontCards('.why-card');
+  initClickToFrontCards('.step-card'); /* Adds support for "How to Shop" cards */
 
 })();
