@@ -1,32 +1,27 @@
 (function() {
   'use strict';
 
-  /* ===== CLICK-TO-FRONT CARDS (moved to the very top on purpose) =====
-     Same idea as the gallery lightbox: clicking a card brings it
-     forward in a full-screen overlay, above everything else on the
-     page, instead of just a small lift within its grid.
-     Applies to: testimonial cards ("What Customers Say"),
-     why-us cards ("Why Kabuye Shops With Us"), and step cards.
-     This block is intentionally wrapped in try/catch AND placed
-     before every other feature, so that if any later feature throws
-     an error on a particular phone/browser, this one still works —
-     previously it was defined last, so one earlier error could
-     silently stop it (and everything after it) from ever running. */
+  /* ===== CLICK-TO-FRONT CARDS =====
+     Opens a card in a full-screen overlay only when the user taps/clicks it,
+     not while scrolling. */
   try {
-    var initClickToFrontCards = function(selector) {
-      var cards = document.querySelectorAll(selector);
+    function initClickToFrontCards(selector) {
+      const cards = document.querySelectorAll(selector);
       if (!cards.length) return;
 
-      var overlay = document.getElementById('cardFocusOverlay');
-      var content = document.getElementById('cardFocusContent');
-      var closeBtn = document.getElementById('cardFocusClose');
+      const overlay = document.getElementById('cardFocusOverlay');
+      const content = document.getElementById('cardFocusContent');
+      const closeBtn = document.getElementById('cardFocusClose');
       if (!overlay || !content || !closeBtn) return;
 
-      var activeCard = null;
-      var originalParent = null;
-      var originalNextSibling = null;
+      let activeCard = null;
+      let originalParent = null;
+      let originalNextSibling = null;
+      let touchMoved = false;
 
       function openCard(card) {
+        if (touchMoved) return;
+
         activeCard = card;
         originalParent = card.parentNode;
         originalNextSibling = card.nextSibling;
@@ -60,29 +55,33 @@
         card.setAttribute('role', 'button');
         card.setAttribute('aria-pressed', 'false');
 
-        /* Real phones fire 'click' after 'touchend' just fine in the
-           vast majority of cases, but some in-app browsers (Facebook,
-           Instagram, older WebViews) can be flaky about it. Binding
-           both 'click' and 'touchend' — with a guard so it doesn't
-           fire twice — makes this bulletproof on real devices. */
-       var lastHandled = 0;
-function handleActivate(e) {
-  // Ignore if the user is trying to scroll (check if they moved their finger)
-  if (e.type === 'touchstart' && e.touches && e.touches.length > 0) {
-    // Store the touch start position
-    this._touchStartY = e.touches[0].clientY;
-  }
-  
-  var now = Date.now();
-  if (now - lastHandled < 500) return;
-  lastHandled = now;
-  if (e.type !== 'touchstart') {
-    e.stopPropagation();
-  }
-  openCard(card);
-}
-card.addEventListener('click', handleActivate);
-card.addEventListener('touchstart', handleActivate, { passive: true });
+        let touchStartY = 0;
+
+        card.addEventListener('touchstart', function(e) {
+          touchMoved = false;
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        card.addEventListener('touchmove', function(e) {
+          if (touchStartY) {
+            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+            if (deltaY > 10) {
+              touchMoved = true;
+            }
+          }
+        }, { passive: true });
+
+        card.addEventListener('touchend', function(e) {
+          if (!touchMoved) {
+            e.preventDefault();
+            openCard(card);
+          }
+        }, { passive: false });
+
+        card.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openCard(card);
+        });
 
         card.addEventListener('keydown', function(e) {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -93,7 +92,10 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
       });
 
       closeBtn.addEventListener('click', closeCard);
-      closeBtn.addEventListener('touchend', function(e) { e.stopPropagation(); closeCard(); }, { passive: true });
+      closeBtn.addEventListener('touchend', function(e) {
+        e.stopPropagation();
+        closeCard();
+      }, { passive: true });
 
       overlay.addEventListener('click', function(e) {
         if (e.target === overlay) closeCard();
@@ -102,11 +104,12 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && overlay.classList.contains('open')) closeCard();
       });
-    };
+    }
 
     initClickToFrontCards('.testimonial-card');
     initClickToFrontCards('.why-card');
     initClickToFrontCards('.step-card');
+
   } catch (err) {
     console.warn('Click-to-front cards failed to initialize:', err);
   }
@@ -196,8 +199,8 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
     var isOpen = (day >= 1 && day <= 6 && hour >= 6.5 && hour < 21) || (day === 0 && hour >= 8 && hour < 20);
     dot.classList.toggle('closed', !isOpen);
     text.textContent = isOpen
-      ? 'Open now \u00B7 Mon\u2013Sat 6:30 AM\u20139:00 PM \u00B7 Sun 8:00 AM\u20138:00 PM'
-      : 'Closed now \u00B7 Opens at 6:30 AM';
+      ? 'Open now · Mon–Sat 6:30 AM–9:00 PM · Sun 8:00 AM–8:00 PM'
+      : 'Closed now · Opens at 6:30 AM';
   }
   updateHours();
   setInterval(updateHours, 60000);
@@ -883,7 +886,6 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
 
   if (!toggleBtn) return;
 
-  // Toggle open/close
   function toggleChat() {
     const isOpen = popup.classList.contains('chat-open');
     if (isOpen) {
@@ -910,38 +912,25 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // -----------------------------------------------------------
-  // DETECT CURRENT LANGUAGE
-  // -----------------------------------------------------------
   function getCurrentLanguage() {
-    // Look for the active language button in the header
     const activeLangBtn = document.querySelector('.lang-btn.active');
     if (activeLangBtn) {
       return activeLangBtn.getAttribute('data-lang');
     }
-    return 'en'; // Default to English
+    return 'en';
   }
 
-  // -----------------------------------------------------------
-  // MULTI-LINGUAL KNOWLEDGE BASE (3 Separate Brains)
-  // -----------------------------------------------------------
   function getAIResponse(query) {
-    const lang = getCurrentLanguage(); // Detect language
+    const lang = getCurrentLanguage();
     const q = query.toLowerCase().trim();
 
-    // --------------------------------------------
-    // BRAIN 1: ENGLISH LANGUAGE
-    // --------------------------------------------
     if (lang === 'en') {
-      // GREETINGS
       if (q === 'hi' || q === 'hello' || q === 'hey' || q === 'yo' || q === 'wssp' || q === 'sup' || q === 'hy' || q.includes('good morning') || q.includes('good afternoon') || q.includes('good evening')) {
         return "Hello! 👋 You are free to ask anything about Marie Rose Shop. What can I help you with today?";
       }
-      // INSULTS
       if (q.includes('fuck') || q.includes('fack') || q.includes('fu*k') || q.includes('f\*\*k') || q.includes('stupid') || q.includes('st*pid') || q.includes('st\*\*id') || q.includes('idiot') || q.includes('id\*\*t') || q.includes('id\*ot') || q.includes('bastard') || q.includes('dumb') || q.includes('dumbass') || q.includes('bullshit') || q.includes('shit') || q.includes('piss') || q.includes('moron') || q.includes('suck') || q.includes('asshole') || q.includes('a\*\*hole')) {
         return "I'm not here to insult or fight, please. I am here to help you with your shopping at Marie Rose Shop. How can I assist you today?";
       }
-      // THANK YOU
       if (q.includes('thank') || q.includes('thx') || q.includes('thanks') || q.includes('thank you')) {
         return "You are very welcome! 😊 Thank you for choosing Marie Rose Shop. Have a blessed day!";
       }
@@ -949,211 +938,153 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
         return "Absolutely. I stand by this information, and it is 100% reliable.";
       }
       if (q.includes('how are you') || q.includes('how do you feel') || q.includes('how are you going') || q.includes('what is going on')) {
-        return "i'm fine";
+        return "I'm fine";
       }
       if (q === 'bye' || q === 'goodbye' || q === 'see ya') {
         return "Goodbye! 😊 If you need anything else, just type 'Hi' to start a new chat. Have a blessed day!";
       }
-      // IDENTIFICATION
       if (q.includes('who are you') || q.includes('what are you') || q.includes('your name') || q.includes('who is this')) {
         return "I am the official AI Assistant for Marie Rose Shop! 🤖 I was created to help our customers get instant answers about our products, location, and services.";
       }
-      // LOGISTICS / WALK-IN / PARKING
       if (q.includes('appointment') || q.includes('walk in') || q.includes('walk-in') || q.includes('just come') || q.includes('need to book')) {
         return "Yes, absolutely! We are a walk-in neighbourhood shop. You can walk in anytime during our opening hours. No appointment is needed!";
       }
       if (q.includes('park') || q.includes('parking') || q.includes('car')) {
         return "Yes, there is street parking available right in front of our shop. You can also park near the Kabuye Parish Church and walk over.";
       }
-      // STORE HOURS
       if (q.includes('hour') || q.includes('open') || q.includes('close') || q.includes('time') || q.includes('when do you') || q.includes('are you open today')) {
         return "We are open 7 days a week! 🕘<br><br>• <b>Monday - Saturday:</b> 7:00 AM – 9:30 PM<br>• <b>Sunday:</b> 7:30 AM – 9:00 PM";
       }
-      // LOCATION / DIRECTIONS
       if (q.includes('location') || q.includes('where') || q.includes('address') || q.includes('find') || q.includes('are you located') || q.includes('live') || q.includes('how do i get') || q.includes('directions') || q.includes('map')) {
         return "We are located at <b>Kabuye Cell, Jabana Sector, Gasabo District, Kigali City, Rwanda</b>.<br><br>You can find us just <b>below the Kabuye Parish Church</b>. If you are using a map, search for 'Kabuye Parish Church'. We are easy to spot! 😊";
       }
-      // PAYMENT
       if (q.includes('pay') || q.includes('payment') || q.includes('cash') || q.includes('momo') || q.includes('mobile money') || q.includes('airtel')) {
         return "We accept cash, MTN Mobile Money (MoMo Pay), and Airtel Money. Every payment comes with an official EBM receipt.";
       }
-      // DELIVERY
       if (q.includes('delivery') || q.includes('home') || q.includes('deliver') || q.includes('shipping') || q.includes('ship') || q.includes('send') || q.includes('transport')) {
         return "Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery, but you can call or WhatsApp us to check stock availability before visiting.";
       }
-      // REQUESTS
       if (q.includes('request') || q.includes('specific') || q.includes('not on shelf') || q.includes('custom order') || q.includes('find something') || q.includes('bring in')) {
         return "Yes! If you need something specific, let us know via WhatsApp or at the counter. Our sourcing team travels regularly and can often bring it in.";
       }
-      // NEGOTIABLE / DISCOUNTS
       if (q.includes('negotiable') || q.includes('bargain') || q.includes('haggle') || q.includes('discount') || q.includes('cheap')) {
         return "We keep our prices fair and transparent for everyone. The price on the shelf is the final price — no haggling needed.";
       }
-      // WHOLESALE
       if (q.includes('wholesale') || q.includes('bulk') || q.includes('large quantity') || q.includes('sack') || q.includes('bag')) {
         return "Yes — many items like rice, flour, and oil are available in sacks and larger containers at wholesale-friendly prices. Ask at the counter for bulk pricing.";
       }
-      // PRODUCTS / STOCK
       if (q.includes('stock') || q.includes('product') || q.includes('sell') || q.includes('items') || q.includes('available') || q.includes('what do you have') || q.includes('got') || q.includes('supply')) {
         return "We have a wide variety of fresh stock! 🛒 Here are our main categories:<br><br>🌾 <b>Grains & Staples:</b> Premium Rice, Wheat Flour, Maize Flour, Sugar, Beans, Salt.<br><br>🥤 <b>Beverages:</b> Fanta, Assorted Juices, Tea, Milk, Bottled Water, Coffee.<br><br>🍳 <b>Cooking Essentials:</b> Cooking Oil, Ketchup, Soy Sauce, Pasta, Spices, Tomato Paste.<br><br>🧺 <b>Household & Care:</b> Soaps, Detergents, Tissues, Toothpaste, Shampoo.";
       }
-      // SPECIFIC PRODUCTS
       if (q.includes('rice') || q.includes('rise')) { return "Yes! We have premium quality sacks of rice available. We sell it by the sack or by the kilo. Come visit us to see our fresh supply!"; }
       if (q.includes('oil') || q.includes('blue band') || q.includes('margarine')) { return "Yes, we stock pure vegetable cooking oil and Blue Band margarine! We have it in different sizes. Let us know if you need a specific brand."; }
       if (q.includes('fanta') || q.includes('soda') || q.includes('drink') || q.includes('coke') || q.includes('sprite') || q.includes('coca cola')) { return "Yes, we stock Fanta and other sodas. We keep them cold and ready for you! We also carry fresh juices and bottled water."; }
-      // EBM & RECEIPTS
       if (q.includes('ebm') || q.includes('receipt') || q.includes('tax')) { return "Yes! We take tax compliance very seriously. 🧾<br><br><b>Every single sale</b> comes with an official <b>EBM (Electronic Billing Machine) receipt</b>. You can always trust us for transparency!"; }
-      // CONTACT INFO
       if (q.includes('contact') || q.includes('call') || q.includes('whatsapp') || q.includes('message') || q.includes('phone') || q.includes('number')) { return "You can reach us anytime! 📞<br><br>• <b>Call or WhatsApp:</b> +250 789 542 601<br>• <b>Visit us:</b> Kabuye, just below the Kabuye Parish Church.<br><br>We respond to messages quickly! 💬"; }
-      // DEVELOPER
       if (q.includes('developed') || q.includes('created') || q.includes('developer') || q.includes('who built') || q.includes('gikundiro') || q.includes('pierrot')) { return "The developer who built this website and created me (the AI Assistant) is called <b>Gikundiro Pierrot</b>. He specializes in creating robust, scalable websites and databases. His expertise covers the entire web development lifecycle! 🚀"; }
-      // TRUST
       if (q.includes('safe') || q.includes('trust') || q.includes('legit') || q.includes('real')) { return "Yes, 100%! Marie Rose Shop is a trusted neighbourhood shop in Kabuye. We take compliance very seriously and provide official EBM receipts for every sale. You are in good hands! 😊"; }
-      
-      // FALLBACK ENGLISH
       return "While I don't have the specific answer to that right now, you can call or WhatsApp us directly at +250 789 542 601, or visit our shop in Kabuye (just below the Kabuye Parish Church). The team is always happy to help! 😊";
     }
 
-    // --------------------------------------------
-    // BRAIN 2: KINYARWANDA LANGUAGE
-    // --------------------------------------------
     else if (lang === 'rw') {
-      // GREETINGS
-      if (q === 'muraho' || q === 'mwaramutse' || q === 'mwiriwe' || q === 'amakuru' ||  q === 'bonjour' || q === 'bite' || q.includes('mwaramutse')) {
+      if (q === 'muraho' || q === 'mwaramutse' || q === 'mwiriwe' || q === 'amakuru' || q === 'bonjour' || q === 'bite' || q.includes('mwaramutse')) {
         return "Muraho! 👋 Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na Marie Rose Shop. Nakubafasha iki uyu munsi?";
       }
-      // INSULTS
       if (q.includes('ukunyomo') || q.includes('ubwenge') || q.includes('ikinyoma') || q.includes('umuswa') || q.includes('fuck') || q.includes('stupid')) {
         return "Ntabwo ndi hano ngo nkubye cyangwa ngo muhangane. Ndi hano kugira ngo nkubafashe mu iserukiramuco rya Marie Rose Shop. Nakubafasha iki?";
       }
-      // THANK YOU
       if (q.includes('urakoze') || q.includes('murakoze') || q.includes('thx')) {
         return "Murakoze cyane! 😊 Mube numunsi mwiza!";
       }
       if (q === 'bye' || q === 'goodbye') {
         return "Muraho! 😊 Niba ukeneye ikindi, andika 'Muraho' kugira ngo ukomeze ikiganiro. Mube numunsi mwiza!";
       }
-      // IDENTIFICATION
       if (q.includes('uri nde') || q.includes('ni nde') || q.includes('izina')) {
         return "Ndi umuyobozi wa AI wa Marie Rose Shop! 🤖 Nakozwe kugira ngo nkubafashe gusubiza byihuse ibibazo by'ibicuruzwa, aho duherereye, n'amasaha.";
       }
-      // STORE HOURS
       if (q.includes('amasaha') || q.includes('gufungura') || q.includes('gufunga') || q.includes('saa') || q.includes('irafungura')) {
         return "Dufunguye iminsi 7 mu cyumweru! 🕘<br><br>• <b>Kuwa mbere - Kuwa gatandatu:</b> 7:00 AM – 9:30 PM<br>• <b>Ku cyumweru:</b> 7:30 AM – 9:00 PM";
       }
-      // LOCATION
       if (q.includes('herereye') || q.includes('ahe') || q.includes('adresse') || q.includes('shaka') || q.includes('ho')) {
         return "Tuherereye i <b>Kabuye, Umurenge wa Jabana, Akarere ka Gasabo, Umujyi wa Kigali, Rwanda</b>.<br><br>Mushobora kutubona hepfo y'<b>Itorero rya Kabuye (Paroisse)</b>. Ni byoroshye kutubona! 😊";
       }
-      // PAYMENT
       if (q.includes('kwishyura') || q.includes('amafaranga') || q.includes('momo') || q.includes('ishyura')) {
         return "Twakira amafaranga (Cash), MTN Mobile Money (MoMo Pay), na Airtel Money. Buri kigurishwa cyose giterwa inyemezabwishyu ya EBM.";
       }
-      // DELIVERY
       if (q.includes('gutwara') || q.includes('kugera') || q.includes('gurisha mu rugo')) {
         return "Kuri ubu, dukora nk'iduka ryo mu gace ryakira abakiriya batugana. Ntabwo dutanga serivisi yo kugeza ibicuruzwa mu rugo, ariko mwaduhamagara cyangwa mukatwandikira kuri WhatsApp mumenye ko ibyo mukeneye bihari.";
       }
-      // REQUESTS
       if (q.includes('gusaba') || q.includes('keneye') || q.includes('kidafite')) {
         return "Yego! Niba ukeneye ikintu runaka, tubwire kuri WhatsApp cyangwa ku murongo wa telephone. Itsinda ryacu rijya kurangura hanze kenshi, rikaba rishobora kukibazanira.";
       }
-      // WHOLESALE
       if (q.includes('kurangura') || q.includes('wholesale') || q.includes('sack')) {
         return "Yego — ibintu byinshi nk'umuceri, ifu, n'amavuta biboneka mu mifuka minini ku giciro cyiza cyo kurangura. Baza ku murongo wa telephone kugira ngo ubone ibiciro by'ubwinshi.";
       }
-      // PRODUCTS / STOCK
       if (q.includes('ibicuruzwa') || q.includes('bikubiye') || q.includes('mugurisha') || q.includes('igurishwa')) {
         return "Dufite ibicuruzwa binyuranye! 🛒 Dufite ibyiciro bikurikira:<br><br>🌾 <b>Ibinyampeke:</b> Umuceri, ifu y'ingano, ifu y'ibigori, isukari, ibishyimbo, umunyu.<br>🥤 <b>Ibinyobwa:</b> Fanta, amajus, icyayi, amata, amazi y'icupa, ikawa.<br>🍳 <b>Ibikoresho byo guteka:</b> Amavuta, ketchup, soya sauce, pasta, ibirungo.<br>🧺 <b>Isukura & Ubuziranire:</b> Isabune, Omo, tissues, toothpaste, shampoing.";
       }
-      // EBM
       if (q.includes('ebm') || q.includes('inyemezabwishyu')) {
         return "Yego! Dukurikiza amategeko y'ubusoresha cyane. 🧾<br><br><b>Buri kigurishwa cyose</b> gitangwa n'inyemezabwishyu ya <b>EBM (Electronic Billing Machine)</b>. Mwizere neza!";
       }
-      // CONTACT
       if (q.includes('tuvugishe') || q.includes('hamagara') || q.includes('whatsapp') || q.includes('gutumanira')) {
         return "Mushobora kutugiraho ibihe byose! 📞<br><br>• <b>Guhamagara cyangwa WhatsApp:</b> +250 789 542 601<br>• <b>Kudusura:</b> Kabuye, munsi y'Itorero rya Kabuye.<br><br>Turasubiza vuba! 💬";
       }
-      // DEVELOPER
       if (q.includes('wakureze') || q.includes('wakoze') || q.includes('umurenge') || q.includes('gikundiro') || q.includes('pierrot')) {
         return "Umukoresha wakoze urubuga ni Gikundiro Pierrot. Yihanga mu gukora no gushushanya urubuga rukomeye kandi rwiza, ndetse no mu bubiko bw'amakuru. Ubuhamya bwe bugera ku nzego zose zo gukora urubuga! 🚀";
       }
-      
-      // FALLBACK KINYARWANDA
       return "Nubwo nta nyishu nyuzuye nfite ubu, mushobora guhamagara cyangwa kutwandikira kuri WhatsApp kuri +250 789 542 601, cyangwa kudusura mu iduka i Kabuye (munsi y'Itorero rya Kabuye). Itsinda ryacu rishobora kubafasha! 😊";
     }
 
-    // --------------------------------------------
-    // BRAIN 3: FRENCH LANGUAGE
-    // --------------------------------------------
     else if (lang === 'fr') {
-      // GREETINGS
       if (q === 'bonjour' || q === 'salut' || q === 'coucou' || q === 'hey' || q.includes('bonjour') || q.includes('bonsoir') || q.includes('bon après-midi')) {
         return "Bonjour ! 👋 Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?";
       }
-      // INSULTS
       if (q.includes('insulte') || q.includes('con') || q.includes('idiot') || q.includes('salopard') || q.includes('merde') || q.includes('fuck') || q.includes('pute')) {
         return "Je ne suis pas là pour vous insulter ou me battre, s'il vous plaît. Je suis là pour vous aider avec vos achats à la boutique Marie Rose. Comment puis-je vous aider aujourd'hui ?";
       }
-      // THANK YOU
       if (q.includes('merci') || q.includes('thx') || q.includes('merci beaucoup')) {
         return "Je vous en prie ! 😊 Passez une excellente journée !";
       }
       if (q === 'bye' || q === 'au revoir') {
         return "Au revoir ! 😊 Si vous avez besoin d'autre chose, tapez simplement 'Bonjour' pour commencer une nouvelle conversation. Passez une bonne journée !";
       }
-      // IDENTIFICATION
       if (q.includes('qui êtes-vous') || q.includes('qui es-tu') || q.includes('ton nom')) {
         return "Je suis l'assistant IA officiel de Marie Rose Shop ! 🤖 J'ai été créé pour aider nos clients à obtenir des réponses instantanées sur nos produits, notre emplacement et nos services.";
       }
-      // STORE HOURS
       if (q.includes('heure') || q.includes('ouvert') || q.includes('fermé') || q.includes('ouverture')) {
         return "Nous sommes ouverts 7 jours sur 7 ! 🕘<br><br>• <b>Lundi - Samedi :</b> 7h00 – 21h30<br>• <b>Dimanche :</b> 7h30 – 21h00";
       }
-      // LOCATION
       if (q.includes('localisation') || q.includes('où') || q.includes('adresse') || q.includes('trouver')) {
         return "Nous sommes situés à <b>Kabuye, Secteur Jabana, District de Gasabo, Ville de Kigali, Rwanda</b>.<br><br>Vous pouvez nous trouver juste <b>en dessous de l'église paroissiale de Kabuye</b>. C'est très facile à repérer ! 😊";
       }
-      // PAYMENT
       if (q.includes('payer') || q.includes('paiement') || q.includes('espèces') || q.includes('momo')) {
         return "Nous acceptons les espèces, MTN Mobile Money (MoMo Pay) et Airtel Money. Chaque paiement est accompagné d'un reçu EBM officiel.";
       }
-      // DELIVERY
       if (q.includes('livraison') || q.includes('domicile') || q.includes('livrer')) {
         return "Actuellement, nous fonctionnons comme une boutique de quartier. Nous ne proposons pas de livraison à domicile, mais vous pouvez nous appeler ou nous contacter sur WhatsApp pour vérifier la disponibilité des stocks.";
       }
-      // REQUESTS
       if (q.includes('demander') || q.includes('spécifique') || q.includes('pas sur les étagères')) {
         return "Oui ! Si vous avez besoin d'un produit spécifique, faites-le nous savoir via WhatsApp ou au comptoir. Notre équipe d'approvisionnement voyage régulièrement et peut souvent le ramener.";
       }
-      // WHOLESALE
       if (q.includes('gros') || q.includes('en vrac')) {
         return "Oui — de nombreux articles comme le riz, la farine et l'huile sont disponibles en sacs et en grands contenants à des prix de gros avantageux. Renseignez-vous au comptoir pour les tarifs de gros.";
       }
-      // PRODUCTS
       if (q.includes('stock') || q.includes('produits') || q.includes('vendre') || q.includes('articles') || q.includes('disponibles')) {
         return "Nous avons une grande variété de produits frais ! 🛒 Voici nos principales catégories :<br><br>🌾 <b>Grains et de base :</b> Riz, farine de blé, farine de maïs, sucre, haricots, sel.<br>🥤 <b>Boissons :</b> Fanta, jus, thé, lait, eau en bouteille, café.<br>🍳 <b>Essentiels de cuisine :</b> Huile de cuisson, ketchup, sauce soja, pâtes, épices.<br>🧺 <b>Universel et Propreté :</b> Savons, détergents, mouchoirs, dentifrice, shampoing.";
       }
-      // EBM
       if (q.includes('ebm') || q.includes('reçu')) {
         return "Oui ! Nous prenons la conformité fiscale très au sérieux. 🧾<br><br><b>Chaque vente</b> est accompagnée d'un <b>reçu EBM (Machine de Facturation Électronique) officiel</b>. Vous pouvez nous faire confiance pour la transparence !";
       }
-      // CONTACT
       if (q.includes('contacter') || q.includes('appeler') || q.includes('whatsapp') || q.includes('message')) {
         return "Vous pouvez nous joindre à tout moment ! 📞<br><br>• <b>Appeler ou WhatsApp :</b> +250 789 542 601<br>• <b>Nous visiter :</b> Kabuye, juste en dessous de l'église paroissiale de Kabuye.<br><br>Nous répondons rapidement ! 💬";
       }
-      // DEVELOPER
       if (q.includes('développé') || q.includes('créé') || q.includes('développeur') || q.includes('gikundiro') || q.includes('pierrot')) {
         return "Le développeur qui a créé ce site Web et m'a créé (l'assistant IA) s'appelle <b>Gikundiro Pierrot</b>. Il est spécialisé dans la création de sites Web et de bases de données robustes et évolutifs ! 🚀";
       }
-      
-      // FALLBACK FRENCH
       return "Bien que je n'aie pas la réponse spécifique pour le moment, vous pouvez nous appeler ou nous envoyer un WhatsApp au +250 789 542 601, ou visiter notre boutique à Kabuye (juste en dessous de l'église paroissiale de Kabuye). L'équipe sera ravie de vous aider ! 😊";
     }
   }
 
-  // ----------------------------
-  // MODERN USER INPUT HANDLER (WITH TYPING INDICATOR)
-  // ----------------------------
   function handleUserQuery() {
     const query = chatInput.value.trim();
     if (!query) return;
@@ -1161,18 +1092,14 @@ card.addEventListener('touchstart', handleActivate, { passive: true });
     addMessage(query, 'user');
     chatInput.value = '';
 
-    // Add a professional "Typing..." indicator
     const typingDiv = document.createElement('div');
     typingDiv.className = 'chat-message bot';
     typingDiv.innerHTML = `<div class="bubble typing-indicator"><span>.</span><span>.</span><span>.</span></div>`;
     chatBody.appendChild(typingDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Simulate AI thinking with a small delay
     setTimeout(() => {
-      // Remove typing indicator
       typingDiv.remove();
-
       const response = getAIResponse(query);
       addMessage(response, 'bot', true);
     }, 800);
