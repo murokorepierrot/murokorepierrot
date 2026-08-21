@@ -65,16 +65,24 @@
            Instagram, older WebViews) can be flaky about it. Binding
            both 'click' and 'touchend' — with a guard so it doesn't
            fire twice — makes this bulletproof on real devices. */
-        var lastHandled = 0;
-        function handleActivate(e) {
-          var now = Date.now();
-          if (now - lastHandled < 500) return; // prevent double-fire from click+touchend
-          lastHandled = now;
-          e.stopPropagation();
-          openCard(card);
-        }
-        card.addEventListener('click', handleActivate);
-        card.addEventListener('touchend', handleActivate, { passive: true });
+       var lastHandled = 0;
+function handleActivate(e) {
+  // Ignore if the user is trying to scroll (check if they moved their finger)
+  if (e.type === 'touchstart' && e.touches && e.touches.length > 0) {
+    // Store the touch start position
+    this._touchStartY = e.touches[0].clientY;
+  }
+  
+  var now = Date.now();
+  if (now - lastHandled < 500) return;
+  lastHandled = now;
+  if (e.type !== 'touchstart') {
+    e.stopPropagation();
+  }
+  openCard(card);
+}
+card.addEventListener('click', handleActivate);
+card.addEventListener('touchstart', handleActivate, { passive: true });
 
         card.addEventListener('keydown', function(e) {
           if (e.key === 'Enter' || e.key === ' ') {
