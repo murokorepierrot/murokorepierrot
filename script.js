@@ -1,6 +1,108 @@
 (function() {
   'use strict';
 
+  /* ===== CLICK-TO-FRONT CARDS (moved to the very top on purpose) =====
+     Same idea as the gallery lightbox: clicking a card brings it
+     forward in a full-screen overlay, above everything else on the
+     page, instead of just a small lift within its grid.
+     Applies to: testimonial cards ("What Customers Say"),
+     why-us cards ("Why Kabuye Shops With Us"), and step cards.
+     This block is intentionally wrapped in try/catch AND placed
+     before every other feature, so that if any later feature throws
+     an error on a particular phone/browser, this one still works —
+     previously it was defined last, so one earlier error could
+     silently stop it (and everything after it) from ever running. */
+  try {
+    var initClickToFrontCards = function(selector) {
+      var cards = document.querySelectorAll(selector);
+      if (!cards.length) return;
+
+      var overlay = document.getElementById('cardFocusOverlay');
+      var content = document.getElementById('cardFocusContent');
+      var closeBtn = document.getElementById('cardFocusClose');
+      if (!overlay || !content || !closeBtn) return;
+
+      var activeCard = null;
+      var originalParent = null;
+      var originalNextSibling = null;
+
+      function openCard(card) {
+        activeCard = card;
+        originalParent = card.parentNode;
+        originalNextSibling = card.nextSibling;
+
+        content.appendChild(card);
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        card.setAttribute('aria-pressed', 'true');
+        closeBtn.focus();
+      }
+
+      function closeCard() {
+        if (!activeCard) return;
+        if (originalNextSibling) {
+          originalParent.insertBefore(activeCard, originalNextSibling);
+        } else {
+          originalParent.appendChild(activeCard);
+        }
+        activeCard.setAttribute('aria-pressed', 'false');
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        activeCard = null;
+        originalParent = null;
+        originalNextSibling = null;
+      }
+
+      cards.forEach(function(card) {
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-pressed', 'false');
+
+        /* Real phones fire 'click' after 'touchend' just fine in the
+           vast majority of cases, but some in-app browsers (Facebook,
+           Instagram, older WebViews) can be flaky about it. Binding
+           both 'click' and 'touchend' — with a guard so it doesn't
+           fire twice — makes this bulletproof on real devices. */
+        var lastHandled = 0;
+        function handleActivate(e) {
+          var now = Date.now();
+          if (now - lastHandled < 500) return; // prevent double-fire from click+touchend
+          lastHandled = now;
+          e.stopPropagation();
+          openCard(card);
+        }
+        card.addEventListener('click', handleActivate);
+        card.addEventListener('touchend', handleActivate, { passive: true });
+
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openCard(card);
+          }
+        });
+      });
+
+      closeBtn.addEventListener('click', closeCard);
+      closeBtn.addEventListener('touchend', function(e) { e.stopPropagation(); closeCard(); }, { passive: true });
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeCard();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) closeCard();
+      });
+    };
+
+    initClickToFrontCards('.testimonial-card');
+    initClickToFrontCards('.why-card');
+    initClickToFrontCards('.step-card');
+  } catch (err) {
+    console.warn('Click-to-front cards failed to initialize:', err);
+  }
+
   /* ===== MODERN LOADER ===== */
   const loader = document.getElementById('page-loader');
   const progressBar = document.getElementById('loaderProgressBar');
@@ -154,7 +256,8 @@
   var allProductCards = [];
   productGrids.forEach(function(grid) {
     grid.querySelectorAll('.product-card').forEach(function(card) {
-      var name = card.querySelector('h4')?.textContent?.trim();
+      var h4El = card.querySelector('h4');
+      var name = h4El && h4El.textContent ? h4El.textContent.trim() : '';
       if (name) {
         allProductNames.push(name);
         var alias = (card.dataset.name || '').toLowerCase();
@@ -1073,88 +1176,5 @@
       if (e.key === 'Enter') handleUserQuery();
     });
   }
-
-  /* ===== CLICK-TO-FRONT CARDS =====
-     Same idea as the gallery lightbox: clicking a card brings it
-     forward in a full-screen overlay, above everything else on the
-     page, instead of just a small lift within its grid.
-     Applies to: testimonial cards ("What Customers Say") and
-     why-us cards ("Why Kabuye Shops With Us"). */
-  function initClickToFrontCards(selector) {
-    const cards = document.querySelectorAll(selector);
-    if (!cards.length) return;
-
-    const overlay = document.getElementById('cardFocusOverlay');
-    const content = document.getElementById('cardFocusContent');
-    const closeBtn = document.getElementById('cardFocusClose');
-    if (!overlay || !content || !closeBtn) return;
-
-    let activeCard = null;
-    let originalParent = null;
-    let originalNextSibling = null;
-
-    function openCard(card) {
-      // Remember exactly where the card lives so we can put it back.
-      activeCard = card;
-      originalParent = card.parentNode;
-      originalNextSibling = card.nextSibling;
-
-      content.appendChild(card);
-      overlay.classList.add('open');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      card.setAttribute('aria-pressed', 'true');
-      closeBtn.focus();
-    }
-
-    function closeCard() {
-      if (!activeCard) return;
-      if (originalNextSibling) {
-        originalParent.insertBefore(activeCard, originalNextSibling);
-      } else {
-        originalParent.appendChild(activeCard);
-      }
-      activeCard.setAttribute('aria-pressed', 'false');
-      overlay.classList.remove('open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      activeCard = null;
-      originalParent = null;
-      originalNextSibling = null;
-    }
-
-    cards.forEach(function(card) {
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('role', 'button');
-      card.setAttribute('aria-pressed', 'false');
-
-      card.addEventListener('click', function(e) {
-        e.stopPropagation();
-        openCard(card);
-      });
-
-      card.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openCard(card);
-        }
-      });
-    });
-
-    closeBtn.addEventListener('click', closeCard);
-
-    // Clicking the dark backdrop (but not the card itself) closes it.
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeCard();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeCard();
-    });
-  }
-
-  initClickToFrontCards('.testimonial-card');
-  initClickToFrontCards('.why-card');
-  initClickToFrontCards('.step-card'); /* Adds support for "How to Shop" cards */
 
 })();
