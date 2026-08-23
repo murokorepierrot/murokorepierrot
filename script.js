@@ -2,57 +2,72 @@
   'use strict';
 
   /* ===== CLICK-TO-FRONT CARDS =====
-     Works like a gallery: tap a card, it pops up cleanly on its own.
-     No scroll-triggering, no stacking, no double-tap issues. */
+     Opens a card in a full-screen overlay only when the user taps/clicks it,
+     not while scrolling. */
   try {
     function initClickToFrontCards(selector) {
-      var cards = document.querySelectorAll(selector);
+      const cards = document.querySelectorAll(selector);
       if (!cards.length) return;
 
-      var overlay = document.getElementById('cardFocusOverlay');
-      var content = document.getElementById('cardFocusContent');
-      var closeBtn = document.getElementById('cardFocusClose');
+      const overlay = document.getElementById('cardFocusOverlay');
+      const content = document.getElementById('cardFocusContent');
+      const closeBtn = document.getElementById('cardFocusClose');
       if (!overlay || !content || !closeBtn) return;
 
-      var activeCard = null;
-      var originalParent = null;
-      var originalNextSibling = null;
-      var touchStartY = 0;
-      var isTouching = false;
+      let activeCard = null;
+      let originalParent = null;
+      let originalNextSibling = null;
 
       function openCard(card) {
-        // Prevent opening if the card is already active
-        if (activeCard === card) return;
-
-        // If another card is open, close it first
-        if (activeCard) closeCard();
+        if (activeCard) return; // a card is already open / mid-transition — ignore re-entrant calls
 
         activeCard = card;
         originalParent = card.parentNode;
         originalNextSibling = card.nextSibling;
 
+        // Remove hover states that might conflict with open state
+        card.style.transform = 'none';
+        card.style.boxShadow = 'none';
+
+        // Add a class for the entry animation
+        card.classList.add('popup-enter');
         content.appendChild(card);
         overlay.classList.add('open');
         overlay.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
         card.setAttribute('aria-pressed', 'true');
-        closeBtn.focus();
+        
+        // Focus the close button after a tiny delay
+        setTimeout(function() { closeBtn.focus(); }, 10);
       }
 
       function closeCard() {
         if (!activeCard) return;
-        if (originalNextSibling) {
-          originalParent.insertBefore(activeCard, originalNextSibling);
-        } else {
-          originalParent.appendChild(activeCard);
-        }
-        activeCard.setAttribute('aria-pressed', 'false');
-        overlay.classList.remove('open');
-        overlay.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        activeCard = null;
-        originalParent = null;
-        originalNextSibling = null;
+        
+        // Add a class for the exit animation
+        activeCard.classList.add('popup-exit');
+        
+        // Wait for the exit animation to finish before moving it back
+        setTimeout(function() {
+          if (!activeCard) return;
+          
+          if (originalNextSibling) {
+            originalParent.insertBefore(activeCard, originalNextSibling);
+          } else {
+            originalParent.appendChild(activeCard);
+          }
+          
+          activeCard.classList.remove('popup-enter', 'popup-exit');
+          activeCard.setAttribute('aria-pressed', 'false');
+          
+          overlay.classList.remove('open');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          
+          activeCard = null;
+          originalParent = null;
+          originalNextSibling = null;
+        }, 250); // The duration of the exit CSS animation
       }
 
       cards.forEach(function(card) {
@@ -60,36 +75,18 @@
         card.setAttribute('role', 'button');
         card.setAttribute('aria-pressed', 'false');
 
-        // Touch events: detect if user is scrolling or tapping
-        card.addEventListener('touchstart', function(e) {
-          touchStartY = e.touches[0].clientY;
-          isTouching = true;
-        }, { passive: true });
-
-        card.addEventListener('touchmove', function(e) {
-          if (touchStartY) {
-            var deltaY = Math.abs(e.touches[0].clientY - touchStartY);
-            if (deltaY > 10) {
-              isTouching = false; // User is scrolling, not tapping
-            }
-          }
-        }, { passive: true });
-
-        card.addEventListener('touchend', function(e) {
-          if (isTouching) {
-            e.preventDefault();
-            openCard(card);
-          }
-          isTouching = false;
-        }, { passive: false });
-
-        // Click for desktop
+        // 'click' alone is enough on modern mobile browsers (viewport meta tag
+        // already disables the old 300ms tap delay), and it's the only event
+        // browsers reliably suppress after a real scroll. Duplicating this with
+        // manual touchstart/touchmove/touchend tracking caused a race: the
+        // synthetic click that follows touchend would fire *after* the card had
+        // already been moved in the DOM, landing on the wrong element and
+        // re-triggering openCard() a second time.
         card.addEventListener('click', function(e) {
           e.stopPropagation();
           openCard(card);
         });
 
-        // Keyboard support
         card.addEventListener('keydown', function(e) {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -98,7 +95,6 @@
         });
       });
 
-      // Close handlers
       closeBtn.addEventListener('click', closeCard);
       closeBtn.addEventListener('touchend', function(e) {
         e.stopPropagation();
@@ -114,7 +110,6 @@
       });
     }
 
-    // Initialize all card types
     initClickToFrontCards('.testimonial-card');
     initClickToFrontCards('.why-card');
     initClickToFrontCards('.step-card');
@@ -124,20 +119,20 @@
   }
 
   /* ===== MODERN LOADER ===== */
-  var loader = document.getElementById('page-loader');
-  var progressBar = document.getElementById('loaderProgressBar');
-  var loaderLabel = document.getElementById('loaderLabel');
+  const loader = document.getElementById('page-loader');
+  const progressBar = document.getElementById('loaderProgressBar');
+  const loaderLabel = document.getElementById('loaderLabel');
 
   if (loader && progressBar) {
-    var progress = 0;
-    var steps = [
+    let progress = 0;
+    const steps = [
       { p: 20, label: 'Warming up …' },
       { p: 45, label: 'Loading products …' },
       { p: 70, label: 'Preparing your shop …' },
       { p: 90, label: 'Almost ready …' }
     ];
-    var stepIndex = 0;
-    var interval = setInterval(function() {
+    let stepIndex = 0;
+    const interval = setInterval(function() {
       progress += Math.floor(Math.random() * 6) + 2;
       if (progress > 100) progress = 100;
       progressBar.style.width = progress + '%';
@@ -163,7 +158,7 @@
   }
 
   /* ===== Scroll Progress Bar ===== */
-  var scrollProgress = document.getElementById('scrollProgress');
+  const scrollProgress = document.getElementById('scrollProgress');
   function updateScrollProgress() {
     if (!scrollProgress) return;
     var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -208,8 +203,8 @@
     var isOpen = (day >= 1 && day <= 6 && hour >= 6.5 && hour < 21) || (day === 0 && hour >= 8 && hour < 20);
     dot.classList.toggle('closed', !isOpen);
     text.textContent = isOpen
-      ? 'Open now \u00B7 Mon\u2013Sat 6:30 AM\u20139:00 PM \u00B7 Sun 8:00 AM\u20138:00 PM'
-      : 'Closed now \u00B7 Opens at 6:30 AM';
+      ? 'Open now · Mon–Sat 6:30 AM–9:00 PM · Sun 8:00 AM–8:00 PM'
+      : 'Closed now · Opens at 6:30 AM';
   }
   updateHours();
   setInterval(updateHours, 60000);
@@ -597,8 +592,18 @@
   function saveList(arr) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch (e) {}
   }
+  var headerCartCount = document.getElementById('headerCartCount');
+
   function renderList() {
     var items = loadList();
+    if (headerCartCount) {
+      if (items.length) {
+        headerCartCount.textContent = items.length > 99 ? '99+' : String(items.length);
+        headerCartCount.hidden = false;
+      } else {
+        headerCartCount.hidden = true;
+      }
+    }
     if (listItems) listItems.innerHTML = '';
     items.forEach(function(item, idx) {
       var li = document.createElement('li');
@@ -699,34 +704,36 @@
     });
   }
 
-  var langBtns = document.querySelectorAll('.lang-btn');
-  var enElements = document.querySelectorAll('.lang-en');
-  var rwElements = document.querySelectorAll('.lang-rw');
-  var frElements = document.querySelectorAll('.lang-fr');
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const enElements = document.querySelectorAll('.lang-en');
+  const rwElements = document.querySelectorAll('.lang-rw');
+  const frElements = document.querySelectorAll('.lang-fr');
+
+  // Clear any static inline "display:none" from the HTML — visibility is now
+  // driven entirely by the .lang-hidden class (see style.css). Relying on
+  // inline styles was fragile: once JS touched an element's style.display,
+  // browsers re-serialize it as "display: none" (with a space), which no
+  // longer matched CSS written to expect the original "display:none" markup
+  // — causing all three languages to stack instead of one replacing another.
+  enElements.forEach(el => el.style.removeProperty('display'));
+  rwElements.forEach(el => el.style.removeProperty('display'));
+  frElements.forEach(el => el.style.removeProperty('display'));
 
   function setLanguage(lang) {
-    langBtns.forEach(function(btn) { btn.classList.remove('active'); });
-    var activeBtn = document.querySelector('.lang-btn[data-lang="' + lang + '"]');
+    langBtns.forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[data-lang="${lang}"]`);
     if (activeBtn) activeBtn.classList.add('active');
 
-    if (lang === 'en') {
-      enElements.forEach(function(el) { el.style.removeProperty('display'); });
-      rwElements.forEach(function(el) { el.style.display = 'none'; });
-      frElements.forEach(function(el) { el.style.display = 'none'; });
-    } else if (lang === 'rw') {
-      enElements.forEach(function(el) { el.style.display = 'none'; });
-      rwElements.forEach(function(el) { el.style.removeProperty('display'); });
-      frElements.forEach(function(el) { el.style.display = 'none'; });
-    } else if (lang === 'fr') {
-      enElements.forEach(function(el) { el.style.display = 'none'; });
-      rwElements.forEach(function(el) { el.style.display = 'none'; });
-      frElements.forEach(function(el) { el.style.removeProperty('display'); });
-    }
-  }
+    enElements.forEach(el => el.classList.toggle('lang-hidden', lang !== 'en'));
+    rwElements.forEach(el => el.classList.toggle('lang-hidden', lang !== 'rw'));
+    frElements.forEach(el => el.classList.toggle('lang-hidden', lang !== 'fr'));
 
+    document.body.setAttribute('data-lang', lang);
+    try { localStorage.setItem('marierose_lang', lang); } catch (e) {}
+  }
   if (productSearchInput && searchDropdown) {
-    var resizeDropdown = function() {
-      var rect = productSearchInput.getBoundingClientRect();
+    const resizeDropdown = () => {
+      const rect = productSearchInput.getBoundingClientRect();
       searchDropdown.style.width = rect.width + 'px';
       searchDropdown.style.minWidth = '300px';
     };
@@ -734,14 +741,19 @@
     setTimeout(resizeDropdown, 100);
   }
 
-  langBtns.forEach(function(btn) {
+  langBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      var lang = this.getAttribute('data-lang');
+      const lang = this.getAttribute('data-lang');
       setLanguage(lang);
     });
   });
 
-  setLanguage('en');
+  let initialLang = 'en';
+  try {
+    const stored = localStorage.getItem('marierose_lang');
+    if (stored === 'en' || stored === 'rw' || stored === 'fr') initialLang = stored;
+  } catch (e) {}
+  setLanguage(initialLang);
 
 })();
 
@@ -751,16 +763,16 @@
 (function() {
   'use strict';
 
-  var overlay = document.getElementById('lightboxOverlay');
-  var lightboxImg = document.getElementById('lightboxImage');
-  var closeBtn = document.querySelector('.lightbox-close');
-  var prevBtn = document.querySelector('.lightbox-prev');
-  var nextBtn = document.querySelector('.lightbox-next');
+  const overlay = document.getElementById('lightboxOverlay');
+  const lightboxImg = document.getElementById('lightboxImage');
+  const closeBtn = document.querySelector('.lightbox-close');
+  const prevBtn = document.querySelector('.lightbox-prev');
+  const nextBtn = document.querySelector('.lightbox-next');
 
   if (!overlay) return;
 
-  var currentGalleryImages = [];
-  var currentIndex = 0;
+  let currentGalleryImages = [];
+  let currentIndex = 0;
 
   function updateLightboxImage() {
     if (!currentGalleryImages.length || !currentGalleryImages[currentIndex]) {
@@ -779,7 +791,7 @@
   }
 
   window.openLightbox = function(element) {
-    var img;
+    let img;
     if (element.tagName === 'IMG') {
       img = element;
     } else {
@@ -788,12 +800,12 @@
     
     if (!img) return;
 
-    var group = img.getAttribute('data-group');
+    const group = img.getAttribute('data-group');
     if (!group) {
         currentGalleryImages = Array.from(document.querySelectorAll('.gallery-item img, .product-photo-slot img, .team-card img'));
     } else {
-        var allImages = document.querySelectorAll('.gallery-item img, .product-photo-slot img, .team-card img, .about-media img, .team-big-img, .footer-media img');
-        currentGalleryImages = Array.from(allImages).filter(function(imgEl) { return imgEl.getAttribute('data-group') === group; });
+        const allImages = document.querySelectorAll('.gallery-item img, .product-photo-slot img, .team-card img, .about-media img, .team-big-img, .footer-media img');
+        currentGalleryImages = Array.from(allImages).filter(imgEl => imgEl.getAttribute('data-group') === group);
     }
 
     currentIndex = currentGalleryImages.indexOf(img);
@@ -860,8 +872,8 @@
     }
   });
 
-  var touchStartX = 0;
-  var touchEndX = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
   
   overlay.addEventListener('touchstart', function(e) {
     touchStartX = e.changedTouches[0].screenX;
@@ -869,7 +881,7 @@
   
   overlay.addEventListener('touchend', function(e) {
     touchEndX = e.changedTouches[0].screenX;
-    var diff = touchStartX - touchEndX;
+    const diff = touchStartX - touchEndX;
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
         changeLightbox(1);
@@ -887,17 +899,17 @@
 (function() {
   'use strict';
 
-  var toggleBtn = document.getElementById('ai-chat-toggle');
-  var popup = document.getElementById('ai-chat-popup');
-  var closeBtn = document.getElementById('chat-close-btn');
-  var sendBtn = document.getElementById('chat-send-btn');
-  var chatInput = document.getElementById('chat-input');
-  var chatBody = document.getElementById('ai-chat-popup').querySelector('.chat-body');
+  const toggleBtn = document.getElementById('ai-chat-toggle');
+  const popup = document.getElementById('ai-chat-popup');
+  const closeBtn = document.getElementById('chat-close-btn');
+  const sendBtn = document.getElementById('chat-send-btn');
+  const chatInput = document.getElementById('chat-input');
+  const chatBody = document.getElementById('ai-chat-popup').querySelector('.chat-body');
 
   if (!toggleBtn) return;
 
   function toggleChat() {
-    var isOpen = popup.classList.contains('chat-open');
+    const isOpen = popup.classList.contains('chat-open');
     if (isOpen) {
       popup.classList.remove('chat-open');
       popup.classList.add('chat-hidden');
@@ -910,17 +922,20 @@
   toggleBtn.addEventListener('click', toggleChat);
   if (closeBtn) closeBtn.addEventListener('click', toggleChat);
 
-  function addMessage(text, sender, isHTML) {
-    if (isHTML === undefined) isHTML = false;
-    var msgDiv = document.createElement('div');
-    msgDiv.className = 'chat-message ' + sender;
-    msgDiv.innerHTML = '<div class="bubble">' + text + '</div>';
+  function addMessage(text, sender, isHTML = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message ${sender}`;
+    if (isHTML) {
+      msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
+    } else {
+      msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
+    }
     chatBody.appendChild(msgDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
   function getCurrentLanguage() {
-    var activeLangBtn = document.querySelector('.lang-btn.active');
+    const activeLangBtn = document.querySelector('.lang-btn.active');
     if (activeLangBtn) {
       return activeLangBtn.getAttribute('data-lang');
     }
@@ -928,107 +943,186 @@
   }
 
   function getAIResponse(query) {
-    var lang = getCurrentLanguage();
-    var q = query.toLowerCase().trim();
+    const lang = getCurrentLanguage();
+    const q = query.toLowerCase().trim();
 
-    // ENGLISH
     if (lang === 'en') {
-      if (q === 'hi' || q === 'hello' || q === 'hey') {
+      if (q === 'hi' || q === 'hello' || q === 'hey' || q === 'yo' || q === 'wssp' || q === 'sup' || q === 'hy' || q.includes('good morning') || q.includes('good afternoon') || q.includes('good evening')) {
         return "Hello! 👋 You are free to ask anything about Marie Rose Shop. What can I help you with today?";
       }
-      if (q.includes('thank') || q.includes('thx') || q.includes('thanks')) {
+      if (q.includes('fuck') || q.includes('fack') || q.includes('fu*k') || q.includes('f\*\*k') || q.includes('stupid') || q.includes('st*pid') || q.includes('st\*\*id') || q.includes('idiot') || q.includes('id\*\*t') || q.includes('id\*ot') || q.includes('bastard') || q.includes('dumb') || q.includes('dumbass') || q.includes('bullshit') || q.includes('shit') || q.includes('piss') || q.includes('moron') || q.includes('suck') || q.includes('asshole') || q.includes('a\*\*hole')) {
+        return "I'm not here to insult or fight, please. I am here to help you with your shopping at Marie Rose Shop. How can I assist you today?";
+      }
+      if (q.includes('thank') || q.includes('thx') || q.includes('thanks') || q.includes('thank you')) {
         return "You are very welcome! 😊 Thank you for choosing Marie Rose Shop. Have a blessed day!";
       }
-      if (q === 'bye' || q === 'goodbye') {
+      if (q.includes('sure') || q.includes('forsure') || q.includes('truth') || q.includes('realy')) {
+        return "Absolutely. I stand by this information, and it is 100% reliable.";
+      }
+      if (q.includes('how are you') || q.includes('how do you feel') || q.includes('how are you going') || q.includes('what is going on')) {
+        return "I'm fine";
+      }
+      if (q === 'bye' || q === 'goodbye' || q === 'see ya') {
         return "Goodbye! 😊 If you need anything else, just type 'Hi' to start a new chat. Have a blessed day!";
       }
-      if (q.includes('who are you') || q.includes('what are you') || q.includes('your name')) {
+      if (q.includes('who are you') || q.includes('what are you') || q.includes('your name') || q.includes('who is this')) {
         return "I am the official AI Assistant for Marie Rose Shop! 🤖 I was created to help our customers get instant answers about our products, location, and services.";
       }
-      if (q.includes('hour') || q.includes('open') || q.includes('close') || q.includes('time')) {
+      if (q.includes('appointment') || q.includes('walk in') || q.includes('walk-in') || q.includes('just come') || q.includes('need to book')) {
+        return "Yes, absolutely! We are a walk-in neighbourhood shop. You can walk in anytime during our opening hours. No appointment is needed!";
+      }
+      if (q.includes('park') || q.includes('parking') || q.includes('car')) {
+        return "Yes, there is street parking available right in front of our shop. You can also park near the Kabuye Parish Church and walk over.";
+      }
+      if (q.includes('hour') || q.includes('open') || q.includes('close') || q.includes('time') || q.includes('when do you') || q.includes('are you open today')) {
         return "We are open 7 days a week! 🕘<br><br>• <b>Monday - Saturday:</b> 7:00 AM – 9:30 PM<br>• <b>Sunday:</b> 7:30 AM – 9:00 PM";
       }
-      if (q.includes('location') || q.includes('where') || q.includes('address') || q.includes('find')) {
-        return "We are located at <b>Kabuye Cell, Jabana Sector, Gasabo District, Kigali City, Rwanda</b>.<br><br>You can find us just <b>below the Kabuye Parish Church</b>.";
+      if (q.includes('location') || q.includes('where') || q.includes('address') || q.includes('find') || q.includes('are you located') || q.includes('live') || q.includes('how do i get') || q.includes('directions') || q.includes('map')) {
+        return "We are located at <b>Kabuye Cell, Jabana Sector, Gasabo District, Kigali City, Rwanda</b>.<br><br>You can find us just <b>below the Kabuye Parish Church</b>. If you are using a map, search for 'Kabuye Parish Church'. We are easy to spot! 😊";
       }
-      if (q.includes('pay') || q.includes('payment') || q.includes('cash') || q.includes('momo')) {
+      if (q.includes('pay') || q.includes('payment') || q.includes('cash') || q.includes('momo') || q.includes('mobile money') || q.includes('airtel')) {
         return "We accept cash, MTN Mobile Money (MoMo Pay), and Airtel Money. Every payment comes with an official EBM receipt.";
       }
-      if (q.includes('delivery') || q.includes('home') || q.includes('deliver')) {
-        return "Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery.";
+      if (q.includes('delivery') || q.includes('home') || q.includes('deliver') || q.includes('shipping') || q.includes('ship') || q.includes('send') || q.includes('transport')) {
+        return "Currently we operate as a walk-in neighbourhood shop. We do not offer home delivery, but you can call or WhatsApp us to check stock availability before visiting.";
       }
-      if (q.includes('ebm') || q.includes('receipt') || q.includes('tax')) {
-        return "Yes! 🧾<br><br><b>Every single sale</b> comes with an official <b>EBM (Electronic Billing Machine) receipt</b>.";
+      if (q.includes('request') || q.includes('specific') || q.includes('not on shelf') || q.includes('custom order') || q.includes('find something') || q.includes('bring in')) {
+        return "Yes! If you need something specific, let us know via WhatsApp or at the counter. Our sourcing team travels regularly and can often bring it in.";
       }
-      if (q.includes('contact') || q.includes('call') || q.includes('whatsapp') || q.includes('phone')) {
-        return "You can reach us anytime! 📞<br><br>• <b>Call or WhatsApp:</b> +250 789 542 601<br>• <b>Visit us:</b> Kabuye, just below the Kabuye Parish Church.";
+      if (q.includes('negotiable') || q.includes('bargain') || q.includes('haggle') || q.includes('discount') || q.includes('cheap')) {
+        return "We keep our prices fair and transparent for everyone. The price on the shelf is the final price — no haggling needed.";
       }
-      return "I'm not sure about that. You can call or WhatsApp us at +250 789 542 601, or visit our shop in Kabuye. The team is always happy to help! 😊";
+      if (q.includes('wholesale') || q.includes('bulk') || q.includes('large quantity') || q.includes('sack') || q.includes('bag')) {
+        return "Yes — many items like rice, flour, and oil are available in sacks and larger containers at wholesale-friendly prices. Ask at the counter for bulk pricing.";
+      }
+      if (q.includes('stock') || q.includes('product') || q.includes('sell') || q.includes('items') || q.includes('available') || q.includes('what do you have') || q.includes('got') || q.includes('supply')) {
+        return "We have a wide variety of fresh stock! 🛒 Here are our main categories:<br><br>🌾 <b>Grains & Staples:</b> Premium Rice, Wheat Flour, Maize Flour, Sugar, Beans, Salt.<br><br>🥤 <b>Beverages:</b> Fanta, Assorted Juices, Tea, Milk, Bottled Water, Coffee.<br><br>🍳 <b>Cooking Essentials:</b> Cooking Oil, Ketchup, Soy Sauce, Pasta, Spices, Tomato Paste.<br><br>🧺 <b>Household & Care:</b> Soaps, Detergents, Tissues, Toothpaste, Shampoo.";
+      }
+      if (q.includes('rice') || q.includes('rise')) { return "Yes! We have premium quality sacks of rice available. We sell it by the sack or by the kilo. Come visit us to see our fresh supply!"; }
+      if (q.includes('oil') || q.includes('blue band') || q.includes('margarine')) { return "Yes, we stock pure vegetable cooking oil and Blue Band margarine! We have it in different sizes. Let us know if you need a specific brand."; }
+      if (q.includes('fanta') || q.includes('soda') || q.includes('drink') || q.includes('coke') || q.includes('sprite') || q.includes('coca cola')) { return "Yes, we stock Fanta and other sodas. We keep them cold and ready for you! We also carry fresh juices and bottled water."; }
+      if (q.includes('ebm') || q.includes('receipt') || q.includes('tax')) { return "Yes! We take tax compliance very seriously. 🧾<br><br><b>Every single sale</b> comes with an official <b>EBM (Electronic Billing Machine) receipt</b>. You can always trust us for transparency!"; }
+      if (q.includes('contact') || q.includes('call') || q.includes('whatsapp') || q.includes('message') || q.includes('phone') || q.includes('number')) { return "You can reach us anytime! 📞<br><br>• <b>Call or WhatsApp:</b> +250 789 542 601<br>• <b>Visit us:</b> Kabuye, just below the Kabuye Parish Church.<br><br>We respond to messages quickly! 💬"; }
+      if (q.includes('developed') || q.includes('created') || q.includes('developer') || q.includes('who built') || q.includes('gikundiro') || q.includes('pierrot')) { return "The developer who built this website and created me (the AI Assistant) is called <b>Gikundiro Pierrot</b>. He specializes in creating robust, scalable websites and databases. His expertise covers the entire web development lifecycle! 🚀"; }
+      if (q.includes('safe') || q.includes('trust') || q.includes('legit') || q.includes('real')) { return "Yes, 100%! Marie Rose Shop is a trusted neighbourhood shop in Kabuye. We take compliance very seriously and provide official EBM receipts for every sale. You are in good hands! 😊"; }
+      return "While I don't have the specific answer to that right now, you can call or WhatsApp us directly at +250 789 542 601, or visit our shop in Kabuye (just below the Kabuye Parish Church). The team is always happy to help! 😊";
     }
 
-    // KINYARWANDA
     else if (lang === 'rw') {
-      if (q === 'muraho' || q === 'mwaramutse' || q === 'amakuru') {
+      if (q === 'muraho' || q === 'mwaramutse' || q === 'mwiriwe' || q === 'amakuru' || q === 'bonjour' || q === 'bite' || q.includes('mwaramutse')) {
         return "Muraho! 👋 Ufite uburenganzira bwo kubaza ikintu cyose kijyanye na Marie Rose Shop. Nakubafasha iki uyu munsi?";
       }
-      if (q.includes('urakoze') || q.includes('murakoze')) {
+      if (q.includes('ukunyomo') || q.includes('ubwenge') || q.includes('ikinyoma') || q.includes('umuswa') || q.includes('fuck') || q.includes('stupid')) {
+        return "Ntabwo ndi hano ngo nkubye cyangwa ngo muhangane. Ndi hano kugira ngo nkubafashe mu iserukiramuco rya Marie Rose Shop. Nakubafasha iki?";
+      }
+      if (q.includes('urakoze') || q.includes('murakoze') || q.includes('thx')) {
         return "Murakoze cyane! 😊 Mube numunsi mwiza!";
       }
-      if (q.includes('amasaha') || q.includes('gufungura') || q.includes('gufunga')) {
+      if (q === 'bye' || q === 'goodbye') {
+        return "Muraho! 😊 Niba ukeneye ikindi, andika 'Muraho' kugira ngo ukomeze ikiganiro. Mube numunsi mwiza!";
+      }
+      if (q.includes('uri nde') || q.includes('ni nde') || q.includes('izina')) {
+        return "Ndi umuyobozi wa AI wa Marie Rose Shop! 🤖 Nakozwe kugira ngo nkubafashe gusubiza byihuse ibibazo by'ibicuruzwa, aho duherereye, n'amasaha.";
+      }
+      if (q.includes('amasaha') || q.includes('gufungura') || q.includes('gufunga') || q.includes('saa') || q.includes('irafungura')) {
         return "Dufunguye iminsi 7 mu cyumweru! 🕘<br><br>• <b>Kuwa mbere - Kuwa gatandatu:</b> 7:00 AM – 9:30 PM<br>• <b>Ku cyumweru:</b> 7:30 AM – 9:00 PM";
       }
-      if (q.includes('herereye') || q.includes('ahe') || q.includes('adresse')) {
-        return "Tuherereye i <b>Kabuye, Umurenge wa Jabana, Akarere ka Gasabo, Umujyi wa Kigali, Rwanda</b>.<br><br>Mushobora kutubona hepfo y'<b>Itorero rya Kabuye</b>.";
+      if (q.includes('herereye') || q.includes('ahe') || q.includes('adresse') || q.includes('shaka') || q.includes('ho')) {
+        return "Tuherereye i <b>Kabuye, Umurenge wa Jabana, Akarere ka Gasabo, Umujyi wa Kigali, Rwanda</b>.<br><br>Mushobora kutubona hepfo y'<b>Itorero rya Kabuye (Paroisse)</b>. Ni byoroshye kutubona! 😊";
       }
-      if (q.includes('kwishyura') || q.includes('amafaranga') || q.includes('momo')) {
+      if (q.includes('kwishyura') || q.includes('amafaranga') || q.includes('momo') || q.includes('ishyura')) {
         return "Twakira amafaranga (Cash), MTN Mobile Money (MoMo Pay), na Airtel Money. Buri kigurishwa cyose giterwa inyemezabwishyu ya EBM.";
       }
-      if (q.includes('ebm') || q.includes('inyemezabwishyu')) {
-        return "Yego! 🧾<br><br><b>Buri kigurishwa cyose</b> gitangwa n'inyemezabwishyu ya <b>EBM</b>.";
+      if (q.includes('gutwara') || q.includes('kugera') || q.includes('gurisha mu rugo')) {
+        return "Kuri ubu, dukora nk'iduka ryo mu gace ryakira abakiriya batugana. Ntabwo dutanga serivisi yo kugeza ibicuruzwa mu rugo, ariko mwaduhamagara cyangwa mukatwandikira kuri WhatsApp mumenye ko ibyo mukeneye bihari.";
       }
-      return "Ntabwo mbizi neza ubu. Mushobora guhamagara cyangwa kutwandikira kuri WhatsApp kuri +250 789 542 601, cyangwa kudusura i Kabuye. Itsinda ryacu rishobora kubafasha! 😊";
+      if (q.includes('gusaba') || q.includes('keneye') || q.includes('kidafite')) {
+        return "Yego! Niba ukeneye ikintu runaka, tubwire kuri WhatsApp cyangwa ku murongo wa telephone. Itsinda ryacu rijya kurangura hanze kenshi, rikaba rishobora kukibazanira.";
+      }
+      if (q.includes('kurangura') || q.includes('wholesale') || q.includes('sack')) {
+        return "Yego — ibintu byinshi nk'umuceri, ifu, n'amavuta biboneka mu mifuka minini ku giciro cyiza cyo kurangura. Baza ku murongo wa telephone kugira ngo ubone ibiciro by'ubwinshi.";
+      }
+      if (q.includes('ibicuruzwa') || q.includes('bikubiye') || q.includes('mugurisha') || q.includes('igurishwa')) {
+        return "Dufite ibicuruzwa binyuranye! 🛒 Dufite ibyiciro bikurikira:<br><br>🌾 <b>Ibinyampeke:</b> Umuceri, ifu y'ingano, ifu y'ibigori, isukari, ibishyimbo, umunyu.<br>🥤 <b>Ibinyobwa:</b> Fanta, amajus, icyayi, amata, amazi y'icupa, ikawa.<br>🍳 <b>Ibikoresho byo guteka:</b> Amavuta, ketchup, soya sauce, pasta, ibirungo.<br>🧺 <b>Isukura & Ubuziranire:</b> Isabune, Omo, tissues, toothpaste, shampoing.";
+      }
+      if (q.includes('ebm') || q.includes('inyemezabwishyu')) {
+        return "Yego! Dukurikiza amategeko y'ubusoresha cyane. 🧾<br><br><b>Buri kigurishwa cyose</b> gitangwa n'inyemezabwishyu ya <b>EBM (Electronic Billing Machine)</b>. Mwizere neza!";
+      }
+      if (q.includes('tuvugishe') || q.includes('hamagara') || q.includes('whatsapp') || q.includes('gutumanira')) {
+        return "Mushobora kutugiraho ibihe byose! 📞<br><br>• <b>Guhamagara cyangwa WhatsApp:</b> +250 789 542 601<br>• <b>Kudusura:</b> Kabuye, munsi y'Itorero rya Kabuye.<br><br>Turasubiza vuba! 💬";
+      }
+      if (q.includes('wakureze') || q.includes('wakoze') || q.includes('umurenge') || q.includes('gikundiro') || q.includes('pierrot')) {
+        return "Umukoresha wakoze urubuga ni Gikundiro Pierrot. Yihanga mu gukora no gushushanya urubuga rukomeye kandi rwiza, ndetse no mu bubiko bw'amakuru. Ubuhamya bwe bugera ku nzego zose zo gukora urubuga! 🚀";
+      }
+      return "Nubwo nta nyishu nyuzuye nfite ubu, mushobora guhamagara cyangwa kutwandikira kuri WhatsApp kuri +250 789 542 601, cyangwa kudusura mu iduka i Kabuye (munsi y'Itorero rya Kabuye). Itsinda ryacu rishobora kubafasha! 😊";
     }
 
-    // FRENCH
     else if (lang === 'fr') {
-      if (q === 'bonjour' || q === 'salut') {
-        return "Bonjour ! 👋 Vous êtes libre de poser toutes les questions concernant Marie Rose. Comment puis-je vous aider aujourd'hui ?";
+      if (q === 'bonjour' || q === 'salut' || q === 'coucou' || q === 'hey' || q.includes('bonjour') || q.includes('bonsoir') || q.includes('bon après-midi')) {
+        return "Bonjour ! 👋 Vous êtes libre de poser toutes les questions concernant le site Web de Marie Rose. Comment puis-je vous aider aujourd'hui ?";
       }
-      if (q.includes('merci')) {
+      if (q.includes('insulte') || q.includes('con') || q.includes('idiot') || q.includes('salopard') || q.includes('merde') || q.includes('fuck') || q.includes('pute')) {
+        return "Je ne suis pas là pour vous insulter ou me battre, s'il vous plaît. Je suis là pour vous aider avec vos achats à la boutique Marie Rose. Comment puis-je vous aider aujourd'hui ?";
+      }
+      if (q.includes('merci') || q.includes('thx') || q.includes('merci beaucoup')) {
         return "Je vous en prie ! 😊 Passez une excellente journée !";
       }
-      if (q.includes('heure') || q.includes('ouvert') || q.includes('fermé')) {
+      if (q === 'bye' || q === 'au revoir') {
+        return "Au revoir ! 😊 Si vous avez besoin d'autre chose, tapez simplement 'Bonjour' pour commencer une nouvelle conversation. Passez une bonne journée !";
+      }
+      if (q.includes('qui êtes-vous') || q.includes('qui es-tu') || q.includes('ton nom')) {
+        return "Je suis l'assistant IA officiel de Marie Rose Shop ! 🤖 J'ai été créé pour aider nos clients à obtenir des réponses instantanées sur nos produits, notre emplacement et nos services.";
+      }
+      if (q.includes('heure') || q.includes('ouvert') || q.includes('fermé') || q.includes('ouverture')) {
         return "Nous sommes ouverts 7 jours sur 7 ! 🕘<br><br>• <b>Lundi - Samedi :</b> 7h00 – 21h30<br>• <b>Dimanche :</b> 7h30 – 21h00";
       }
-      if (q.includes('localisation') || q.includes('où') || q.includes('adresse')) {
-        return "Nous sommes situés à <b>Kabuye, Secteur Jabana, District de Gasabo, Ville de Kigali, Rwanda</b>.<br><br>Vous pouvez nous trouver juste <b>en dessous de l'église paroissiale de Kabuye</b>.";
+      if (q.includes('localisation') || q.includes('où') || q.includes('adresse') || q.includes('trouver')) {
+        return "Nous sommes situés à <b>Kabuye, Secteur Jabana, District de Gasabo, Ville de Kigali, Rwanda</b>.<br><br>Vous pouvez nous trouver juste <b>en dessous de l'église paroissiale de Kabuye</b>. C'est très facile à repérer ! 😊";
       }
-      if (q.includes('payer') || q.includes('paiement') || q.includes('momo')) {
+      if (q.includes('payer') || q.includes('paiement') || q.includes('espèces') || q.includes('momo')) {
         return "Nous acceptons les espèces, MTN Mobile Money (MoMo Pay) et Airtel Money. Chaque paiement est accompagné d'un reçu EBM officiel.";
       }
-      if (q.includes('ebm') || q.includes('reçu')) {
-        return "Oui ! 🧾<br><br><b>Chaque vente</b> est accompagnée d'un <b>reçu EBM officiel</b>.";
+      if (q.includes('livraison') || q.includes('domicile') || q.includes('livrer')) {
+        return "Actuellement, nous fonctionnons comme une boutique de quartier. Nous ne proposons pas de livraison à domicile, mais vous pouvez nous appeler ou nous contacter sur WhatsApp pour vérifier la disponibilité des stocks.";
       }
-      return "Je ne suis pas sûr de cela. Vous pouvez nous appeler ou nous envoyer un WhatsApp au +250 789 542 601, ou visiter notre boutique à Kabuye. L'équipe sera ravie de vous aider ! 😊";
+      if (q.includes('demander') || q.includes('spécifique') || q.includes('pas sur les étagères')) {
+        return "Oui ! Si vous avez besoin d'un produit spécifique, faites-le nous savoir via WhatsApp ou au comptoir. Notre équipe d'approvisionnement voyage régulièrement et peut souvent le ramener.";
+      }
+      if (q.includes('gros') || q.includes('en vrac')) {
+        return "Oui — de nombreux articles comme le riz, la farine et l'huile sont disponibles en sacs et en grands contenants à des prix de gros avantageux. Renseignez-vous au comptoir pour les tarifs de gros.";
+      }
+      if (q.includes('stock') || q.includes('produits') || q.includes('vendre') || q.includes('articles') || q.includes('disponibles')) {
+        return "Nous avons une grande variété de produits frais ! 🛒 Voici nos principales catégories :<br><br>🌾 <b>Grains et de base :</b> Riz, farine de blé, farine de maïs, sucre, haricots, sel.<br>🥤 <b>Boissons :</b> Fanta, jus, thé, lait, eau en bouteille, café.<br>🍳 <b>Essentiels de cuisine :</b> Huile de cuisson, ketchup, sauce soja, pâtes, épices.<br>🧺 <b>Universel et Propreté :</b> Savons, détergents, mouchoirs, dentifrice, shampoing.";
+      }
+      if (q.includes('ebm') || q.includes('reçu')) {
+        return "Oui ! Nous prenons la conformité fiscale très au sérieux. 🧾<br><br><b>Chaque vente</b> est accompagnée d'un <b>reçu EBM (Machine de Facturation Électronique) officiel</b>. Vous pouvez nous faire confiance pour la transparence !";
+      }
+      if (q.includes('contacter') || q.includes('appeler') || q.includes('whatsapp') || q.includes('message')) {
+        return "Vous pouvez nous joindre à tout moment ! 📞<br><br>• <b>Appeler ou WhatsApp :</b> +250 789 542 601<br>• <b>Nous visiter :</b> Kabuye, juste en dessous de l'église paroissiale de Kabuye.<br><br>Nous répondons rapidement ! 💬";
+      }
+      if (q.includes('développé') || q.includes('créé') || q.includes('développeur') || q.includes('gikundiro') || q.includes('pierrot')) {
+        return "Le développeur qui a créé ce site Web et m'a créé (l'assistant IA) s'appelle <b>Gikundiro Pierrot</b>. Il est spécialisé dans la création de sites Web et de bases de données robustes et évolutifs ! 🚀";
+      }
+      return "Bien que je n'aie pas la réponse spécifique pour le moment, vous pouvez nous appeler ou nous envoyer un WhatsApp au +250 789 542 601, ou visiter notre boutique à Kabuye (juste en dessous de l'église paroissiale de Kabuye). L'équipe sera ravie de vous aider ! 😊";
     }
   }
 
   function handleUserQuery() {
-    var query = chatInput.value.trim();
+    const query = chatInput.value.trim();
     if (!query) return;
 
-    addMessage(query, 'user', false);
+    addMessage(query, 'user');
     chatInput.value = '';
 
-    var typingDiv = document.createElement('div');
+    const typingDiv = document.createElement('div');
     typingDiv.className = 'chat-message bot';
-    typingDiv.innerHTML = '<div class="bubble typing-indicator"><span>.</span><span>.</span><span>.</span></div>';
+    typingDiv.innerHTML = `<div class="bubble typing-indicator"><span>.</span><span>.</span><span>.</span></div>`;
     chatBody.appendChild(typingDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    setTimeout(function() {
+    setTimeout(() => {
       typingDiv.remove();
-      var response = getAIResponse(query);
+      const response = getAIResponse(query);
       addMessage(response, 'bot', true);
     }, 800);
   }
@@ -1039,5 +1133,37 @@
       if (e.key === 'Enter') handleUserQuery();
     });
   }
+
+})();
+
+/* ============================================================
+   BUTTON RIPPLE MICRO-INTERACTION
+   ============================================================ */
+(function() {
+  'use strict';
+
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
+  document.addEventListener('click', function(e) {
+    var target = e.target.closest('.btn, .add-to-list, .lang-btn, .header-cart-btn');
+    if (!target) return;
+
+    var existing = target.querySelector('.ripple');
+    if (existing) existing.remove();
+
+    var rect = target.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height);
+    var ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    target.appendChild(ripple);
+
+    ripple.addEventListener('animationend', function() {
+      ripple.remove();
+    });
+  });
 
 })();
