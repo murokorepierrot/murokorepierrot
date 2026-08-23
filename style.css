@@ -67,6 +67,45 @@ a:hover { color: var(--leaf-dark); }
 .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 .section-lede { max-width: 560px; margin: 0 auto 2rem; color: var(--ink-muted); font-size: .95rem; }
 
+/* ===== HEADER CART / SHOPPING-LIST BADGE ===== */
+.header-cart-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--ink);
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.header-cart-btn:hover {
+  background: rgba(61, 122, 61, 0.08);
+  color: var(--leaf);
+}
+.header-cart-btn .cart-icon {
+  width: 21px;
+  height: 21px;
+}
+.header-cart-count {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: .65rem;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--paper, #fdfcfa);
+}
+
 /* ===== LANGUAGE SWITCHER BUTTONS ===== */
 .lang-switcher {
   display: flex;
@@ -105,6 +144,14 @@ a:hover { color: var(--leaf-dark); }
 
 /* Adjust on mobile to move the buttons correctly */
 @media (max-width: 640px) {
+  .header-cart-btn {
+    width: 34px;
+    height: 34px;
+  }
+  .header-cart-btn .cart-icon {
+    width: 19px;
+    height: 19px;
+  }
   .lang-switcher {
     margin-right: 8px;
     padding: 2px;
@@ -319,6 +366,19 @@ a:hover { color: var(--leaf-dark); }
   overflow: hidden;
   background: linear-gradient(135deg, #2a5a2a 0%, #1a3a1a 40%, #0d260d 100%);
 }
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  z-index: 1;
+  background: radial-gradient(circle at 30% 20%, rgba(200,164,92,0.18), transparent 55%);
+  animation: heroGlow 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes heroGlow {
+  0%   { transform: translate(-4%, -2%) scale(1); }
+  100% { transform: translate(4%, 3%) scale(1.15); }
+}
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -344,6 +404,35 @@ a:hover { color: var(--leaf-dark); }
   text-align: center;
   max-width: 720px;
   padding: 80px 24px 60px;
+}
+.hero-content .eyebrow,
+.hero-content h1,
+.hero-content .tagline,
+.hero-content .hero-hours,
+.hero-content .cta-row {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroRise .8s cubic-bezier(.25,.8,.25,1) forwards;
+}
+.hero-content .eyebrow    { animation-delay: .05s; }
+.hero-content h1          { animation-delay: .15s; }
+.hero-content .tagline    { animation-delay: .28s; }
+.hero-content .hero-hours { animation-delay: .4s; }
+.hero-content .cta-row    { animation-delay: .5s; }
+@keyframes heroRise {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero::after { animation: none; }
+  .hero-content .eyebrow,
+  .hero-content h1,
+  .hero-content .tagline,
+  .hero-content .hero-hours,
+  .hero-content .cta-row {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 .hero-content h1 {
   color: #fff;
@@ -662,6 +751,7 @@ a:hover { color: var(--leaf-dark); }
   border-radius: var(--radius);
   padding: 28px 26px;
   box-shadow: var(--shadow-sm);
+  touch-action: manipulation;
   transition: var(--transition);
   display: flex;
   flex-direction: column;
@@ -691,60 +781,152 @@ a:hover { color: var(--leaf-dark); }
   font-weight: 600;
   color: var(--ink-muted);
 }
+/* ============================================
+   MOBILE 2X2 GRIDS & PROFESSIONAL CARD UPGRADE
+   ============================================ */
+
+/* Mobile: Force grids into 2 columns */
 @media (max-width: 860px) {
-  .testimonial-grid { grid-template-columns: 1fr; }
+  .why-grid,
+  .testimonial-grid,
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .why-grid,
+  .testimonial-grid,
+  .steps-grid {
+    gap: 12px !important;
+  }
 }
 
 /* ============================================
-   WHY US
+   MODERN PROFESSIONAL CARD STYLING
    ============================================ */
-.why-us { padding: 70px 0; background: white; }
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-top: 36px;
-}
-.why-card {
-  background: var(--paper);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px 24px;
-  text-align: center;
-  transition: var(--transition);
-  cursor: pointer;
-}
-.why-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-  border-color: var(--gold);
-}
-.why-icon { font-size: 2rem; line-height: 1; margin-bottom: 12px; display: block; }
-.why-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
-.why-card p { font-size: .88rem; color: var(--ink-muted); margin: 0; }
 
-/* ============================================
-   GOOD TO KNOW
-   ============================================ */
-.good-to-know { padding: 70px 0; }
-.gtk-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 36px;
-}
-.gtk-card {
-  background: white;
+/* Base Card Hover Effects */
+.why-card,
+.testimonial-card,
+.step-card {
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px 24px;
-  text-align: center;
-  transition: var(--transition);
+  background: #fff;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.4s ease,
+              border-color 0.3s ease;
 }
-.gtk-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--gold); }
-.gtk-icon { font-size: 2rem; line-height: 1; margin-bottom: 12px; display: block; }
-.gtk-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
-.gtk-card p { font-size: .88rem; color: var(--ink-muted); margin: 0; }
+
+/* Subtle gradient top border effect */
+.why-card::before,
+.testimonial-card::before,
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--leaf));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  z-index: 1;
+}
+
+.why-card:hover::before,
+.testimonial-card:hover::before,
+.step-card:hover::before {
+  transform: scaleX(1);
+}
+
+.why-card:hover,
+.testimonial-card:hover,
+.step-card:hover {
+  transform: translateY(-6px) scale(1.02) !important;
+  border-color: rgba(200, 164, 92, 0.5);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(61, 122, 61, 0.08) !important;
+}
+
+/* Make Icons Pop */
+.why-icon,
+.step-num,
+.testimonial-stars {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.why-card:hover .why-icon,
+.step-card:hover .step-num,
+.testimonial-card:hover .testimonial-stars {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+/* Custom Scrollbar for the popup to look professional */
+#cardFocusContent::-webkit-scrollbar {
+  width: 8px;
+}
+#cardFocusContent::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+#cardFocusContent::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 10px;
+}
+#cardFocusContent::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dark);
+}
+
+/* Mobile Specific Scaling for 2x2 Grids */
+@media (max-width: 768px) {
+  .why-card,
+  .testimonial-card,
+  .step-card {
+    padding: 22px 16px !important;
+    border-radius: 16px !important;
+    min-height: 180px; /* Ensures they look like neat boxes */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Adjust text size for small phones */
+  .why-card h3,
+  .step-card h3 {
+    font-size: 1rem !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .why-card p,
+  .step-card p,
+  .testimonial-card p {
+    font-size: 0.8rem !important;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 420px) {
+  .why-card,
+  .testimonial-card,
+  .step-card {
+    padding: 16px 10px !important;
+    min-height: 150px;
+  }
+  .why-card h3,
+  .step-card h3 {
+    font-size: 0.9rem !important;
+  }
+  .why-card p,
+  .step-card p,
+  .testimonial-card p {
+    font-size: 0.75rem !important;
+  }
+}
 /* ============================================
    GALLERY - All 6 photos visible in a grid
    ============================================ */
@@ -997,6 +1179,19 @@ a:hover { color: var(--leaf-dark); }
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
+  transition: transform .25s cubic-bezier(.25,.8,.25,1), box-shadow .25s, border-color .25s, opacity .6s ease;
+}
+.category-block:not(.expanded) .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: rgba(61,122,61,0.3);
+}
+.category-block:not(.expanded) .product-card .product-photo-slot img,
+.category-block.expanded .product-photo-slot img {
+  transition: transform .4s cubic-bezier(.25,.8,.25,1);
+}
+.category-block:not(.expanded) .product-card:hover .product-photo-slot img {
+  transform: scale(1.06);
 }
 
 .category-block:not(.expanded) .product-card .product-photo-slot {
@@ -1046,6 +1241,59 @@ a:hover { color: var(--leaf-dark); }
   font-size: .7rem;
   padding: 6px 0;
   margin-top: auto;
+}
+
+/* ===== BUTTON RIPPLE ===== */
+.btn, .add-to-list, .lang-btn, .header-cart-btn {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(255,255,255,0.45);
+  pointer-events: none;
+  animation: rippleAnim .6s ease-out;
+}
+.btn-ghost .ripple, .lang-btn .ripple, .header-cart-btn .ripple {
+  background: rgba(61,122,61,0.18);
+}
+@keyframes rippleAnim {
+  to { transform: scale(2.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ripple { display: none; }
+}
+
+/* ===== PRODUCT PRICE TAG =====
+   Selectors mirror the .category-block(:not(.expanded)/.expanded) .product-card p
+   scoping used elsewhere (including inside the mobile media queries) so this
+   wins on specificity rather than relying on !important alone. */
+.category-block:not(.expanded) .product-card .product-price,
+.category-block.expanded .product-card .product-price,
+.product-card .product-price {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  overflow: visible !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: .95rem !important;
+  font-weight: 700 !important;
+  color: var(--leaf, #3d7a3d) !important;
+  margin: 2px 0 8px !important;
+  letter-spacing: -0.2px;
+}
+.product-card .product-price .price-unit {
+  font-family: 'Inter', sans-serif;
+  font-size: .68rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin-left: 4px;
+  text-transform: none;
+}
+.category-block.expanded .product-card .product-price {
+  font-size: 1.05rem !important;
+  margin: 4px 0 10px !important;
 }
 
 .category-block .view-more-wrap {
@@ -1144,6 +1392,12 @@ a:hover { color: var(--leaf-dark); }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 14px;
+  transition: transform .25s cubic-bezier(.25,.8,.25,1), box-shadow .25s, border-color .25s, opacity .6s ease;
+}
+.category-block.expanded .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: rgba(61,122,61,0.3);
 }
 
 .category-block.expanded .product-photo-slot {
@@ -1246,6 +1500,7 @@ a:hover { color: var(--leaf-dark); }
   padding: 32px 28px;
   text-align: center;
   transition: var(--transition);
+  touch-action: manipulation;
   position: relative;
 }
 .step-card:hover {
@@ -1517,6 +1772,36 @@ a:hover { color: var(--leaf-dark); }
   flex-wrap: wrap;
 }
 
+/* ===== PAYMENT METHOD NOTE ===== */
+.payment-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 480px;
+  margin: 18px auto 0;
+  padding: 12px 16px;
+  background: var(--leaf-light, rgba(61,122,61,0.07));
+  border: 1px solid rgba(61,122,61,0.18);
+  border-radius: 10px;
+}
+.payment-note-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--leaf);
+}
+.payment-note p {
+  margin: 0;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: var(--ink);
+  text-align: left;
+}
+.payment-note strong {
+  color: var(--leaf);
+}
+
 /* ============================================
    REQUEST PRODUCT
    ============================================ */
@@ -1746,6 +2031,16 @@ a:hover { color: var(--leaf-dark); }
   transform: translateY(0);
 }
 
+/* Stagger product-card reveals within a row so a grid doesn't pop as one block */
+.product-grid .product-card.reveal:nth-child(4n+1) { transition-delay: 0s; }
+.product-grid .product-card.reveal:nth-child(4n+2) { transition-delay: .08s; }
+.product-grid .product-card.reveal:nth-child(4n+3) { transition-delay: .16s; }
+.product-grid .product-card.reveal:nth-child(4n+4) { transition-delay: .24s; }
+@media (max-width: 640px) {
+  .product-grid .product-card.reveal:nth-child(2n+1) { transition-delay: 0s; }
+  .product-grid .product-card.reveal:nth-child(2n+2) { transition-delay: .1s; }
+}
+
 /* ============================================
    RESPONSIVE - UPDATED FOR FULL SCREEN ON MOBILE
    ============================================ */
@@ -1858,7 +2153,12 @@ a:hover { color: var(--leaf-dark); }
     overflow: hidden !important;
     line-height: 1.4 !important;
   }
-  
+  /* Non-active-language paragraphs are hidden via the .lang-hidden class
+     (see the global "LANGUAGE VISIBILITY" rule near the end of this file),
+     which is a higher-specificity !important rule that reliably beats the
+     -webkit-box display forced above, regardless of how the browser
+     serializes any inline style. */
+
   .category-block:not(.expanded) .product-card .add-to-list {
     font-size: 0.8rem !important;
     padding: 10px 0 !important;
@@ -2332,10 +2632,9 @@ html {
   0%, 100% { background: var(--gold-light); border-color: var(--gold); color: var(--gold-dark); }
   50% { background: #fff176; border-color: #fdd835; color: var(--ink); }
 }
-
 /* ===== GALLERY & PRODUCT LIGHTBOX (Professional Overlay) ===== */
 .lightbox-overlay {
-  display: none;
+  display: none !important;
   position: fixed;
   z-index: 99999;
   left: 0;
@@ -2348,8 +2647,9 @@ html {
   flex-direction: column;
 }
 .lightbox-overlay.open {
-  display: flex;
+  display: flex !important;
 }
+/* DESKTOP LIGHTBOX */
 .lightbox-content {
   position: relative;
   width: 90%;
@@ -2359,6 +2659,44 @@ html {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+}
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* MOBILE FULLSCREEN LIGHTBOX FIX */
+@media (max-width: 640px) {
+  .lightbox-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+  .lightbox-content img {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: contain;
+  }
+  .lightbox-close {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.8rem;
+  }
+  .lightbox-prev, .lightbox-next {
+    width: 40px;
+    height: 40px;
+    font-size: 1.8rem;
+  }
 }
 .lightbox-content img {
   width: 100%;
@@ -2452,127 +2790,6 @@ html {
   .lightbox-next { right: 10px; }
   .lightbox-prev { left: 10px; }
 }/* ===== GALLERY & PRODUCT LIGHTBOX (Professional Overlay) ===== */
-.lightbox-overlay {
-  display: none !important;
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.92);
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.lightbox-overlay.open {
-  display: flex !important;
-}
-.lightbox-content {
-  position: relative;
-  width: 90%;
-  max-width: 1100px;
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-}
-.lightbox-content img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  transition: opacity 0.2s ease;
-}
-
-/* --- BUTTONS --- */
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: #fff;
-  font-size: 2.5rem;
-  font-weight: 300;
-  background: rgba(0,0,0,0.4);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 100001;
-  transition: background 0.2s, transform 0.2s;
-  line-height: 1;
-  pointer-events: auto !important;
-}
-.lightbox-close:hover {
-  background: rgba(255,255,255,0.1);
-  transform: scale(1.1);
-}
-
-.lightbox-prev, .lightbox-next {
-  cursor: pointer !important;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 2.5rem;
-  transition: all 0.2s ease;
-  user-select: none;
-  background: rgba(0,0,0,0.3);
-  border: none;
-  border-radius: 50%;
-  z-index: 100002 !important;
-  pointer-events: auto !important;
-}
-.lightbox-prev:hover, .lightbox-next:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateY(-50%) scale(1.15);
-}
-.lightbox-next { right: 15px; }
-.lightbox-prev { left: 15px; }
-
-/* --- MOBILE RESPONSIVE --- */
-@media (max-width: 768px) {
-  .lightbox-content {
-    width: 95%;
-    height: auto;
-    max-height: 85vh;
-  }
-  .lightbox-content img {
-    width: 100%;
-    height: auto;
-    max-height: 85vh;
-    object-fit: contain;
-  }
-  .lightbox-close {
-    top: 10px;
-    right: 10px;
-    font-size: 1.8rem;
-    width: 44px;
-    height: 44px;
-  }
-  .lightbox-prev, .lightbox-next {
-    width: 44px;
-    height: 44px;
-    font-size: 2rem;
-  }
-  .lightbox-next { right: 10px; }
-  .lightbox-prev { left: 10px; }
-}
-/* ============================================
-   TEAM SCRIPTURE BANNER
-   ============================================ */
 .team-scripture-banner {
   max-width: 700px;
   margin: 40px auto 60px; /* Spacing between image and team cards */
@@ -3503,4 +3720,201 @@ html {
     color: #a0803a !important;
     letter-spacing: 0.15em !important;
     text-transform: uppercase !important;
+}
+/* ============================================================
+   LANGUAGE VISIBILITY — robust, class-based (replaces inline-style
+   toggling). Specificity is deliberately higher than every rule
+   that could otherwise force a paragraph's display (e.g. the
+   mobile product-card line-clamp rule), so a non-active language
+   never leaks through regardless of context or breakpoint.
+   ============================================================ */
+.category-block .product-card p.lang-hidden,
+.category-block .product-card h4.lang-hidden,
+.category-block .product-card span.lang-hidden {
+  display: none !important;
+}
+.lang-hidden {
+  display: none !important;
+}
+/* ============================================
+   CARD POPUP MODERN ANIMATIONS
+   ============================================ */
+
+/* Entry animation */
+.card-focus-content .popup-enter {
+  animation: cardPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes cardPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Exit animation */
+.card-focus-content .popup-exit {
+  animation: cardPopOut 0.25s ease forwards;
+}
+
+@keyframes cardPopOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+}
+
+/* Enhanced Look for the popup content card */
+.card-focus-content .why-card,
+.card-focus-content .testimonial-card,
+.card-focus-content .step-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f8f5ee 100%);
+  border-left: 5px solid var(--gold);
+  border-right: 5px solid var(--gold);
+  border-radius: 20px !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  padding: 40px !important;
+  overflow-y: auto !important;
+  max-height: 85vh;
+}
+
+/* Nice styling for the quote marks */
+.card-focus-content .testimonial-stars {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.card-focus-content .why-icon,
+.card-focus-content .step-num {
+  font-size: 4rem !important;
+  margin-bottom: 20px;
+}
+/* --- FIX 1: "WE ACCEPT" ON ONE LINE --- */
+.payment-note .eyebrow {
+  white-space: nowrap !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: left !important;
+  margin-bottom: 6px !important;
+}
+
+/* Hide hidden languages and only show the active one on its own line */
+.payment-note .eyebrow.lang-hidden {
+  display: none !important;
+}
+.payment-pills {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  text-align: left !important;
+}
+.payment-pill {
+  display: inline-block !important;
+  margin: 0 !important;
+}
+/* --- FIX 2: "WHY KABUYE" CARDS - FULL OVERRIDE --- */
+.why-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important; /* One line on Desktop */
+  gap: 20px !important;
+  max-width: 1200px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Base Card Styling (Exactly like Testimonials) */
+.why-card {
+  background: #ffffff !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  padding: 24px 22px !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1) !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+.why-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+  border-color: var(--gold) !important;
+}
+
+.why-card .why-icon {
+  font-size: 1.4rem !important;
+  margin: 0 0 6px 0 !important;
+  display: block !important;
+  text-align: left !important;
+}
+
+.why-card h3 {
+  font-size: 1.05rem !important;
+  margin: 0 0 2px 0 !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+}
+
+.why-card p {
+  font-size: 0.88rem !important;
+  color: var(--ink-muted) !important;
+  margin: 0 !important;
+  line-height: 1.6 !important;
+  text-align: left !important;
+  overflow: hidden !important;
+}
+
+/* Force 2x2 on Tablets and Phones */
+@media (max-width: 860px) {
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 12px !important;
+  }
+  
+  .why-card {
+    padding: 16px 12px !important;
+    min-height: 170px !important;
+  }
+  
+  .why-card h3 {
+    font-size: 0.9rem !important;
+  }
+  
+  .why-card p {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* Fix 3: Prevent any other rules from overriding this layout */
+@media (max-width: 640px) {
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .why-card {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
 }
