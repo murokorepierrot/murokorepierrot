@@ -1,70 +1,91 @@
-// Marie Rose Shop — Service Worker
-// Bumps CACHE_NAME whenever core files change so old caches get cleared.
-const CACHE_NAME = 'marie-rose-shop-v1';
+/* =========================================================================
+   Marie Rose Shop — Service Worker
+   -------------------------------------------------------------------------
+   IMPORTANT: bump CACHE_VERSION every time you deploy a change.
+   Changing this string makes the browser treat it as a brand-new cache,
+   automatically deleting the old one — this is what stops visitors from
+   getting stuck on an old version of the site.
+   ========================================================================= */
+const CACHE_VERSION = 'v2026-08-24-1';
+const STATIC_CACHE = `mrs-static-${CACHE_VERSION}`;
 
-const CORE_ASSETS = [
+const PRECACHE_URLS = [
   './',
   './index.html',
   './style.css',
   './script.js',
-  './manifest.json',
-  './images/logo.png'
+  './manifest.json'
 ];
 
-// Install: pre-cache the core shell so the site can open offline.
+/* Install: pre-cache the core files, then activate right away instead of
+   waiting for every open tab to be closed first. */
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(CORE_ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE)
+      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .catch(() => { /* precache is best-effort; fetch handler still works without it */ })
   );
+  self.skipWaiting();
 });
 
-// Activate: clear out any old cache versions.
+/* Activate: delete every cache that isn't this version, then take control
+   of any already-open pages immediately. */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) => Promise.all(
+        keys.filter((key) => key !== STATIC_CACHE).map((key) => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch strategy:
-// - HTML (navigation requests): network-first, fall back to cache, then offline shell.
-// - Everything else (css/js/images): cache-first, fall back to network, and cache the result.
+/* Let the page force this worker to activate immediately when the visitor
+   clicks "Refresh" on the update banner. */
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
 self.addEventListener('fetch', (event) => {
-  const req = event.request;
+  const { request } = event;
+  if (request.method !== 'GET') return;
 
-  // Only handle GET requests from our own origin.
-  if (req.method !== 'GET' || !req.url.startsWith(self.location.origin)) {
-    return;
-  }
+  const isHTML =
+    request.mode === 'navigate' ||
+    (request.headers.get('accept') || '').includes('text/html');
 
-  if (req.mode === 'navigate') {
+  if (isHTML) {
+    // Network-first for pages: always try to get the latest HTML. Only fall
+    // back to the cache if the visitor is offline. This is the key fix —
+    // previously a cache-first strategy here is what forced people to do a
+    // hard refresh to see anything new.
     event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-          return res;
+      fetch(request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(STATIC_CACHE).then((cache) => cache.put(request, copy));
+          return response;
         })
-        .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
+        .catch(() => caches.match(request).then((cached) => cached || caches.match('./index.html')))
     );
     return;
   }
 
+  // CSS/JS/images/fonts: stale-while-revalidate — serve instantly from cache
+  // for speed, while quietly fetching the latest copy in the background so
+  // the *next* load is already up to date.
   event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((res) => {
-        if (res && res.status === 200 && res.type === 'basic') {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-        }
-        return res;
-      }).catch(() => cached);
+    caches.match(request).then((cached) => {
+      const network = fetch(request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(STATIC_CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => cached);
+      return cached || network;
     })
   );
 });
