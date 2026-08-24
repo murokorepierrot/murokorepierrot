@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#3d7a3d">
 
+ <!-- Cache control: always ask the browser to check the network for a fresh copy
+       of THIS document instead of serving a stale one from disk/back-forward cache. -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">==
+ 
   <!-- Primary Meta Tags -->
   <title>Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali</title>
   <meta name="title" content="Marie Rose Shop | Your Trusted Neighborhood Shop in Kigali">
@@ -55,8 +61,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+   <!-- Styles -->
+  <!-- SITE_VERSION cache-buster: bump this value (e.g. to today's date) every time you edit
+       style.css or script.js and push to GitHub. Changing the query string forces every
+       browser/device to fetch the new file instead of reusing an old cached copy. -->
+  <link rel="stylesheet" href="style.css?v=20260824-1">
 
   <!-- Structured Data for Google Search -->
   <script type="application/ld+json">
@@ -1225,16 +1234,58 @@
 
   <div class="toast" id="searchToast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260824-1"></script>
 
-  <!-- PWA: register service worker for offline support + installability -->
+  <!-- PWA: register service worker for offline support + installability.
+       This also keeps the site fresh on every device: sw.js fetches HTML "network-first"
+       (so a normal refresh always checks for new content) and takes over immediately on
+       update (skipWaiting + clients.claim), instead of holding on to an old cached copy
+       until someone does a hard refresh. If a new version is found while a page is already
+       open, we show a small "Refresh" banner instead of yanking the page out from under
+       anyone mid-scroll or mid-form. -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').catch(function (err) {
+        navigator.serviceWorker.register('sw.js').then(function (reg) {
+          // Ask immediately, then keep checking while the tab stays open.
+          reg.update();
+          setInterval(function () { reg.update(); }, 30 * 60 * 1000);
+
+          reg.addEventListener('updatefound', function () {
+            var newWorker = reg.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', function () {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                showUpdateBanner(newWorker);
+              }
+            });
+          });
+        }).catch(function (err) {
           console.warn('Service worker registration failed:', err);
         });
+
+        var refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          if (refreshing) return;
+          refreshing = true;
+          window.location.reload();
+        });
       });
+
+      function showUpdateBanner(worker) {
+        if (document.getElementById('updateBanner')) return;
+        var bar = document.createElement('div');
+        bar.id = 'updateBanner';
+        bar.className = 'update-banner';
+        bar.innerHTML =
+          '<span>A newer version of this page is available.</span>' +
+          '<button type="button" id="updateBannerBtn">Refresh</button>';
+        document.body.appendChild(bar);
+        requestAnimationFrame(function () { bar.classList.add('show'); });
+        document.getElementById('updateBannerBtn').addEventListener('click', function () {
+          worker.postMessage('SKIP_WAITING');
+        });
+      }
     }
   </script>
 </body>
