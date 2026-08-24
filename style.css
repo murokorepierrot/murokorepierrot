@@ -3918,3 +3918,56 @@ html {
     width: 100% !important;
   }
 }
+
+/* ============================================
+   Update Banner (shown when a new deploy is
+   detected while the site is already open)
+   ============================================ */
+.update-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(140%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 14px 12px 20px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-lg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  max-width: calc(100vw - 32px);
+  transition: transform .45s cubic-bezier(.175,.885,.32,1.275);
+}
+.update-banner.show { transform: translateX(-50%) translateY(0); }
+.update-banner span { white-space: nowrap; }
+.update-banner #updateBannerBtn {
+  background: var(--leaf);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.update-banner #updateBannerBtn:hover { background: var(--leaf-dark); transform: translateY(-1px); }
+@media (max-width: 480px) {
+  .update-banner {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    transform: translateY(140%);
+    max-width: none;
+  }
+  .update-banner.show { transform: translateY(0); }
+  .update-banner span { white-space: normal; font-size: 0.85rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .update-banner { transition: none; }
+}
