@@ -200,11 +200,13 @@
     var now = new Date();
     var day = now.getDay();
     var hour = now.getHours() + now.getMinutes() / 60;
-    var isOpen = (day >= 1 && day <= 6 && hour >= 6.5 && hour < 21) || (day === 0 && hour >= 8 && hour < 20);
+    // Monday-Saturday: 7:00 AM - 9:30 PM (7.0 to 21.5)
+    // Sunday: 6:00 PM - 9:00 PM (18.0 to 21.0)
+    var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
     dot.classList.toggle('closed', !isOpen);
     text.textContent = isOpen
-      ? 'Open now · Mon–Sat 6:30 AM–9:00 PM · Sun 8:00 AM–8:00 PM'
-      : 'Closed now · Opens at 6:30 AM';
+      ? 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM'
+      : 'Closed now';
   }
   updateHours();
   setInterval(updateHours, 60000);
