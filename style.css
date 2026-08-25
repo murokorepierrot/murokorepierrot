@@ -4083,3 +4083,46 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .install-banner { transition: none; }
 }
+
+/* ===== MOBILE RESPONSIVE BADGES FIX ===== */
+@media (max-width: 480px) {
+  .about-badges {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+  
+  .about-badge {
+    padding: 10px 4px !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+  }
+  
+  .about-badge .badge-num {
+    font-size: 0.9rem !important;
+  }
+  
+  .about-badge span:last-child {
+    font-size: 0.55rem !important;
+    line-height: 1.2 !important;
+    word-break: break-word !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .about-badges {
+    gap: 4px !important;
+  }
+  
+  .about-badge {
+    padding: 8px 2px !important;
+  }
+  
+  .about-badge .badge-num {
+    font-size: 0.75rem !important;
+  }
+  
+  .about-badge span:last-child {
+    font-size: 0.45rem !important;
+  }
+}
