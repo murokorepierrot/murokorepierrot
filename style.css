@@ -741,21 +741,21 @@ a:hover { color: var(--leaf-dark); }
 .testimonials { padding: 70px 0 76px; background: var(--paper); }
 .testimonial-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-top: 36px;
 }
 .testimonial-card {
   background: white;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px 26px;
+  border-radius: 14px;
+  padding: 22px 20px;
   box-shadow: var(--shadow-sm);
   touch-action: manipulation;
   transition: var(--transition);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
 }
 .testimonial-card:hover {
@@ -765,21 +765,29 @@ a:hover { color: var(--leaf-dark); }
 }
 .testimonial-stars {
   color: var(--gold);
-  font-size: 1rem;
+  font-size: .9rem;
   letter-spacing: 2px;
 }
 .testimonial-quote {
-  font-size: .92rem;
-  line-height: 1.6;
+  font-size: .85rem;
+  line-height: 1.55;
   color: var(--ink);
   font-style: italic;
   margin: 0;
 }
 .testimonial-author {
   margin: 4px 0 0;
-  font-size: .82rem;
+  font-size: .78rem;
   font-weight: 600;
   color: var(--ink-muted);
+}
+
+/* Keep the 4-up testimonial layout consistent with the Why-Us cards at every size */
+@media (max-width: 992px) {
+  .testimonial-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 640px) {
+  .testimonial-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 /* ============================================
    MOBILE 2X2 GRIDS & PROFESSIONAL CARD UPGRADE
@@ -1228,6 +1236,7 @@ a:hover { color: var(--leaf-dark); }
   color: var(--ink-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1275,6 +1284,7 @@ a:hover { color: var(--leaf-dark); }
 .product-card .product-price {
   display: block !important;
   -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
   overflow: visible !important;
   font-family: 'JetBrains Mono', monospace !important;
   font-size: .95rem !important;
@@ -1430,6 +1440,7 @@ a:hover { color: var(--leaf-dark); }
   color: var(--ink-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1489,15 +1500,15 @@ a:hover { color: var(--leaf-dark); }
 .how-to-shop { padding: 80px 0; background: white; }
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
   margin-top: 36px;
 }
 .step-card {
   background: var(--paper);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 32px 28px;
+  padding: 26px 22px;
   text-align: center;
   transition: var(--transition);
   touch-action: manipulation;
@@ -2149,6 +2160,7 @@ a:hover { color: var(--leaf-dark); }
     color: var(--ink-muted) !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     line-height: 1.4 !important;
@@ -3970,4 +3982,104 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   .update-banner { transition: none; }
+}
+
+/* ============================================
+   PWA INSTALL PROMPT BANNER
+   Shown automatically on load (Android/desktop Chrome
+   via beforeinstallprompt, iOS Safari via manual steps)
+   ============================================ */
+.install-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%) translateY(140%);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  padding: 14px 16px;
+  max-width: 420px;
+  width: calc(100% - 32px);
+  transition: transform 0.4s cubic-bezier(.25,.8,.25,1);
+}
+.install-banner.show { transform: translateX(-50%) translateY(0); }
+.install-banner-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--leaf);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+.install-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+.install-banner-text strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.install-banner-text span {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+.install-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.install-banner-btn {
+  background: var(--leaf);
+  color: #fff;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.install-banner-btn:hover { background: var(--leaf-dark); transform: translateY(-1px); }
+.install-banner-close {
+  background: none;
+  border: none;
+  color: var(--ink-light);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.install-banner-close:hover { color: var(--ink); }
+@media (max-width: 480px) {
+  .install-banner {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    transform: translateY(140%);
+    max-width: none;
+    width: auto;
+    flex-wrap: wrap;
+  }
+  .install-banner.show { transform: translateY(0); }
+  .install-banner-actions { width: 100%; justify-content: flex-end; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .install-banner { transition: none; }
 }
