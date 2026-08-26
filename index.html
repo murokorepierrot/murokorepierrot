@@ -1277,12 +1277,11 @@
 
   <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
-  <!-- ===== PWA INSTALL PROMPT BANNER =====
-       Hidden by default (no "show" class). script.js decides when to reveal it:
-       on Android/desktop Chrome & Edge it fires the real install prompt; on iOS
-       Safari (which has no install API) it just shows the manual steps instead. -->
+   <!-- ===== PWA INSTALL PROMPT BANNER ===== -->
   <div id="installBanner" class="install-banner" role="dialog" aria-live="polite" aria-label="Install app">
-    <div class="install-banner-icon">MR</div>
+    <div class="install-banner-icon">
+        <img src="apple-touch-icon.png" alt="Marie Rose Shop" style="width: 40px; height: 40px; border-radius: 8px;">
+    </div>
     <div class="install-banner-text">
       <strong id="installBannerTitle">Install Marie Rose Shop</strong>
       <span id="installBannerSubtitle">Add it to your home screen for one-tap access, even offline.</span>
