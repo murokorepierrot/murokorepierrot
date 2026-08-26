@@ -1169,3 +1169,107 @@
   });
 
 })();
+
+/* ============================================================
+   PWA INSTALL PROMPT BANNER
+   ------------------------------------------------------------
+   Chrome/Edge (Android + desktop) fire "beforeinstallprompt" when
+   the site meets install criteria (HTTPS, manifest.json with icons
+   + start_url, a registered service worker). We intercept that
+   event, stop the browser's own mini-infobar, and show our own
+   branded #installBanner instead so it actually gets noticed.
+
+   iOS Safari never fires "beforeinstallprompt" (Apple doesn't
+   support it) — there is no programmatic install on iOS. So for
+   iOS we detect it directly and show the same banner with manual
+   "Share -> Add to Home Screen" instructions instead of an Install
+   button.
+
+   The banner never appears if the app is already installed
+   (running in standalone display mode), and a dismissal is
+   remembered for 7 days so we don't nag on every visit.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var banner = document.getElementById('installBanner');
+  if (!banner) return;
+
+  var installBtn = document.getElementById('installBannerBtn');
+  var closeBtn = document.getElementById('installBannerClose');
+  var titleEl = document.getElementById('installBannerTitle');
+  var subtitleEl = document.getElementById('installBannerSubtitle');
+
+  var DISMISS_KEY = 'mrs-install-dismissed-at';
+  var DISMISS_DAYS = 7;
+
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true; // legacy iOS flag
+  }
+
+  function recentlyDismissed() {
+    var raw = localStorage.getItem(DISMISS_KEY);
+    if (!raw) return false;
+    var elapsedDays = (Date.now() - parseInt(raw, 10)) / (1000 * 60 * 60 * 24);
+    return elapsedDays < DISMISS_DAYS;
+  }
+
+  function markDismissed() {
+    try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (e) { /* storage unavailable, ignore */ }
+  }
+
+  function showBanner() {
+    if (isStandalone() || recentlyDismissed()) return;
+    requestAnimationFrame(function () { banner.classList.add('show'); });
+  }
+
+  function hideBanner() {
+    banner.classList.remove('show');
+  }
+
+  if (isStandalone()) return; // already installed, nothing to do
+
+  var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+  var isSafari = isIOS && /safari/i.test(window.navigator.userAgent) && !/crios|fxios/i.test(window.navigator.userAgent);
+
+  var deferredPrompt = null;
+
+  if (isIOS && isSafari) {
+    // No beforeinstallprompt on iOS: swap the button for plain instructions.
+    titleEl.textContent = 'Install Marie Rose Shop';
+    subtitleEl.textContent = 'Tap the Share icon, then "Add to Home Screen".';
+    installBtn.textContent = 'Got it';
+    installBtn.addEventListener('click', function () {
+      hideBanner();
+      markDismissed();
+    });
+    setTimeout(showBanner, 2500);
+  } else {
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault(); // stop Chrome's default mini-infobar
+      deferredPrompt = e;
+      setTimeout(showBanner, 2500);
+    });
+
+    installBtn.addEventListener('click', function () {
+      if (!deferredPrompt) { hideBanner(); return; }
+      hideBanner();
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function () {
+        deferredPrompt = null;
+      });
+    });
+  }
+
+  closeBtn.addEventListener('click', function () {
+    hideBanner();
+    markDismissed();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    hideBanner();
+    try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (e) { /* ignore */ }
+  });
+
+})();
