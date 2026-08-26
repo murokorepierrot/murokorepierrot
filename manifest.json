@@ -1,7 +1,7 @@
 {
   "id": "/marie-rose-shop/",
   "name": "Marie Rose Shop | Jabana, Kigali",
-  "short_name": "Marie Rose Shop",
+  "short_name": "Marie Rose",
   "description": "Quality groceries and household essentials in Jabana, Gasabo, Kigali. Fair prices, friendly service, every single day.",
   "start_url": "./index.html",
   "scope": "./",
@@ -13,19 +13,19 @@
   "categories": ["shopping", "food", "business"],
   "icons": [
     {
-      "src": "images/logo.png",
+      "src": "android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "images/logo.png",
+      "src": "android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "images/logo.png",
+      "src": "android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
