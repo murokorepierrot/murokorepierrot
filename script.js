@@ -1,9 +1,7 @@
 (function() {
   'use strict';
 
-  /* ===== CLICK-TO-FRONT CARDS =====
-     Opens a card in a full-screen overlay only when the user taps/clicks it,
-     not while scrolling. */
+  /* ===== CLICK-TO-FRONT CARDS ===== */
   try {
     function initClickToFrontCards(selector) {
       const cards = document.querySelectorAll(selector);
@@ -19,17 +17,15 @@
       let originalNextSibling = null;
 
       function openCard(card) {
-        if (activeCard) return; // a card is already open / mid-transition — ignore re-entrant calls
+        if (activeCard) return;
 
         activeCard = card;
         originalParent = card.parentNode;
         originalNextSibling = card.nextSibling;
 
-        // Remove hover states that might conflict with open state
         card.style.transform = 'none';
         card.style.boxShadow = 'none';
 
-        // Add a class for the entry animation
         card.classList.add('popup-enter');
         content.appendChild(card);
         overlay.classList.add('open');
@@ -37,17 +33,14 @@
         document.body.style.overflow = 'hidden';
         card.setAttribute('aria-pressed', 'true');
         
-        // Focus the close button after a tiny delay
         setTimeout(function() { closeBtn.focus(); }, 10);
       }
 
       function closeCard() {
         if (!activeCard) return;
         
-        // Add a class for the exit animation
         activeCard.classList.add('popup-exit');
         
-        // Wait for the exit animation to finish before moving it back
         setTimeout(function() {
           if (!activeCard) return;
           
@@ -67,7 +60,7 @@
           activeCard = null;
           originalParent = null;
           originalNextSibling = null;
-        }, 250); // The duration of the exit CSS animation
+        }, 250);
       }
 
       cards.forEach(function(card) {
@@ -75,13 +68,6 @@
         card.setAttribute('role', 'button');
         card.setAttribute('aria-pressed', 'false');
 
-        // 'click' alone is enough on modern mobile browsers (viewport meta tag
-        // already disables the old 300ms tap delay), and it's the only event
-        // browsers reliably suppress after a real scroll. Duplicating this with
-        // manual touchstart/touchmove/touchend tracking caused a race: the
-        // synthetic click that follows touchend would fire *after* the card had
-        // already been moved in the DOM, landing on the wrong element and
-        // re-triggering openCard() a second time.
         card.addEventListener('click', function(e) {
           e.stopPropagation();
           openCard(card);
@@ -200,8 +186,6 @@
     var now = new Date();
     var day = now.getDay();
     var hour = now.getHours() + now.getMinutes() / 60;
-    // Monday-Saturday: 7:00 AM - 9:30 PM (7.0 to 21.5)
-    // Sunday: 6:00 PM - 9:00 PM (18.0 to 21.0)
     var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
     dot.classList.toggle('closed', !isOpen);
     text.textContent = isOpen
@@ -257,9 +241,7 @@
     });
   }
 
-  /* ===========================================================
-     PRODUCT SEARCH
-     =========================================================== */
+  /* ===== PRODUCT SEARCH ===== */
   var productSearchInput = document.getElementById('productSearch');
   var searchDropdown = document.getElementById('searchDropdown');
   var searchClear = document.getElementById('searchClear');
@@ -711,12 +693,6 @@
   const rwElements = document.querySelectorAll('.lang-rw');
   const frElements = document.querySelectorAll('.lang-fr');
 
-  // Clear any static inline "display:none" from the HTML — visibility is now
-  // driven entirely by the .lang-hidden class (see style.css). Relying on
-  // inline styles was fragile: once JS touched an element's style.display,
-  // browsers re-serialize it as "display: none" (with a space), which no
-  // longer matched CSS written to expect the original "display:none" markup
-  // — causing all three languages to stack instead of one replacing another.
   enElements.forEach(el => el.style.removeProperty('display'));
   rwElements.forEach(el => el.style.removeProperty('display'));
   frElements.forEach(el => el.style.removeProperty('display'));
@@ -1135,6 +1111,8 @@
       if (e.key === 'Enter') handleUserQuery();
     });
   }
+})();
+
 /* ============================================================
    BUTTON RIPPLE MICRO-INTERACTION
    ============================================================ */
@@ -1164,7 +1142,9 @@
       ripple.remove();
     });
   });
-  /* ============================================================
+})();
+
+/* ============================================================
    PWA INSTALL PROMPT BANNER
    ============================================================ */
 (function () {
@@ -1249,7 +1229,5 @@
     hideBanner();
     try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (e) { /* ignore */ }
   });
-
-})();
 
 })();
