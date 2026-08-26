@@ -18,7 +18,6 @@
 
       function openCard(card) {
         if (activeCard) return;
-
         activeCard = card;
         originalParent = card.parentNode;
         originalNextSibling = card.nextSibling;
@@ -38,7 +37,6 @@
 
       function closeCard() {
         if (!activeCard) return;
-        
         activeCard.classList.add('popup-exit');
         
         setTimeout(function() {
@@ -1194,7 +1192,6 @@
   var deferredPrompt = null;
 
   if (isIOS && isSafari) {
-    // No beforeinstallprompt on iOS: swap the button for plain instructions.
     titleEl.textContent = 'Install Marie Rose Shop';
     subtitleEl.textContent = 'Tap the Share icon, then "Add to Home Screen".';
     installBtn.textContent = 'Got it';
@@ -1205,7 +1202,7 @@
     setTimeout(showBanner, 2500);
   } else {
     window.addEventListener('beforeinstallprompt', function (e) {
-      e.preventDefault(); // stop Chrome's default mini-infobar
+      e.preventDefault(); 
       deferredPrompt = e;
       setTimeout(showBanner, 2500);
     });
