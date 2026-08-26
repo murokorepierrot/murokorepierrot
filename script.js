@@ -1135,9 +1135,6 @@
       if (e.key === 'Enter') handleUserQuery();
     });
   }
-
-})();
-
 /* ============================================================
    BUTTON RIPPLE MICRO-INTERACTION
    ============================================================ */
@@ -1167,27 +1164,8 @@
       ripple.remove();
     });
   });
-
-})();
-
-/* ============================================================
+  /* ============================================================
    PWA INSTALL PROMPT BANNER
-   ------------------------------------------------------------
-   Chrome/Edge (Android + desktop) fire "beforeinstallprompt" when
-   the site meets install criteria (HTTPS, manifest.json with icons
-   + start_url, a registered service worker). We intercept that
-   event, stop the browser's own mini-infobar, and show our own
-   branded #installBanner instead so it actually gets noticed.
-
-   iOS Safari never fires "beforeinstallprompt" (Apple doesn't
-   support it) — there is no programmatic install on iOS. So for
-   iOS we detect it directly and show the same banner with manual
-   "Share -> Add to Home Screen" instructions instead of an Install
-   button.
-
-   The banner never appears if the app is already installed
-   (running in standalone display mode), and a dismissal is
-   remembered for 7 days so we don't nag on every visit.
    ============================================================ */
 (function () {
   'use strict';
@@ -1272,54 +1250,6 @@
     try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (e) { /* ignore */ }
   });
 
-  /* ===== PWA INSTALL PROMPT LOGIC ===== */
-let deferredPrompt;
-const installBanner = document.getElementById('installBanner');
-const installBtn = document.getElementById('installBannerBtn');
-const installClose = document.getElementById('installBannerClose');
+})();
 
-// Hide banner initially
-installBanner.style.display = 'none';
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent Chrome 67 and earlier from automatically showing the prompt
-  e.preventDefault();
-  // Stash the event so it can be triggered later.
-  deferredPrompt = e;
-  // Update UI to notify the user they can add to home screen
-  installBanner.style.display = 'flex';
-});
-
-installBtn.addEventListener('click', async () => {
-  // Hide the app provided install promotion
-  installBanner.style.display = 'none';
-  // Show the install prompt
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    // Optionally, send analytics event with outcome of prompt
-    console.log(`User response to the install prompt: ${outcome}`);
-    // We've used the prompt, and can't use it again, throw it away
-    deferredPrompt = null;
-  }
-});
-
-installClose.addEventListener('click', () => {
-  installBanner.style.display = 'none';
-  deferredPrompt = null;
-});
-
-// iOS specific: Show manual instructions if needed
-window.addEventListener('load', () => {
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isIOS && !window.matchMedia('(display-mode: standalone)').matches) {
-    // You can modify this to show a custom iOS toast if you want
-    setTimeout(() => {
-       installBanner.style.display = 'flex';
-       document.getElementById('installBannerSubtitle').innerText = "Tap the 'Share' button, then select 'Add to Home Screen'.";
-       installBtn.style.display = 'none'; // Hide install button on iOS
-    }, 3000); // Show after 3 seconds
-  }
-});
 })();
