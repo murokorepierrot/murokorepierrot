@@ -6417,3 +6417,267 @@ html {
     animation: none !important;
   }
 }
+/* ============================================
+   FIX: FOOTER AND ABOUT IMAGES CLICKABLE ON MOBILE
+   ============================================ */
+
+/* Fix for footer scripture images */
+.footer-media > div {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    display: block !important;
+    position: relative !important;
+}
+
+.footer-media > div img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.footer-media > div:active {
+    opacity: 0.8;
+    transition: opacity 0.1s ease;
+}
+
+/* Fix for about carousel images */
+.about-media .about-slide {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.about-media .about-slide img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.about-media .about-slide:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Fix for any image wrapper that might block clicks */
+.about-carousel-wrapper,
+.about-carousel-track {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Fix for gallery images on mobile */
+.gallery-item {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.gallery-item img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+/* Fix for team images on mobile */
+.team-card > div:first-child {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.team-card > div:first-child img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Fix for product images on mobile */
+.product-photo-slot {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.product-photo-slot img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Ensure the lightbox overlay responds to touch */
+.lightbox-overlay {
+    touch-action: manipulation !important;
+}
+
+.lightbox-content {
+    touch-action: manipulation !important;
+}
+
+.lightbox-content img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+}
+/* ============================================
+   FIX: ALL IMAGES CLICKABLE ON REAL PHONES
+   ============================================ */
+
+/* Fix for team big image */
+.team-big-img {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+    pointer-events: auto !important;
+    display: block !important;
+}
+
+.team-big-img:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Fix for team header images */
+.team-header-slide {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.team-header-slide img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.team-header-slide:active {
+    opacity: 0.9;
+    transition: opacity 0.1s ease;
+}
+
+/* Fix for any .about-media > div images */
+.about-media > div {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.about-media > div img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.about-media > div:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Fix for footer-media images */
+.footer-media > div {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.footer-media > div img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.footer-media > div:active {
+    opacity: 0.8;
+    transition: opacity 0.1s ease;
+}
+
+/* Fix for gallery images */
+.gallery-item {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.gallery-item img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.gallery-item:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s ease !important;
+}
+
+/* Fix for product images */
+.product-photo-slot {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.product-photo-slot img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.product-photo-slot:active {
+    opacity: 0.9;
+    transition: opacity 0.1s ease;
+}
+
+/* Fix for team card images */
+.team-card > div:first-child {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.team-card > div:first-child img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.team-card > div:first-child:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* Fix for any wrapper that contains clickable images */
+[onclick] {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+[onclick] img {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
