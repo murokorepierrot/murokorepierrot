@@ -6418,266 +6418,303 @@ html {
   }
 }
 /* ============================================
-   FIX: FOOTER AND ABOUT IMAGES CLICKABLE ON MOBILE
+   FOOTER SCRIPTURE BANNER - ATTRACTIVE STYLE
    ============================================ */
 
-/* Fix for footer scripture images */
-.footer-media > div {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-    display: block !important;
-    position: relative !important;
+.footer-scripture-banner {
+    margin-top: 24px;
+    padding: 32px 28px 28px;
+    background: linear-gradient(145deg, #f8f5ee 0%, #ede8de 100%);
+    border-radius: var(--radius-lg);
+    border-left: 5px solid var(--gold);
+    border-right: 5px solid var(--gold);
+    border-top: 1px solid rgba(200, 164, 92, 0.15);
+    border-bottom: 1px solid rgba(200, 164, 92, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-.footer-media > div img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
+.footer-scripture-banner:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.footer-media > div:active {
+/* Top gradient line */
+.footer-scripture-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-dark), var(--gold), transparent);
+}
+
+/* Decorative Cross */
+.footer-scripture-banner .banner-cross {
+    position: absolute;
+    right: 18px;
+    top: 10px;
+    font-size: 2.4rem;
+    color: var(--gold);
+    opacity: 0.08;
+    font-weight: 300;
+    pointer-events: none;
+    font-family: 'Georgia', serif;
+}
+
+/* ----- Scripture Text ----- */
+.footer-scripture-banner .scripture-text {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(1.3rem, 2.8vw, 2rem);
+    font-weight: 600;
+    color: #2a2a2a;
+    line-height: 1.4;
+    margin: 0 0 4px;
+    letter-spacing: 0.3px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Decorative quote marks */
+.footer-scripture-banner .scripture-text::before {
+    content: '"';
+    color: var(--gold);
+    opacity: 0.25;
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-right: 4px;
+}
+
+.footer-scripture-banner .scripture-text::after {
+    content: '"';
+    color: var(--gold);
+    opacity: 0.25;
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-left: 4px;
+}
+
+/* ----- Scripture Reference ----- */
+.footer-scripture-banner .scripture-ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+    font-weight: 500;
+    color: var(--gold-dark);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 2px 0 0;
+    position: relative;
+    z-index: 1;
     opacity: 0.8;
-    transition: opacity 0.1s ease;
 }
 
-/* Fix for about carousel images */
-.about-media .about-slide {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
+.footer-scripture-banner .scripture-ref::before {
+    content: '— ';
+    opacity: 0.5;
 }
 
-.about-media .about-slide img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
+.footer-scripture-banner .scripture-ref::after {
+    content: ' —';
+    opacity: 0.5;
 }
 
-.about-media .about-slide:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
+/* ----- Divider Line ----- */
+.footer-scripture-banner .divider-line {
+    display: block;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+    margin: 10px auto 8px;
+    border-radius: 2px;
+    position: relative;
+    z-index: 1;
 }
 
-/* Fix for any image wrapper that might block clicks */
-.about-carousel-wrapper,
-.about-carousel-track {
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
+/* ----- Pillars (4 columns) ----- */
+.footer-scripture-banner .scripture-pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(200, 164, 92, 0.15);
+    position: relative;
+    z-index: 1;
 }
 
-/* Fix for gallery images on mobile */
-.gallery-item {
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
+.footer-scripture-banner .pillar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 10px 6px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(200, 164, 92, 0.06);
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
-.gallery-item img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
+.footer-scripture-banner .pillar:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(200, 164, 92, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(200, 164, 92, 0.10);
 }
 
-/* Fix for team images on mobile */
-.team-card > div:first-child {
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
+.footer-scripture-banner .pillar-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    display: block;
 }
 
-.team-card > div:first-child img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
+.footer-scripture-banner .pillar-text {
+    font-size: clamp(0.6rem, 0.7vw, 0.72rem);
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-align: center;
+    line-height: 1.2;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Fix for product images on mobile */
-.product-photo-slot {
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
+/* ----- Responsive ----- */
+@media (max-width: 992px) {
+    .footer-scripture-banner .scripture-pillars {
+        gap: 8px;
+    }
+    
+    .footer-scripture-banner .pillar-icon {
+        font-size: 1.3rem;
+    }
+    
+    .footer-scripture-banner .pillar-text {
+        font-size: 0.62rem;
+    }
 }
 
-.product-photo-slot img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
+@media (max-width: 768px) {
+    .footer-scripture-banner {
+        padding: 24px 20px 20px;
+        border-left-width: 4px;
+        border-right-width: 4px;
+        border-radius: var(--radius);
+        margin-top: 18px;
+    }
+    
+    .footer-scripture-banner .scripture-text {
+        font-size: clamp(1rem, 3vw, 1.4rem);
+    }
+    
+    .footer-scripture-banner .scripture-text::before,
+    .footer-scripture-banner .scripture-text::after {
+        font-size: 1.3rem;
+    }
+    
+    .footer-scripture-banner .scripture-ref {
+        font-size: 0.65rem;
+    }
+    
+    .footer-scripture-banner .scripture-pillars {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-top: 14px;
+        padding-top: 12px;
+    }
+    
+    .footer-scripture-banner .pillar {
+        padding: 8px 6px;
+        border-radius: 10px;
+    }
+    
+    .footer-scripture-banner .pillar-icon {
+        font-size: 1.2rem;
+    }
+    
+    .footer-scripture-banner .pillar-text {
+        font-size: 0.6rem;
+    }
+    
+    .footer-scripture-banner .banner-cross {
+        font-size: 1.8rem;
+        right: 12px;
+        top: 8px;
+    }
+    
+    .footer-scripture-banner .divider-line {
+        width: 40px;
+        margin: 8px auto 6px;
+    }
 }
 
-/* Ensure the lightbox overlay responds to touch */
-.lightbox-overlay {
-    touch-action: manipulation !important;
+@media (max-width: 480px) {
+    .footer-scripture-banner {
+        padding: 18px 14px 16px;
+        border-left-width: 3px;
+        border-right-width: 3px;
+        border-radius: 12px;
+        margin-top: 14px;
+    }
+    
+    .footer-scripture-banner .scripture-text {
+        font-size: clamp(0.85rem, 3.2vw, 1.1rem);
+    }
+    
+    .footer-scripture-banner .scripture-text::before,
+    .footer-scripture-banner .scripture-text::after {
+        font-size: 1rem;
+    }
+    
+    .footer-scripture-banner .scripture-ref {
+        font-size: 0.55rem;
+    }
+    
+    .footer-scripture-banner .scripture-pillars {
+        gap: 6px;
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+    
+    .footer-scripture-banner .pillar {
+        padding: 6px 4px;
+        border-radius: 8px;
+    }
+    
+    .footer-scripture-banner .pillar-icon {
+        font-size: 1rem;
+    }
+    
+    .footer-scripture-banner .pillar-text {
+        font-size: 0.5rem;
+    }
+    
+    .footer-scripture-banner .banner-cross {
+        font-size: 1.4rem;
+        right: 10px;
+        top: 6px;
+        opacity: 0.06;
+    }
+    
+    .footer-scripture-banner .divider-line {
+        width: 30px;
+    }
 }
 
-.lightbox-content {
-    touch-action: manipulation !important;
-}
-
-.lightbox-content img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-}
-/* ============================================
-   FIX: ALL IMAGES CLICKABLE ON REAL PHONES
-   ============================================ */
-
-/* Fix for team big image */
-.team-big-img {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-    pointer-events: auto !important;
-    display: block !important;
-}
-
-.team-big-img:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-}
-
-/* Fix for team header images */
-.team-header-slide {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-.team-header-slide img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-}
-
-.team-header-slide:active {
-    opacity: 0.9;
-    transition: opacity 0.1s ease;
-}
-
-/* Fix for any .about-media > div images */
-.about-media > div {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-.about-media > div img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-}
-
-.about-media > div:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-}
-
-/* Fix for footer-media images */
-.footer-media > div {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-.footer-media > div img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-}
-
-.footer-media > div:active {
-    opacity: 0.8;
-    transition: opacity 0.1s ease;
-}
-
-/* Fix for gallery images */
-.gallery-item {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-.gallery-item img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-}
-
-.gallery-item:active {
-    transform: scale(0.97) !important;
-    transition: transform 0.1s ease !important;
-}
-
-/* Fix for product images */
-.product-photo-slot {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-.product-photo-slot img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-}
-
-.product-photo-slot:active {
-    opacity: 0.9;
-    transition: opacity 0.1s ease;
-}
-
-/* Fix for team card images */
-.team-card > div:first-child {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-.team-card > div:first-child img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
-}
-
-.team-card > div:first-child:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
-}
-
-/* Fix for any wrapper that contains clickable images */
-[onclick] {
-    cursor: pointer !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-[onclick] img {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-touch-callout: none !important;
+/* ----- Reduced Motion ----- */
+@media (prefers-reduced-motion: reduce) {
+    .footer-scripture-banner {
+        transition: none !important;
+    }
+    .footer-scripture-banner:hover {
+        transform: none !important;
+    }
+    .footer-scripture-banner .pillar {
+        transition: none !important;
+    }
+    .footer-scripture-banner .pillar:hover {
+        transform: none !important;
+    }
 }
