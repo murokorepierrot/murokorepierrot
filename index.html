@@ -491,32 +491,32 @@
         <div class="about-carousel-track" id="aboutCarouselTrack">
           
           <!-- Slide 1 -->
-          <div class="about-slide active" data-slide="0" onclick="openLightbox(this.querySelector('img'))">
+          <div class="about-slide active" data-slide="0">
             <img src="images/lk.png" alt="Marie Rose Shop Interior" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 2 -->
-          <div class="about-slide" data-slide="1" onclick="openLightbox(this.querySelector('img'))">
+          <div class="about-slide" data-slide="1">
             <img src="images/bn.avif" alt="Marie Rose Shop Storefront" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 3 -->
-          <div class="about-slide" data-slide="2" onclick="openLightbox(this.querySelector('img'))">
+          <div class="about-slide" data-slide="2">
             <img src="images/grocery.png" alt="Shop Interior Displays" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 4 -->
-          <div class="about-slide" data-slide="3" onclick="openLightbox(this.querySelector('img'))">
+          <div class="about-slide" data-slide="3">
             <img src="images/web.png" alt="Marie Rose Shop Team" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 5 -->
-          <div class="about-slide" data-slide="4" onclick="openLightbox(this.querySelector('img'))">
+          <div class="about-slide" data-slide="4">
             <img src="images/tg.jpg" alt="Product Shelves" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 6 -->
-          <div class="about-slide" data-slide="5" onclick="openLightbox(this.querySelector('img'))">
+          <div class="about-slide" data-slide="5">
             <img src="images/rm.png" alt="Fresh Stock Arrivals" loading="lazy" data-group="about">
           </div>
 
@@ -588,61 +588,98 @@
     <p class="section-lede center lang-rw" style="display:none;">Reba imbere mw'iduka, n'abafatanyabikorwa baryo.</p>
     <p class="section-lede center lang-fr" style="display:none;">Un aperçu de nos étagères, de notre devanture et des personnes qui la font fonctionner chaque jour.</p>
 
-    <!-- GALLERY GRID - 6 images for carousel -->
-    <div class="gallery-grid">
-      <div class="gallery-item active" onclick="openLightbox(this)">
-        <img src="images/lk.png" alt="Inside Marie Rose Shop" loading="lazy" data-group="gallery">
-        <span class="image-count">1 / 6</span>
-        <span class="gloss"></span>
-        <span class="zoom-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          View
-        </span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="images/ds.jpg" alt="Marie Rose Shop Storefront" loading="lazy" data-group="gallery">
-        <span class="image-count">2 / 6</span>
-        <span class="gloss"></span>
-        <span class="zoom-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          View
-        </span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="images/fd.jpg" alt="Shop Interior Displays" loading="lazy" data-group="gallery">
-        <span class="image-count">3 / 6</span>
-        <span class="gloss"></span>
-        <span class="zoom-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          View
-        </span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="images/web.png" alt="Marie Rose Shop Team" loading="lazy" data-group="gallery">
-        <span class="image-count">4 / 6</span>
-        <span class="gloss"></span>
-        <span class="zoom-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          View
-        </span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="images/vb.jpg" alt="Product Shelves" loading="lazy" data-group="gallery">
-        <span class="image-count">5 / 6</span>
-        <span class="gloss"></span>
-        <span class="zoom-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          View
-        </span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="images/bn.avif" alt="Fresh Stock Arrivals" loading="lazy" data-group="gallery">
-        <span class="image-count">6 / 6</span>
-        <span class="gloss"></span>
-        <span class="zoom-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          View
-        </span>
+    <!-- GALLERY FILMSTRIP - 6 images, auto-sliding, seamless loop.
+         The 6 tiles below are the real, clickable photos. They are followed
+         by an identical (but non-interactive, aria-hidden) copy of the same
+         6 tiles used purely so the CSS scroll animation can loop seamlessly
+         -- no new photos are added, it's still exactly 6 unique images. -->
+    <div class="gallery-viewport">
+      <div class="gallery-track" id="galleryTrack">
+        <div class="gallery-item active" onclick="openLightbox(this)">
+          <img src="images/lk.png" alt="Inside Marie Rose Shop" loading="lazy" data-group="gallery">
+          <span class="image-count">1 / 6</span>
+          <span class="gloss"></span>
+          <span class="zoom-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            View
+          </span>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this)">
+          <img src="images/ds.jpg" alt="Marie Rose Shop Storefront" loading="lazy" data-group="gallery">
+          <span class="image-count">2 / 6</span>
+          <span class="gloss"></span>
+          <span class="zoom-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            View
+          </span>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this)">
+          <img src="images/fd.jpg" alt="Shop Interior Displays" loading="lazy" data-group="gallery">
+          <span class="image-count">3 / 6</span>
+          <span class="gloss"></span>
+          <span class="zoom-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            View
+          </span>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this)">
+          <img src="images/web.png" alt="Marie Rose Shop Team" loading="lazy" data-group="gallery">
+          <span class="image-count">4 / 6</span>
+          <span class="gloss"></span>
+          <span class="zoom-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            View
+          </span>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this)">
+          <img src="images/vb.jpg" alt="Product Shelves" loading="lazy" data-group="gallery">
+          <span class="image-count">5 / 6</span>
+          <span class="gloss"></span>
+          <span class="zoom-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            View
+          </span>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this)">
+          <img src="images/bn.avif" alt="Fresh Stock Arrivals" loading="lazy" data-group="gallery">
+          <span class="image-count">6 / 6</span>
+          <span class="gloss"></span>
+          <span class="zoom-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            View
+          </span>
+        </div>
+        <!-- Decorative duplicate copy (same 6 photos) for a seamless loop -->
+        <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
+          <img src="images/lk.png" alt="" loading="lazy">
+          <span class="image-count">1 / 6</span>
+          <span class="gloss"></span>
+        </div>
+        <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
+          <img src="images/ds.jpg" alt="" loading="lazy">
+          <span class="image-count">2 / 6</span>
+          <span class="gloss"></span>
+        </div>
+        <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
+          <img src="images/fd.jpg" alt="" loading="lazy">
+          <span class="image-count">3 / 6</span>
+          <span class="gloss"></span>
+        </div>
+        <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
+          <img src="images/web.png" alt="" loading="lazy">
+          <span class="image-count">4 / 6</span>
+          <span class="gloss"></span>
+        </div>
+        <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
+          <img src="images/vb.jpg" alt="" loading="lazy">
+          <span class="image-count">5 / 6</span>
+          <span class="gloss"></span>
+        </div>
+        <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
+          <img src="images/bn.avif" alt="" loading="lazy">
+          <span class="image-count">6 / 6</span>
+          <span class="gloss"></span>
+        </div>
       </div>
     </div>
 
@@ -673,10 +710,10 @@
 </section>
 
   <!-- ===== LIGHTBOX OVERLAY ===== -->
-  <div id="lightboxOverlay" class="lightbox-overlay" onclick="closeLightbox()">
-    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-    <button class="lightbox-prev" onclick="changeLightbox(-1)">&#10094;</button>
-    <button class="lightbox-next" onclick="changeLightbox(1)">&#10095;</button>
+  <div id="lightboxOverlay" class="lightbox-overlay">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox-prev" aria-label="Previous image">&#10094;</button>
+    <button class="lightbox-next" aria-label="Next image">&#10095;</button>
     <div class="lightbox-content">
       <img id="lightboxImage" src="" alt="Gallery Image">
     </div>
@@ -1239,6 +1276,161 @@
         <p class="team-role">Import &amp; Sourcing</p>
         <p>Travels abroad to source quality products at wholesale prices.</p>
       </div>
+    </div>
+
+    <!-- Team Scripture Banner -->
+    <div class="team-scripture-banner reveal">
+      <!-- English -->
+      <div class="lang-en">
+        <p class="scripture-text">We can do all things through Christ,<br>who strengthens us.</p>
+        <p class="scripture-ref">Philippians 4:13</p>
+      </div>
+      <!-- Kinyarwanda -->
+      <div class="lang-rw" style="display:none;">
+        <p class="scripture-text">Dushobozwa byose na Kristo,<br>uduha imbaraga.</p>
+        <p class="scripture-ref">Abafilipi 4:13</p>
+      </div>
+      <!-- French -->
+      <div class="lang-fr" style="display:none;">
+        <p class="scripture-text">Nous pouvons tout faire grâce au Christ,<br>qui nous donne la force.</p>
+        <p class="scripture-ref">Philippiens 4:13</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- ===== SHOPPING LIST ===== -->
+  <section class="shopping-list" id="shopping-list">
+    <div class="section-inner">
+      <p class="eyebrow center lang-en">Plan Your Visit</p>
+      <p class="eyebrow center lang-rw" style="display:none;">Kora Urutonde rwawe</p>
+      <p class="eyebrow center lang-fr" style="display:none;">Planifiez votre visite</p>
+      
+      <h2 class="center reveal lang-en">Your Digital Shopping List</h2>
+      <h2 class="center reveal lang-rw" style="display:none;">Urutonde rw’Ibyo Mugura </h2>
+      <h2 class="center reveal lang-fr" style="display:none;">Votre liste de courses numérique</h2>
+      
+      <p class="section-lede center lang-en">Tap "Add to list" on any product to build your shopping list before you visit. Your list is saved on this device.</p>
+      <p class="section-lede center lang-rw" style="display:none;">Kanda "Add" kuri buri icuruzwa.</p>
+      <p class="section-lede center lang-fr" style="display:none;">Appuyez sur "Ajouter à la liste" sur n'importe quel produit pour construire votre liste de courses avant votre visite. Votre liste est enregistrée sur cet appareil.</p>
+      
+      <div class="list-app">
+        <div class="list-input-row">
+          <input type="text" id="listInput" placeholder="Add an item (e.g., Rice, Oil, Soap)..." autocomplete="off">
+          <button id="listAdd" class="btn btn-primary">Add</button>
+        </div>
+        <ul id="listItems" class="list-items"></ul>
+        <div class="list-empty" id="listEmpty">Your list is empty. Browse products above and click "Add to list".</div>
+        <div class="list-actions" id="listActions" style="display:none;">
+          <button id="listCopy" class="btn btn-ghost">Copy List</button>
+          <button id="listClear" class="btn btn-ghost">Clear All</button>
+          <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp" id="listWhatsApp">Send List via WhatsApp</a>
+        </div>
+        <div class="payment-note">
+          <svg viewBox="0 0 24 24" class="payment-note-icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          <p>
+            <span class="lang-en">We confirm your order on WhatsApp, then you pay by <strong>Cash</strong> or <strong>Mobile Money (MoMo)</strong> on pickup or delivery.</span>
+            <span class="lang-rw" style="display:none;">Dukemeza ibyo wifuza kuri WhatsApp, hanyuma ukishyura mu <strong>Amafaranga</strong> cyangwa <strong>MoMo</strong> igihe uzatanga cyangwa dutangire.</span>
+            <span class="lang-fr" style="display:none;">Nous confirmons votre commande sur WhatsApp, puis vous payez en <strong>Espèces</strong> ou par <strong>Mobile Money (MoMo)</strong> à la livraison ou au retrait.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+
+  <!-- ===== REQUEST PRODUCT ===== -->
+  <section class="request-product" id="request">
+    <div class="section-inner">
+      <div class="request-card reveal">
+        <div class="request-text">
+          <p class="eyebrow lang-en">Can't Find Something?</p>
+          <p class="eyebrow lang-rw" style="display:none;">Nutabona igicuruzwa ukeneye?</p>
+          <p class="eyebrow lang-fr" style="display:none;">Vous ne trouvez pas quelque chose ?</p>
+          <h2 class="lang-en">Request a Product</h2>
+          <h2 class="lang-rw" style="display:none;">Saba igicuruzwa ukeneye</h2>
+          <h2 class="lang-fr" style="display:none;">Demander un produit</h2>
+          <p class="lang-en">If you need an item we don't currently stock, let us know. Our import team travels regularly and can often source it on their next trip.</p>
+          <p class="lang-rw" style="display:none;">Niba ukeneye ikintu tudafite mu iduka, tubwire. Itsinda ryacu rijya mu mahanga kenshi.</p>
+          <p class="lang-fr" style="display:none;">Si vous avez besoin d'un article que nous n'avons pas en stock, faites-le nous savoir. Notre équipe d'importation voyage régulièrement et peut souvent se le procurer lors de son prochain voyage.</p>
+          <form id="requestForm" class="request-form">
+            <input type="text" id="reqName" placeholder="Your name" required>
+            <input type="text" id="reqItem" placeholder="Product you are looking for" required>
+            <button type="submit" class="btn btn-primary lang-en">Send Request via WhatsApp</button>
+            <button type="submit" class="btn btn-primary lang-rw" style="display:none;">Ohereza ubutumwa kuri WhatsApp</button>
+            <button type="submit" class="btn btn-primary lang-fr" style="display:none;">Envoyer la demande via WhatsApp</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" id="contact">
+  <div class="section-inner footer-grid">
+    <div>
+      <p class="eyebrow lang-en">Come Say Hello</p>
+      <p class="eyebrow lang-rw" style="display:none;">Mwize kuvugana natwe</p>
+      <p class="eyebrow lang-fr" style="display:none;">Venez nous dire bonjour</p>
+      
+      <h2 class="lang-en">Visit Marie Rose Shop</h2>
+      <h2 class="lang-rw" style="display:none;">Sura Marie Rose Shop</h2>
+      <h2 class="lang-fr" style="display:none;">Visitez Marie Rose Shop</h2>
+      
+      <p class="footer-address">Kabuye Cell, Jabana Sector<br>Gasabo District, Kigali City, Rwanda <br>Find us in Kabuye, just below the Kabuye Parish Church</p>
+      <div class="footer-hours">
+        <strong class="lang-en">Opening Hours</strong>
+        <strong class="lang-rw" style="display:none;">Amasaha yo gufungura</strong>
+        <strong class="lang-fr" style="display:none;">Heures d'ouverture</strong>
+        <ul>
+          <li><span>Mon – Sat</span><span>7:00 AM – 21:30 PM</span></li>
+          <li><span>Sunday</span><span>7:00 AM – 21:00 PM</span></li>
+        </ul>
+      </div>
+      <div class="cta-row">
+        <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
+          <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
+          <span class="lang-en">Chat on WhatsApp</span>
+          <span class="lang-rw" style="display:none;">Tuvugishe kuri WhatsApp</span>
+          <span class="lang-fr" style="display:none;">Discuter sur WhatsApp</span>
+        </a>
+        <a href="tel:+250789542601" class="btn btn-ghost lang-en">Call the Shop</a>
+        <a href="tel:+250789542601" class="btn btn-ghost lang-rw" style="display:none;">Hamagara ku iduka</a>
+        <a href="tel:+250789542601" class="btn btn-ghost lang-fr" style="display:none;">Appeler la boutique</a>
+      </div>
+
+      <div class="footer-form">
+        <h4 class="lang-en">Or send us a quick message</h4>
+        <h4 class="lang-rw" style="display:none;">Cyangwa uduherereze ubutumwa bugufi</h4>
+        <h4 class="lang-fr" style="display:none;">Ou envoyez-nous un message rapide</h4>
+        <form id="contactForm">
+          <input type="text" id="cfName" placeholder="Your name" required>
+          <textarea id="cfMessage" placeholder="What do you need?" required></textarea>
+          <button type="submit" class="lang-en">Send via WhatsApp</button>
+          <button type="submit" class="lang-rw" style="display:none;">Ohereza kuri WhatsApp</button>
+          <button type="submit" class="lang-fr" style="display:none;">Envoyer via WhatsApp</button>
+        </form>
+        <p class="form-note">Opens WhatsApp with your message pre-filled — nothing is stored on this site.</p>
+      </div>
+    </div>
+       <div class="footer-media">
+    <!-- ===== MULTI-LINGUAL FOOTER IMAGES ===== -->
+    
+    <!-- English Image Wrapper -->
+    <div onclick="openLightbox(this)" class="lang-en">
+        <img src="images/bv.png" alt="Philippians 4:13 - English" class="team-header-img" data-group="footer-verse" loading="lazy">
+    </div>
+    
+    <!-- Kinyarwanda Image Wrapper -->
+    <div onclick="openLightbox(this)" class="lang-rw" style="display:none;">
+        <img src="images/qu.png" alt="Abafilipi 4:13 - Kinyarwanda" class="team-header-img" data-group="footer-verse" loading="lazy">
+    </div>
+    
+    <!-- French Image Wrapper -->
+    <div onclick="openLightbox(this)" class="lang-fr" style="display:none;">
+        <img src="images/qt.png" alt="Philippiens 4:13 - Français" class="team-header-img" data-group="footer-verse" loading="lazy">
     </div>
 
     <!-- ===== SCRIPTURE BANNER BELOW THE IMAGE ===== -->
