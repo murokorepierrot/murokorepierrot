@@ -232,7 +232,7 @@
   </style>
 </head>
 <body>
-  
+    
   <!-- ===== MODERN LOADER ===== -->
   <div id="page-loader" role="status" aria-live="polite">
     <div class="loader-ring"></div>
@@ -314,47 +314,413 @@
       </button>
     </div>
   </header>
+<!-- ===== HERO ===== -->
+<section class="hero" style="
+  position: relative;
+  z-index: 0;
+  min-height: 72vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2a5a2a 0%, #1a3a1a 40%, #0d260d 100%);
+">
 
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <img src="images/rm.png" class="hero-img" alt="Marie Rose Shop front" loading="eager">
-    <div class="hero-overlay" aria-hidden="true"></div>
+  <!-- Video Background -->
+  <video 
+    id="heroVideo"
+    class="hero-video" 
+    poster="images/rm.png"
+    autoplay 
+    muted 
+    loop 
+    playsinline
+    preload="metadata"
+    aria-hidden="true"
+    style="
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    "
+  >
+    <source src="images/hero-video.mp4" type="video/mp4">
+    <source src="images/hero-video.webm" type="video/webm">
+    <img src="images/rm.png" alt="Marie Rose Shop front" loading="eager">
+  </video>
+  
+  <!-- Static fallback image -->
+  <img 
+    id="heroFallbackImg"
+    src="images/rm.png" 
+    class="hero-fallback-img" 
+    alt="Marie Rose Shop front" 
+    loading="eager"
+    style="display: none;"
+  >
+  
+  <!-- Overlay -->
+  <div class="hero-overlay" style="
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+  "></div>
 
-    <div class="hero-content">
-      <p class="eyebrow lang-en"> Gasabo, Kigali ·Jabana Sector · Kabuye Cell</p>
-      <p class="eyebrow lang-rw" style="display:none;">·Gasabo,Kigali ·Umurenge wa Jabana ·Akagari ka Kabuye ·Munsi ya kiriziya(paroisse kabuye).   </p>
-      <p class="eyebrow lang-fr" style="display:none;">Secteur Jabana · Cellule Kabuye · Gasabo, Kigali</p>
-      
-      <h1 class="lang-en">Your Trusted Neighborhood <br>Shop in Kigali</h1>
-      <h1 class="lang-rw" style="display:none;">Iduka ryizewe <br>mu mujyi wa Kigali</h1>
-      <h1 class="lang-fr" style="display:none;">Votre Comptoir <br>de confiance à Kigali</h1>
-      
-      <p class="tagline lang-en">Quality products, fair prices, friendly service — every single day.</p>
-      <p class="tagline lang-rw" style="display:none;">Ibicuruzwa byiza, ibiciro byiza, serivisi nziza —bihoraho.</p>
-      <p class="tagline lang-fr" style="display:none;">Produits de qualité, prix justes, service amical — chaque jour.</p>
+  <!-- Hero Content -->
+  <div class="hero-content" style="
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 720px;
+    padding: 60px 24px 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  ">
+    <!-- Eyebrow - English -->
+    <p class="eyebrow lang-en" style="
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #c8a45c;
+      margin-bottom: .4rem;
+      text-align: center;
+      width: 100%;
+    ">Gasabo, Kigali · Jabana Sector · Kabuye Cell</p>
+    
+    <!-- Eyebrow - French -->
+    <p class="eyebrow lang-fr" style="display:none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #c8a45c;
+      margin-bottom: .4rem;
+      text-align: center;
+      width: 100%;
+    ">Secteur Jabana · Cellule Kabuye · Gasabo, Kigali</p>
+    
+    <!-- Eyebrow - Kinyarwanda -->
+    <p class="eyebrow lang-rw" style="display:none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #c8a45c;
+      margin-bottom: .4rem;
+      text-align: center;
+      width: 100%;
+    ">Gasabo, Kigali · Umurenge wa Jabana · Akagari ka Kabuye</p>
+    
+    <!-- Title - English -->
+    <h1 class="lang-en" style="
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 .3em;
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    ">Your Trusted Neighborhood <br>Shop in Kigali</h1>
+    
+    <!-- Title - French -->
+    <h1 class="lang-fr" style="display:none;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 .3em;
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    ">Votre Comptoir <br>de confiance à Kigali</h1>
+    
+    <!-- Title - Kinyarwanda -->
+    <h1 class="lang-rw" style="display:none;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 .3em;
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    ">Iduka ryizewe <br>mu mujyi wa Kigali</h1>
+    
+    <!-- Tagline - English -->
+    <p class="tagline lang-en" style="
+      font-size: clamp(0.8rem, 1.5vw, 1.15rem);
+      max-width: 520px;
+      margin: 0 auto 0.6rem;
+      color: rgba(255, 255, 255, 0.90);
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.2);
+    ">Quality products, fair prices, friendly service — every single day.</p>
+    
+    <!-- Tagline - French -->
+    <p class="tagline lang-fr" style="display:none;
+      font-size: clamp(0.8rem, 1.5vw, 1.15rem);
+      max-width: 520px;
+      margin: 0 auto 0.6rem;
+      color: rgba(255, 255, 255, 0.90);
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.2);
+    ">Produits de qualité, prix justes, service amical — chaque jour.</p>
+    
+    <!-- Tagline - Kinyarwanda -->
+    <p class="tagline lang-rw" style="display:none;
+      font-size: clamp(0.8rem, 1.5vw, 1.15rem);
+      max-width: 520px;
+      margin: 0 auto 0.6rem;
+      color: rgba(255, 255, 255, 0.90);
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.2);
+    ">Ibicuruzwa byiza, ibiciro byiza, serivisi nziza — bihoraho.</p>
 
-     <div class="hero-hours">
-  <span class="hours-dot" id="hoursDot" aria-hidden="true"></span>
-  <span class="hours-text" id="hoursText">Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM</span>
-</div>
-
-      <div class="cta-row">
-        <a href="#products" class="btn btn-primary lang-en">Browse Our Products</a>
-        <a href="#products" class="btn btn-primary lang-rw" style="display:none;">Reba Ibicuruzwa</a>
-        <a href="#products" class="btn btn-primary lang-fr" style="display:none;">Parcourir nos produits</a>
+    <!-- Hero Hours -->
+    <div style="
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+      margin: 0.2rem 0 0.8rem 0 !important;
+    ">
+      <div id="hoursContainer" style="
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 6px 16px !important;
+        border-radius: 50px !important;
+        background: rgba(0, 0, 0, 0.40) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 215, 0, 0.15) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+        white-space: nowrap !important;
+        min-height: 32px !important;
+      ">
+        <!-- Clock Icon -->
+        <svg id="clockIcon" style="
+          width: 12px;
+          height: 12px;
+          fill: none;
+          stroke: #c8a45c;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          flex-shrink: 0;
+        " viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
         
-        <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
-          <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
-          <span class="lang-en">Chat on WhatsApp</span>
-          <span class="lang-rw" style="display:none;">Tuvugishe kuri WhatsApp</span>
-          <span class="lang-fr" style="display:none;">Discuter sur WhatsApp</span>
-        </a>
+        <!-- Status Dot -->
+        <span id="hoursDot" style="
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #4caf50;
+          display: inline-block;
+          flex-shrink: 0;
+          box-shadow: 0 0 16px rgba(76, 175, 80, 0.4);
+          border: 1.5px solid rgba(255, 255, 255, 0.2);
+          animation: dotPulse 2s infinite ease-in-out;
+        "></span>
         
-        <a href="#contact" class="btn btn-ghost lang-en">Visit Our Shop</a>
-        <a href="#contact" class="btn btn-ghost lang-rw" style="display:none;">Sura Iduka</a>
-        <a href="#contact" class="btn btn-ghost lang-fr" style="display:none;">Visiter la boutique</a>
+        <!-- Hours Text -->
+        <span id="hoursText" style="
+          color: #ffffff !important;
+          font-weight: 500 !important;
+          font-size: clamp(0.55rem, 1.5vw, 0.85rem) !important;
+          letter-spacing: 0.2px !important;
+          white-space: nowrap !important;
+          display: inline-block !important;
+        ">Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM</span>
       </div>
     </div>
+
+    <!-- CTA Buttons -->
+    <div class="cta-row" style="
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      justify-content: center !important;
+      align-items: center !important;
+      margin-top: 0.8rem !important;
+      width: 100% !important;
+    ">
+      <a href="#products" class="btn btn-primary" style="
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: clamp(0.65rem, 1.2vw, 0.9rem) !important;
+        background: #3d7a3d !important;
+        color: white !important;
+        border: none !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        min-height: 34px !important;
+      ">
+        <span class="lang-en">Browse Products</span>
+        <span class="lang-fr" style="display:none;">Parcourir nos produits</span>
+        <span class="lang-rw" style="display:none;">Reba Ibicuruzwa</span>
+      </a>
+      
+      <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp" style="
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: clamp(0.65rem, 1.2vw, 0.9rem) !important;
+        background: #25d366 !important;
+        color: white !important;
+        border: none !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        min-height: 34px !important;
+      ">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;flex-shrink:0;"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
+        <span class="lang-en">WhatsApp</span>
+        <span class="lang-fr" style="display:none;">Discuter sur WhatsApp</span>
+        <span class="lang-rw" style="display:none;">Tuvugishe kuri WhatsApp</span>
+      </a>
+      
+      <a href="#contact" class="btn btn-ghost" style="
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: clamp(0.65rem, 1.2vw, 0.9rem) !important;
+        background: transparent !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+        color: #fff !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        min-height: 34px !important;
+      ">
+        <span class="lang-en">Visit Shop</span>
+        <span class="lang-fr" style="display:none;">Visiter la boutique</span>
+        <span class="lang-rw" style="display:none;">Sura Iduka</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    'use strict';
+    
+    // Add keyframe animations
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+      @keyframes dotPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 0.7; }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    // Update hours function
+    function updateHoursCentered() {
+      var dot = document.getElementById('hoursDot');
+      var text = document.getElementById('hoursText');
+      if (!dot || !text) return;
+      
+      var now = new Date();
+      var day = now.getDay();
+      var hour = now.getHours() + now.getMinutes() / 60;
+      var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
+      
+      if (isOpen) {
+        dot.style.background = '#4caf50';
+        dot.style.boxShadow = '0 0 16px rgba(76, 175, 80, 0.4)';
+        dot.style.animation = 'dotPulse 2s infinite ease-in-out';
+        text.textContent = 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM';
+      } else {
+        dot.style.background = '#f44336';
+        dot.style.boxShadow = '0 0 16px rgba(244, 67, 54, 0.4)';
+        dot.style.animation = 'none';
+        text.textContent = 'Closed now';
+      }
+    }
+    
+    updateHoursCentered();
+    setInterval(updateHoursCentered, 60000);
+  })();
+</script>
+
+<script>
+  (function() {
+    'use strict';
+    
+    // Add keyframe animations
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+      @keyframes dotPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 0.7; }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    // Update hours function
+    function updateHoursResponsive() {
+      var dot = document.getElementById('hoursDot');
+      var text = document.getElementById('hoursText');
+      if (!dot || !text) return;
+      
+      var now = new Date();
+      var day = now.getDay();
+      var hour = now.getHours() + now.getMinutes() / 60;
+      var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
+      
+      if (isOpen) {
+        dot.style.background = '#4caf50';
+        dot.style.boxShadow = '0 0 16px rgba(76, 175, 80, 0.4)';
+        dot.style.animation = 'dotPulse 2s infinite ease-in-out';
+        text.textContent = 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM';
+      } else {
+        dot.style.background = '#f44336';
+        dot.style.boxShadow = '0 0 16px rgba(244, 67, 54, 0.4)';
+        dot.style.animation = 'none';
+        text.textContent = 'Closed now';
+      }
+    }
+    
+    updateHoursResponsive();
+    setInterval(updateHoursResponsive, 60000);
+  })();
+</script>
+
   </section>
 
   <!-- ===== TRUST BAR ===== -->
