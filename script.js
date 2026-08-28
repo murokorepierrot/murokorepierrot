@@ -2192,3 +2192,118 @@
   });
 
 })();
+/* ============================================================
+   HERO VIDEO SMART FALLBACK
+   ============================================================ */
+(function() {
+  'use strict';
+
+  const video = document.getElementById('heroVideo');
+  const fallbackImg = document.getElementById('heroFallbackImg');
+  
+  if (!video) return;
+
+  // Check if user prefers reduced motion
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  // Check if user has data saver enabled
+  const isDataSaver = navigator.connection && navigator.connection.saveData === true;
+  
+  // Check if connection is slow (effective type)
+  const isSlowConnection = navigator.connection && (
+    navigator.connection.effectiveType === 'slow-2g' ||
+    navigator.connection.effectiveType === '2g'
+  );
+
+  // Decide whether to show video or fallback image
+  const shouldUseVideo = !prefersReducedMotion && !isDataSaver && !isSlowConnection;
+
+  if (shouldUseVideo) {
+    // Show video, hide fallback
+    video.style.display = 'block';
+    if (fallbackImg) fallbackImg.style.display = 'none';
+    
+    // Attempt to play the video
+    video.play().catch(function() {
+      // If video fails to play, fallback to image
+      video.style.display = 'none';
+      if (fallbackImg) fallbackImg.style.display = 'block';
+    });
+  } else {
+    // Use fallback image
+    video.style.display = 'none';
+    if (fallbackImg) fallbackImg.style.display = 'block';
+  }
+
+  // Handle visibility change - pause video when tab is hidden
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden && video) {
+      video.pause();
+    } else if (!document.hidden && video && shouldUseVideo) {
+      video.play().catch(function() {});
+    }
+  });
+
+  // Handle connection change
+  if (navigator.connection) {
+    navigator.connection.addEventListener('change', function() {
+      const newIsSlow = navigator.connection.effectiveType === 'slow-2g' || 
+                        navigator.connection.effectiveType === '2g';
+      if (newIsSlow || navigator.connection.saveData) {
+        // Switch to image on slow connection
+        if (video) {
+          video.pause();
+          video.style.display = 'none';
+          if (fallbackImg) fallbackImg.style.display = 'block';
+        }
+      }
+    });
+  }
+
+  // Make the video loop seamlessly
+  if (video) {
+    video.addEventListener('ended', function() {
+      this.currentTime = 0;
+      this.play().catch(function() {});
+    });
+  }
+
+})();
+/* ============================================================
+   HERO CONTENT CENTERING FIX
+   ============================================================ */
+(function() {
+  'use strict';
+  
+  // Ensure hero content is centered on all devices
+  function centerHeroContent() {
+    var heroContent = document.querySelector('.hero-content');
+    if (heroContent) {
+      heroContent.style.display = 'flex';
+      heroContent.style.flexDirection = 'column';
+      heroContent.style.alignItems = 'center';
+      heroContent.style.justifyContent = 'center';
+      heroContent.style.textAlign = 'center';
+      heroContent.style.width = '100%';
+      heroContent.style.margin = '0 auto';
+    }
+    
+    var ctaRow = document.querySelector('.cta-row');
+    if (ctaRow) {
+      ctaRow.style.display = 'flex';
+      ctaRow.style.flexWrap = 'wrap';
+      ctaRow.style.gap = '10px';
+      ctaRow.style.justifyContent = 'center';
+      ctaRow.style.alignItems = 'center';
+      ctaRow.style.width = '100%';
+      ctaRow.style.marginTop = '1rem';
+    }
+  }
+  
+  // Run on load and resize
+  window.addEventListener('load', centerHeroContent);
+  window.addEventListener('resize', centerHeroContent);
+  
+  // Also run after a small delay to ensure everything is rendered
+  setTimeout(centerHeroContent, 100);
+})();
