@@ -882,6 +882,16 @@
   let currentGalleryImages = [];
   let currentIndex = 0;
   let isOpen = false;
+  let openedAt = 0;
+
+  // Guards against the "ghost click" that mobile browsers fire ~after
+  // touchend: once a tap opens the lightbox, the overlay now covers the
+  // screen, so the browser's synthesized click can land on the overlay
+  // itself and immediately trigger the backdrop-close handler below.
+  // Ignoring backdrop-clicks for a brief window after opening fixes it.
+  function justOpened() {
+    return Date.now() - openedAt < 500;
+  }
 
   function updateLightboxImage() {
     if (!currentGalleryImages.length || !currentGalleryImages[currentIndex]) {
@@ -911,10 +921,14 @@
       img = element.querySelector('img');
     }
     
-    if (!img) return;
+    if (!img) {
+        // Try to find any img in the element or its children
+        img = element.querySelector('img') || element.closest('[onclick]')?.querySelector('img');
+        if (!img) return;
+    }
 
     const group = img.getAttribute('data-group') || 'all';
-    const allImages = document.querySelectorAll('.gallery-item img, .product-photo-slot img, .team-card img, .about-media img, .team-big-img, .footer-media img, .team-header-slide img');
+    const allImages = document.querySelectorAll('.gallery-item:not(.gallery-item--clone) img, .product-photo-slot img, .team-card img, .about-media img, .team-big-img, .footer-media img, .team-header-slide img');
     
     if (group === 'all') {
       currentGalleryImages = Array.from(allImages);
@@ -936,6 +950,7 @@
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
     isOpen = true;
+    openedAt = Date.now();
   };
 
   window.closeLightbox = function() {
@@ -976,7 +991,7 @@
   }
 
   overlay.addEventListener('click', function(e) {
-    if (e.target === overlay) {
+    if (e.target === overlay && !justOpened()) {
       closeLightbox();
     }
   });
@@ -1458,419 +1473,68 @@
 })();
 
 /* ============================================================
-   GALLERY: MODERN INFINITE POSITION SWAPPING
+   GALLERY: AUTO-SLIDING FILMSTRIP (MODERN, SEAMLESS LOOP)
+   The track holds the 6 real photos followed by an aria-hidden duplicate
+   of the same 6, then drifts left via a pure-CSS animation that shifts
+   exactly one set width (-50%) and loops without any visible seam.
+   JS here only pauses the drift on hover/touch so people can look and
+   tap comfortably, and disables it entirely for reduced-motion users.
    ============================================================ */
 (function() {
   'use strict';
 
-  const grid = document.querySelector('.gallery-grid');
-  if (!grid) return;
-
-  const slides = Array.from(grid.querySelectorAll('.gallery-item'));
-  if (slides.length < 4) return;
+  const viewport = document.querySelector('.gallery-viewport');
+  const track = document.getElementById('galleryTrack');
+  if (!viewport || !track) return;
 
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion) return;
 
-  let isAnimating = false;
-  let swapInterval = null;
-  let lastSwapType = '';
-  let swapCount = 0;
-  let isPaused = false;
-  let pauseTimeout = null;
-  const SWAP_DELAY = 2800;
-
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  const isMobile = window.innerWidth <= 768;
 
-  function getGridInfo() {
-    const width = window.innerWidth;
-    let cols = 3;
-    if (width <= 992) cols = 2;
-    if (width <= 480) cols = 2;
-    return { cols };
+  let pauseTimeout = null;
+
+  function pause() {
+    track.classList.add('is-paused');
   }
 
-  function getAllPairs() {
-    const { cols } = getGridInfo();
-    const total = slides.length;
-    const pairs = {
-      horizontal: [],
-      vertical: [],
-      diagonal: []
-    };
-
-    for (let i = 0; i < total; i += cols) {
-      if (i + 1 < total) {
-        pairs.horizontal.push([i, i + 1]);
-      }
-    }
-
-    for (let i = 0; i < cols; i++) {
-      const topIndex = i;
-      const bottomIndex = i + cols;
-      if (bottomIndex < total) {
-        pairs.vertical.push([topIndex, bottomIndex]);
-      }
-    }
-
-    if (cols === 3) {
-      const diagPairs = [[0, 4], [1, 3], [1, 5], [2, 4]];
-      diagPairs.forEach(function(p) {
-        if (p[0] < total && p[1] < total) {
-          pairs.diagonal.push(p);
-        }
-      });
-    } else {
-      const diagPairs = [[0, 3], [1, 2], [1, 4]];
-      diagPairs.forEach(function(p) {
-        if (p[0] < total && p[1] < total) {
-          pairs.diagonal.push(p);
-        }
-      });
-    }
-
-    return pairs;
-  }
-
-  function getRandomSwap() {
-    const pairs = getAllPairs();
-    const types = ['horizontal', 'vertical', 'diagonal'];
-    
-    let availableTypes = types;
-    if (lastSwapType) {
-      availableTypes = types.filter(function(t) { return t !== lastSwapType; });
-      if (availableTypes.length === 0) availableTypes = types;
-    }
-    
-    const validTypes = availableTypes.filter(function(t) {
-      return pairs[t] && pairs[t].length > 0;
-    });
-    
-    if (validTypes.length === 0) {
-      for (var key in pairs) {
-        if (pairs[key] && pairs[key].length > 0) {
-          validTypes.push(key);
-        }
-      }
-    }
-    
-    const type = validTypes[Math.floor(Math.random() * validTypes.length)];
-    const typePairs = pairs[type] || [];
-    
-    if (typePairs.length === 0) return null;
-    
-    lastSwapType = type;
-    const randomIndex = Math.floor(Math.random() * typePairs.length);
-    
-    return {
-      type: type,
-      pair: typePairs[randomIndex]
-    };
-  }
-
-  function createParticles(item) {
-    if (isMobile && Math.random() > 0.3) return;
-    
-    const container = item;
-    container.querySelectorAll('.particle').forEach(function(p) { p.remove(); });
-    
-    const count = isMobile ? 6 : 12;
-    
-    for (let i = 0; i < count; i++) {
-      const particle = document.createElement('span');
-      particle.className = 'particle';
-      
-      const angle = Math.random() * Math.PI * 2;
-      const distance = isMobile ? 20 + Math.random() * 40 : 40 + Math.random() * 80;
-      const tx = Math.cos(angle) * distance;
-      const ty = Math.sin(angle) * distance;
-      
-      particle.style.setProperty('--tx', tx + 'px');
-      particle.style.setProperty('--ty', ty + 'px');
-      particle.style.left = (30 + Math.random() * 40) + '%';
-      particle.style.top = (30 + Math.random() * 40) + '%';
-      particle.style.width = (isMobile ? 2 : 3) + Math.random() * (isMobile ? 3 : 5) + 'px';
-      particle.style.height = particle.style.width;
-      const colors = ['var(--gold)', 'var(--leaf)', '#faf5e6'];
-      particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-      particle.style.animationDelay = (Math.random() * 0.3) + 's';
-      
-      container.appendChild(particle);
-    }
-    
-    setTimeout(function() {
-      container.querySelectorAll('.particle').forEach(function(p) { p.remove(); });
-    }, 1000);
-  }
-
-  function animateImages(itemA, itemB) {
-    const imgA = itemA.querySelector('img');
-    const imgB = itemB.querySelector('img');
-    
-    const scaleAmount = isMobile ? 1.05 : 1.08;
-    const duration = isMobile ? 300 : 500;
-    
-    [imgA, imgB].forEach(function(img) {
-      if (img) {
-        img.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.34, 1.56, 0.64, 1)';
-        img.style.transform = 'scale(' + scaleAmount + ')';
-        setTimeout(function() {
-          img.style.transform = 'scale(1)';
-        }, duration);
-      }
-    });
-  }
-
-  function performSwap(swapData) {
-    if (isAnimating || isPaused) return;
-    if (!swapData) return;
-    
-    const { type, pair } = swapData;
-    if (pair.length < 2) return;
-
-    const [idxA, idxB] = pair;
-    const itemA = slides[idxA];
-    const itemB = slides[idxB];
-    
-    if (!itemA || !itemB) return;
-    
-    if (itemA.classList.contains('swapping') || itemB.classList.contains('swapping')) {
-      return;
-    }
-
-    isAnimating = true;
-    swapCount++;
-
-    const allSwapClasses = [
-      'swap-horizontal-left', 'swap-horizontal-right',
-      'swap-vertical-up', 'swap-vertical-down',
-      'swap-diagonal-tr', 'swap-diagonal-bl',
-      'swap-horizontal-left-back', 'swap-horizontal-right-back',
-      'swap-vertical-up-back', 'swap-vertical-down-back',
-      'swap-diagonal-tr-back', 'swap-diagonal-bl-back'
-    ];
-    
-    itemA.classList.remove.apply(itemA.classList, allSwapClasses);
-    itemB.classList.remove.apply(itemB.classList, allSwapClasses);
-    
-    itemA.classList.add('swapping');
-    itemB.classList.add('swapping');
-
-    const direction = Math.random() > 0.5 ? 1 : -1;
-    
-    let classA, classB;
-    
-    switch(type) {
-      case 'horizontal':
-        if (direction === 1) {
-          classA = 'swap-horizontal-right';
-          classB = 'swap-horizontal-left';
-        } else {
-          classA = 'swap-horizontal-left';
-          classB = 'swap-horizontal-right';
-        }
-        break;
-      case 'vertical':
-        if (direction === 1) {
-          classA = 'swap-vertical-down';
-          classB = 'swap-vertical-up';
-        } else {
-          classA = 'swap-vertical-up';
-          classB = 'swap-vertical-down';
-        }
-        break;
-      case 'diagonal':
-        if (direction === 1) {
-          classA = 'swap-diagonal-tr';
-          classB = 'swap-diagonal-bl';
-        } else {
-          classA = 'swap-diagonal-bl';
-          classB = 'swap-diagonal-tr';
-        }
-        break;
-    }
-
-    itemA.classList.add(classA);
-    itemB.classList.add(classB);
-
-    if (!isMobile || swapCount % 2 === 0) {
-      createParticles(itemA);
-      createParticles(itemB);
-    }
-
-    animateImages(itemA, itemB);
-
-    const animationDuration = isMobile ? 700 : 1000;
-
-    setTimeout(function() {
-      const parent = grid;
-      const allItems = Array.from(parent.children);
-      const indexInDOM_A = allItems.indexOf(itemA);
-      const indexInDOM_B = allItems.indexOf(itemB);
-      
-      if (indexInDOM_A < indexInDOM_B) {
-        parent.insertBefore(itemB, itemA);
-      } else {
-        parent.insertBefore(itemA, itemB);
-      }
-      
-      const newSlides = Array.from(grid.querySelectorAll('.gallery-item'));
-      slides.length = 0;
-      slides.push.apply(slides, newSlides);
-      
-      itemA.classList.remove(classA, 'swapping');
-      itemB.classList.remove(classB, 'swapping');
-      
-      isAnimating = false;
-    }, animationDuration);
-  }
-
-  function startSwapping() {
-    if (swapInterval) {
-      clearInterval(swapInterval);
-      swapInterval = null;
-    }
-
-    if (isPaused) return;
-
-    setTimeout(function() {
-      if (!isAnimating && !isPaused) {
-        const swap = getRandomSwap();
-        if (swap) performSwap(swap);
-      }
-    }, isMobile ? 1500 : 1200);
-
-    const delay = isMobile ? SWAP_DELAY + 500 : SWAP_DELAY;
-
-    swapInterval = setInterval(function() {
-      if (!isAnimating && !isPaused) {
-        const swap = getRandomSwap();
-        if (swap) performSwap(swap);
-      }
-    }, delay);
-  }
-
-  function stopSwapping() {
-    if (swapInterval) {
-      clearInterval(swapInterval);
-      swapInterval = null;
-    }
-  }
-
-  function pauseSwapping() {
-    isPaused = true;
-    stopSwapping();
-  }
-
-  function resumeSwapping() {
-    isPaused = false;
-    startSwapping();
-  }
-
-  let resizeTimeout;
-  function handleResize() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-      stopSwapping();
-      slides.forEach(function(s) {
-        const classes = [
-          'swap-horizontal-left', 'swap-horizontal-right',
-          'swap-vertical-up', 'swap-vertical-down',
-          'swap-diagonal-tr', 'swap-diagonal-bl',
-          'swap-horizontal-left-back', 'swap-horizontal-right-back',
-          'swap-vertical-up-back', 'swap-vertical-down-back',
-          'swap-diagonal-tr-back', 'swap-diagonal-bl-back',
-          'swapping'
-        ];
-        s.classList.remove.apply(s.classList, classes);
-        s.style.transform = '';
-        const img = s.querySelector('img');
-        if (img) {
-          img.style.transform = '';
-          img.style.transition = '';
-        }
-        s.querySelectorAll('.particle').forEach(function(p) { p.remove(); });
-      });
-      isAnimating = false;
-      setTimeout(startSwapping, 600);
-    }, 400);
+  function resume() {
+    track.classList.remove('is-paused');
   }
 
   if (!isTouchDevice) {
-    let hoverTimeout = null;
-    grid.addEventListener('mouseenter', function() {
-      pauseSwapping();
+    viewport.addEventListener('mouseenter', pause);
+    viewport.addEventListener('mouseleave', function() {
+      clearTimeout(pauseTimeout);
+      pauseTimeout = setTimeout(resume, 400);
     });
-
-    grid.addEventListener('mouseleave', function() {
-      clearTimeout(hoverTimeout);
-      hoverTimeout = setTimeout(function() {
-        resumeSwapping();
-      }, 1200);
+    viewport.addEventListener('focusin', pause);
+    viewport.addEventListener('focusout', function() {
+      clearTimeout(pauseTimeout);
+      pauseTimeout = setTimeout(resume, 400);
     });
-  }
-
-  if (isTouchDevice) {
-    let touchStartTime = 0;
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let isSwiping = false;
-
-    grid.addEventListener('touchstart', function(e) {
-      touchStartTime = Date.now();
-      const touch = e.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-      isSwiping = false;
-      pauseSwapping();
+  } else {
+    viewport.addEventListener('touchstart', function() {
+      clearTimeout(pauseTimeout);
+      pause();
     }, { passive: true });
 
-    grid.addEventListener('touchmove', function(e) {
-      const touch = e.touches[0];
-      const deltaX = Math.abs(touch.clientX - touchStartX);
-      const deltaY = Math.abs(touch.clientY - touchStartY);
-      if (deltaX > 10 || deltaY > 10) {
-        isSwiping = true;
-      }
-    }, { passive: true });
-
-    grid.addEventListener('touchend', function() {
-      const touchDuration = Date.now() - touchStartTime;
-      
-      if (!isSwiping && touchDuration < 300) {
-        clearTimeout(pauseTimeout);
-        pauseTimeout = setTimeout(function() {
-          resumeSwapping();
-        }, 800);
-      } else {
-        clearTimeout(pauseTimeout);
-        pauseTimeout = setTimeout(function() {
-          resumeSwapping();
-        }, isSwiping ? 3000 : 2000);
-      }
+    viewport.addEventListener('touchend', function() {
+      clearTimeout(pauseTimeout);
+      pauseTimeout = setTimeout(resume, 1800);
     }, { passive: true });
   }
 
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-      stopSwapping();
+      pause();
     } else {
-      startSwapping();
+      resume();
     }
   });
 
-  setTimeout(function() {
-    startSwapping();
-  }, isMobile ? 2500 : 2000);
-
-  window.addEventListener('resize', handleResize);
-
-  window.addEventListener('beforeunload', function() {
-    stopSwapping();
-  });
-
 })();
+
 
 /* ============================================================
    TEAM HEADER CAROUSEL - INFINITE HORIZONTAL SLIDER (FIXED)
@@ -2060,9 +1724,16 @@
       const touchDuration = Date.now() - touchStartTime;
       // Only open if it was a quick tap (not a swipe)
       if (!touchMoved && touchDuration < 300) {
+        // Cancel the browser's follow-up synthetic "click" for this touch.
+        // Without this, that click fires a moment later at the same screen
+        // point - which the lightbox overlay now covers - and its own
+        // backdrop-click-to-close handler immediately closes what we just
+        // opened. That's what made taps look like they "did nothing" on
+        // real phones (desktop mouse clicks never had this double-fire).
+        e.preventDefault();
         openLightboxFromSlide(this);
       }
-    }, { passive: true });
+    }, { passive: false });
   });
 
   // ---- Arrow buttons ----
@@ -2381,9 +2052,16 @@
       const touchDuration = Date.now() - touchStartTime;
       // Only open if it was a quick tap (not a swipe)
       if (!touchMoved && touchDuration < 300) {
+        // Cancel the browser's follow-up synthetic "click" for this touch.
+        // Without this, that click fires a moment later at the same screen
+        // point - which the lightbox overlay now covers - and its own
+        // backdrop-click-to-close handler immediately closes what we just
+        // opened. That's what made taps look like they "did nothing" on
+        // real phones (desktop mouse clicks never had this double-fire).
+        e.preventDefault();
         openLightboxFromSlide(this);
       }
-    }, { passive: true });
+    }, { passive: false });
   });
 
   // ---- Arrow buttons ----
