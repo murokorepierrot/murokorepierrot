@@ -1,7 +1,3 @@
-/* ============================================
-   Marie Rose Shop — Style Sheet
-   ============================================ */
-
 /* ----- Design Tokens ----- */
 :root {
   --leaf: #3d7a3d;
@@ -24,6 +20,18 @@
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
   --transition: all .3s cubic-bezier(.25,.8,.25,1);
   --transition-slow: all .5s cubic-bezier(.25,.8,.25,1);
+
+  /* ----- 2026 modern layer: depth + glass, additive to tokens above ----- */
+  --shadow-xs: 0 1px 2px rgba(20,20,20,0.04);
+  --shadow-md: 0 8px 28px -6px rgba(20,20,20,0.14);
+  --shadow-xl: 0 24px 64px -16px rgba(20,20,20,0.22);
+  --shadow-glow-gold: 0 8px 28px -8px rgba(200,164,92,0.45);
+  --shadow-glow-leaf: 0 8px 28px -8px rgba(61,122,61,0.35);
+  --glass-bg: rgba(253,252,250,0.72);
+  --glass-border: rgba(255,255,255,0.5);
+  --gradient-primary: linear-gradient(135deg, var(--leaf) 0%, var(--leaf-dark) 100%);
+  --gradient-gold: linear-gradient(135deg, #d9b876 0%, var(--gold) 55%, var(--gold-dark) 100%);
+  --ease-premium: cubic-bezier(.16,1,.3,1);
 }
 
 /* ----- Base ----- */
@@ -184,12 +192,31 @@ a:hover { color: var(--leaf-dark); }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(253,252,250,0.94);
-  backdrop-filter: blur(12px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
   border-bottom: 1px solid var(--border);
-  transition: box-shadow .3s;
+  transition: box-shadow .35s var(--ease-premium), border-color .35s var(--ease-premium);
 }
-.site-header.scrolled { box-shadow: var(--shadow-sm); }
+.site-header::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: var(--gradient-gold);
+  opacity: 0;
+  transform: scaleX(.4);
+  transform-origin: center;
+  transition: opacity .4s var(--ease-premium), transform .4s var(--ease-premium);
+}
+.site-header.scrolled {
+  box-shadow: var(--shadow-md);
+  border-bottom-color: transparent;
+}
+.site-header.scrolled::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
 
 .header-inner {
   max-width: 1200px;
@@ -488,11 +515,23 @@ a:hover { color: var(--leaf-dark); }
     animation: none;
   }
 }
-/* ===== HERO RESPONSIVE - FIXED HEIGHT ===== */
+/* ===== HERO RESPONSIVE - FULLSCREEN VIDEO ON MOBILE =====
+   Note: mobile hero height/video rules consolidated here. Do not add
+   duplicate .hero min-height/max-height rules elsewhere in this file -
+   they will fight each other and shrink the video. */
 @media (max-width: 768px) {
   .hero {
-    min-height: 55vh !important;
-    max-height: 65vh !important;
+    min-height: 100svh !important;
+    max-height: none !important;
+  }
+  .hero-video,
+  .hero-fallback-img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
   }
   .hero-content {
     padding: 30px 20px 20px !important;
@@ -524,16 +563,9 @@ a:hover { color: var(--leaf-dark); }
     padding: 8px 14px !important;
     font-size: 0.75rem !important;
   }
-  .hero-video {
-    object-fit: cover !important;
-  }
 }
 
 @media (max-width: 480px) {
-  .hero {
-    min-height: 50vh !important;
-    max-height: 60vh !important;
-  }
   .hero-content {
     padding: 20px 16px 15px !important;
   }
@@ -574,10 +606,6 @@ a:hover { color: var(--leaf-dark); }
 }
 
 @media (max-width: 380px) {
-  .hero {
-    min-height: 45vh !important;
-    max-height: 55vh !important;
-  }
   .hero-content {
     padding: 15px 12px 12px !important;
   }
@@ -648,22 +676,24 @@ a:hover { color: var(--leaf-dark); }
   font-size: .9rem;
   cursor: pointer;
   border: none;
-  transition: transform .15s, box-shadow .2s, background .2s;
+  transition: transform .25s var(--ease-premium), box-shadow .25s var(--ease-premium), background .25s var(--ease-premium), filter .25s var(--ease-premium);
   font-family: inherit;
   line-height: 1.4;
+  position: relative;
 }
-.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.btn:active { transform: translateY(0); }
-.btn-primary { background: var(--leaf); color: white; }
-.btn-primary:hover { background: var(--leaf-dark); }
-.btn-whatsapp { background: #25d366; color: white; }
-.btn-whatsapp:hover { background: #1ebe57; }
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+.btn-primary { background: var(--gradient-primary); color: white; }
+.btn-primary:hover { filter: brightness(1.06); box-shadow: var(--shadow-glow-leaf); }
+.btn-whatsapp { background: linear-gradient(135deg, #29e072 0%, #1ebe57 100%); color: white; }
+.btn-whatsapp:hover { filter: brightness(1.05); box-shadow: 0 8px 28px -8px rgba(37,211,102,0.5); }
 .btn-ghost {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   color: #fff;
 }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--gold); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.16); border-color: var(--gold); box-shadow: var(--shadow-glow-gold); }
 .btn-icon { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
 
 /* ============================================
@@ -1982,22 +2012,23 @@ a:hover { color: var(--leaf-dark); }
   z-index: 99999;
   left: 0;
   top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.92);
+  height: 100dvh;
+  background-color: #000 !important;
+  opacity: 1 !important;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  animation: lightboxFadeIn 0.3s ease;
 }
 
 .lightbox-overlay.open {
   display: flex !important;
-}
-
-@keyframes lightboxFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  opacity: 1 !important;
 }
 
 .lightbox-content {
@@ -2022,7 +2053,6 @@ a:hover { color: var(--leaf-dark); }
   max-height: 100%;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
 }
 
 .lightbox-close {
@@ -2100,19 +2130,108 @@ a:hover { color: var(--leaf-dark); }
   letter-spacing: 0.5px;
 }
 
-@media (max-width: 768px) {
+/* Fullscreen lightbox for tablets/iPads AND phones (up to 1024px covers
+   iPad portrait 768px and iPad landscape/Pro widths up to 1024px). */
+@media (max-width: 1024px) {
   .lightbox-content {
-    width: 100vw;
-    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
     max-width: none;
     max-height: none;
+    margin: 0;
+    padding: 0;
     border-radius: 0;
   }
   .lightbox-content img {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
+    border-radius: 0;
   }
+  .lightbox-close {
+    top: 18px;
+    right: 18px;
+    width: 46px;
+    height: 46px;
+    font-size: 1.9rem;
+    background: rgba(0,0,0,0.55);
+  }
+  .lightbox-prev,
+  .lightbox-next {
+    width: 46px;
+    height: 46px;
+    font-size: 1.9rem;
+    background: rgba(0,0,0,0.4);
+  }
+  .lightbox-next { right: 14px; }
+  .lightbox-prev { left: 14px; }
+  .lightbox-counter {
+    bottom: 22px;
+    font-size: 0.8rem;
+    padding: 5px 16px;
+  }
+}
+
+/* Device-based fallback: any touchscreen device (coarse pointer / no
+   hover), regardless of reported width, also gets the fullscreen
+   lightbox. Covers tablets that report widths above 1024px. */
+@media (hover: none), (pointer: coarse) {
+  .lightbox-content {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+  .lightbox-content img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+  }
+  .lightbox-close {
+    top: 18px;
+    right: 18px;
+    width: 46px;
+    height: 46px;
+    font-size: 1.9rem;
+    background: rgba(0,0,0,0.55);
+  }
+  .lightbox-prev,
+  .lightbox-next {
+    width: 46px;
+    height: 46px;
+    font-size: 1.9rem;
+    background: rgba(0,0,0,0.4);
+  }
+  .lightbox-next { right: 14px; }
+  .lightbox-prev { left: 14px; }
+  .lightbox-counter {
+    bottom: 22px;
+    font-size: 0.8rem;
+    padding: 5px 16px;
+  }
+}
+
+@media (max-width: 768px) {
   .lightbox-close {
     top: 15px;
     right: 15px;
@@ -2427,29 +2546,30 @@ a:hover { color: var(--leaf-dark); }
   flex-direction: column;
   background: white;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   padding: 14px;
-  transition: transform .25s cubic-bezier(.25,.8,.25,1), box-shadow .25s, border-color .25s, opacity .6s ease;
+  transition: transform .35s var(--ease-premium), box-shadow .35s var(--ease-premium), border-color .35s var(--ease-premium), opacity .6s ease;
 }
 .category-block.expanded .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-  border-color: rgba(61,122,61,0.3);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(61,122,61,0.25);
 }
 
 .category-block.expanded .product-photo-slot {
   aspect-ratio: 1/1;
   margin-bottom: 10px;
   overflow: hidden;
+  border-radius: calc(var(--radius-lg) - 6px);
 }
 
 .category-block.expanded .product-photo-slot img {
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.6s var(--ease-premium);
 }
 
 .category-block.expanded .product-photo-slot:hover img,
 .category-block.expanded .product-card:hover .product-photo-slot img {
-  transform: scale(1.15);
+  transform: scale(1.08);
 }
 
 .category-block.expanded .product-badge,
@@ -3296,16 +3416,25 @@ a:hover { color: var(--leaf-dark); }
   .trust-inner { justify-content: center; gap: 20px 40px; }
 }
 
-@media (max-width: 860px) {
+/* Narrowed from 860px to 680px so tablets/iPads (681-1024px) keep the
+   desktop two-column layout for about/contact/steps, matching desktop
+   structure as requested. Only real phones collapse to one column. */
+@media (max-width: 680px) {
   .about-grid, .footer-grid { grid-template-columns: 1fr; }
   .gtk-grid { grid-template-columns: 1fr; }
   .review-grid { grid-template-columns: 1fr; }
   .steps-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
   .trust-inner { gap: 14px 24px; }
 }
 
-/* ====== UPDATED MOBILE CSS FOR WIDE CONTAINERS ====== */
-@media (max-width: 768px) {
+/* ====== UPDATED MOBILE CSS FOR WIDE CONTAINERS ======
+   Narrowed from 768px to 680px: 768px is iPad portrait width, and this
+   block's 2-up / edge-to-edge / "hide cards beyond 2" pattern is a phone
+   layout, not the tablet layout. Tablets now fall through to the 992px
+   3-column product grid above for desktop-consistent structure. */
+@media (max-width: 680px) {
   /* --- 1. MAKE CONTAINER WIDE --- */
   .categories-stage {
     padding: 0 0px !important;
@@ -3671,7 +3800,6 @@ a:hover { color: var(--leaf-dark); }
   .hero-content { padding: 56px 20px 36px; }
   .hero-content h1 { font-size: clamp(1.7rem, 7.5vw, 2.3rem); }
   .hero-content h1 br { display: none; }
-  .hero { min-height: 100dvh; }
   .hero::before { display: block; }
   .hero-img { object-fit: cover; }
   .hero-content .eyebrow { font-size: .78rem; }
@@ -3852,164 +3980,6 @@ html {
   50% { background: #fff176; border-color: #fdd835; color: var(--ink); }
 }
 
-/* ===== GALLERY & PRODUCT LIGHTBOX (Professional Overlay) ===== */
-.lightbox-overlay {
-  display: none !important;
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.92);
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.lightbox-overlay.open {
-  display: flex !important;
-}
-/* DESKTOP LIGHTBOX */
-.lightbox-content {
-  position: relative;
-  width: 90%;
-  max-width: 1100px;
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-}
-.lightbox-content img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-/* MOBILE FULLSCREEN LIGHTBOX FIX */
-@media (max-width: 640px) {
-  .lightbox-content {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: none !important;
-    max-height: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-  }
-  .lightbox-content img {
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: contain;
-  }
-  .lightbox-close {
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.8rem;
-  }
-  .lightbox-prev, .lightbox-next {
-    width: 40px;
-    height: 40px;
-    font-size: 1.8rem;
-  }
-}
-.lightbox-content img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  transition: opacity 0.2s ease;
-}
-
-/* --- BUTTONS --- */
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: #fff;
-  font-size: 2.5rem;
-  font-weight: 300;
-  background: rgba(0,0,0,0.4);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 100001;
-  transition: background 0.2s, transform 0.2s;
-  line-height: 1;
-  pointer-events: auto !important;
-}
-.lightbox-close:hover {
-  background: rgba(255,255,255,0.1);
-  transform: scale(1.1);
-}
-
-.lightbox-prev, .lightbox-next {
-  cursor: pointer !important;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 2.5rem;
-  transition: all 0.2s ease;
-  user-select: none;
-  background: rgba(0,0,0,0.3);
-  border: none;
-  border-radius: 50%;
-  z-index: 100002 !important;
-  pointer-events: auto !important;
-}
-.lightbox-prev:hover, .lightbox-next:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateY(-50%) scale(1.15);
-}
-.lightbox-next { right: 15px; }
-.lightbox-prev { left: 15px; }
-
-/* --- MOBILE RESPONSIVE --- */
-@media (max-width: 768px) {
-  .lightbox-content {
-    width: 95%;
-    height: auto;
-    max-height: 85vh;
-  }
-  .lightbox-content img {
-    width: 100%;
-    height: auto;
-    max-height: 85vh;
-    object-fit: contain;
-  }
-  .lightbox-close {
-    top: 10px;
-    right: 10px;
-    font-size: 1.8rem;
-    width: 44px;
-    height: 44px;
-  }
-  .lightbox-prev, .lightbox-next {
-    width: 44px;
-    height: 44px;
-    font-size: 2rem;
-  }
-  .lightbox-next { right: 10px; }
-  .lightbox-prev { left: 10px; }
-}
 
 /* ============================================
    LANGUAGE VISIBILITY
@@ -4033,8 +4003,11 @@ html {
   z-index: 99999;
   left: 0;
   top: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   background-color: rgba(20, 30, 20, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -6610,43 +6583,12 @@ html {
 }
 
 /* ============================================
-   MOBILE HERO HEIGHT FIX
+   MOBILE HERO HEIGHT FIX - superseded, see the
+   consolidated ".hero" mobile rules earlier in
+   this file (search "FULLSCREEN VIDEO ON MOBILE").
+   Non-height tweaks below are still applied.
    ============================================ */
 @media (max-width: 768px) {
-  .hero {
-    min-height: 55vh !important;
-    max-height: 70vh !important;
-  }
-  .hero-content {
-    padding: 30px 20px 20px !important;
-  }
-  .hero-content h1 {
-    font-size: clamp(1.3rem, 4.5vw, 1.8rem) !important;
-  }
-  .hero-content h1 br {
-    display: none !important;
-  }
-  .hero-content .eyebrow {
-    font-size: 0.55rem !important;
-    margin-bottom: 0.2rem !important;
-  }
-  .tagline {
-    font-size: 0.75rem !important;
-    margin-bottom: 0.5rem !important;
-  }
-  .hero-hours {
-    font-size: 0.6rem !important;
-    padding: 4px 12px !important;
-    margin: 0.2rem 0 0.6rem 0 !important;
-  }
-  .cta-row {
-    gap: 6px !important;
-    margin-top: 0.8rem !important;
-  }
-  .cta-row .btn {
-    padding: 8px 14px !important;
-    font-size: 0.7rem !important;
-  }
   #clockIcon {
     display: none !important;
   }
@@ -6660,68 +6602,79 @@ html {
 }
 
 @media (max-width: 480px) {
-  .hero {
-    min-height: 50vh !important;
-    max-height: 65vh !important;
-  }
-  .hero-content {
-    padding: 20px 16px 15px !important;
-  }
-  .hero-content h1 {
-    font-size: clamp(1rem, 4vw, 1.3rem) !important;
-  }
-  .hero-content .eyebrow {
-    font-size: 0.45rem !important;
-  }
-  .tagline {
-    font-size: 0.65rem !important;
-  }
-  .hero-hours {
-    font-size: 0.5rem !important;
-    padding: 3px 10px !important;
-    gap: 4px !important;
-  }
   #hoursText {
     font-size: 0.45rem !important;
-  }
-  .cta-row .btn {
-    padding: 6px 10px !important;
-    font-size: 0.6rem !important;
-    border-radius: 6px !important;
-  }
-  .cta-row {
-    gap: 4px !important;
-    margin-top: 0.5rem !important;
-  }
-  .btn-icon {
-    width: 12px !important;
-    height: 12px !important;
   }
 }
 
 @media (max-width: 380px) {
-  .hero {
-    min-height: 45vh !important;
-    max-height: 60vh !important;
-  }
-  .hero-content {
-    padding: 15px 12px 10px !important;
-  }
-  .hero-content h1 {
-    font-size: 0.9rem !important;
-  }
-  .tagline {
-    font-size: 0.55rem !important;
-  }
-  .hero-hours {
-    font-size: 0.4rem !important;
-    padding: 2px 8px !important;
-  }
   #hoursText {
     font-size: 0.38rem !important;
   }
-  .cta-row .btn {
-    padding: 4px 8px !important;
-    font-size: 0.5rem !important;
+}
+/* ============================================
+   PHONE PREMIUM POLISH PASS (v20260830-3)
+   Appended at end of file so it safely wins the cascade
+   without editing/risking the 6000+ lines above.
+   ============================================ */
+@media (max-width: 640px) {
+  /* Header: crisper glass edge, better tap targets */
+  .site-header {
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  }
+  .header-inner {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  /* Buttons: consistent premium sizing + spacing on phones */
+  .btn {
+    border-radius: 12px;
+    font-size: 0.85rem;
+    padding: 13px 20px;
+    letter-spacing: 0.2px;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Section rhythm: more breathing room between blocks reads as premium */
+  section, .section {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  /* Product cards: softer premium shadow language on mobile too */
+  .category-block.expanded .product-card {
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .category-block.expanded .product-card:hover,
+  .category-block.expanded .product-card:active {
+    box-shadow: var(--shadow-md);
+  }
+  .category-block.expanded .product-photo-slot {
+    border-radius: 12px;
+  }
+
+  /* Section eyebrow labels: tighter tracking, more refined */
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+  }
+
+  /* Headings: slightly tighter line-height for a crafted feel */
+  h2 {
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  /* Cards/panels generally: consistent radius language */
+  .about-media img,
+  .footer-media img,
+  .gallery-item img {
+    border-radius: 14px;
   }
 }
