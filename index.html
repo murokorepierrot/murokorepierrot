@@ -551,7 +551,7 @@
           letter-spacing: 0.2px !important;
           white-space: nowrap !important;
           display: inline-block !important;
-        ">Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM</span>
+        ">Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 7:00 AM–9:00 PM</span>
       </div>
     </div>
 
@@ -658,13 +658,13 @@
       var now = new Date();
       var day = now.getDay();
       var hour = now.getHours() + now.getMinutes() / 60;
-      var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
+      var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 7.0 && hour < 21.0);
       
       if (isOpen) {
         dot.style.background = '#4caf50';
         dot.style.boxShadow = '0 0 16px rgba(76, 175, 80, 0.4)';
         dot.style.animation = 'dotPulse 2s infinite ease-in-out';
-        text.textContent = 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM';
+        text.textContent = 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 7:00 AM–9:00 PM';
       } else {
         dot.style.background = '#f44336';
         dot.style.boxShadow = '0 0 16px rgba(244, 67, 54, 0.4)';
@@ -701,13 +701,13 @@
       var now = new Date();
       var day = now.getDay();
       var hour = now.getHours() + now.getMinutes() / 60;
-      var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
+      var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 7.0 && hour < 21.0);
       
       if (isOpen) {
         dot.style.background = '#4caf50';
         dot.style.boxShadow = '0 0 16px rgba(76, 175, 80, 0.4)';
         dot.style.animation = 'dotPulse 2s infinite ease-in-out';
-        text.textContent = 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM';
+        text.textContent = 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 7:00 AM–9:00 PM';
       } else {
         dot.style.background = '#f44336';
         dot.style.boxShadow = '0 0 16px rgba(244, 67, 54, 0.4)';
@@ -1755,17 +1755,7 @@
           <li><span>Sunday</span><span>7:00 AM – 21:00 PM</span></li>
         </ul>
       </div>
-      <div class="cta-row">
-        <a href="https://wa.me/250789542601" target="_blank" rel="noopener" class="btn btn-whatsapp">
-          <svg viewBox="0 0 24 24" class="btn-icon" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5Z"/></svg>
-          <span class="lang-en">Chat on WhatsApp</span>
-          <span class="lang-rw" style="display:none;">Tuvugishe kuri WhatsApp</span>
-          <span class="lang-fr" style="display:none;">Discuter sur WhatsApp</span>
-        </a>
-        <a href="tel:+250789542601" class="btn btn-ghost lang-en">Call the Shop</a>
-        <a href="tel:+250789542601" class="btn btn-ghost lang-rw" style="display:none;">Hamagara ku iduka</a>
-        <a href="tel:+250789542601" class="btn btn-ghost lang-fr" style="display:none;">Appeler la boutique</a>
-      </div>
+  
 
       <div class="footer-form">
         <h4 class="lang-en">Or send us a quick message</h4>
@@ -1940,7 +1930,7 @@
 
   <div class="toast" id="searchToast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-<script src="script.js?v=20260826-3"></script>
+<script src="script.js?v=20260830-5"></script>
 
   <!-- PWA: register service worker for offline support + installability.
        This also keeps the site fresh on every device: sw.js fetches HTML "network-first"
