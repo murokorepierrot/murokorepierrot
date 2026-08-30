@@ -247,10 +247,11 @@
     var now = new Date();
     var day = now.getDay();
     var hour = now.getHours() + now.getMinutes() / 60;
-    var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 18.0 && hour < 21.0);
+    // Mon-Sat: 7:00 AM - 9:30 PM. Sunday: 7:00 AM - 9:00 PM.
+    var isOpen = (day >= 1 && day <= 6 && hour >= 7.0 && hour < 21.5) || (day === 0 && hour >= 7.0 && hour < 21.0);
     dot.classList.toggle('closed', !isOpen);
     text.textContent = isOpen
-      ? 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 6:00 PM–9:00 PM'
+      ? 'Open now · Mon–Sat 7:00 AM–9:30 PM · Sun 7:00 AM–9:00 PM'
       : 'Closed now';
   }
   updateHours();
@@ -948,13 +949,71 @@
 
     updateLightboxImage();
     overlay.classList.add('open');
+    overlay.style.setProperty('position', 'fixed', 'important');
+    overlay.style.setProperty('inset', '0px', 'important');
+    overlay.style.setProperty('width', window.innerWidth + 'px', 'important');
+    overlay.style.setProperty('height', window.innerHeight + 'px', 'important');
+    overlay.style.setProperty('background-color', '#000', 'important');
     document.body.style.overflow = 'hidden';
     isOpen = true;
     openedAt = Date.now();
+
+    // Reliable fullscreen sizing: react to the real window width instead
+    // of trusting CSS media queries alone (some tablets/emulators report
+    // pointer/hover types that skip the CSS-only fix). Runs every time
+    // the lightbox opens and on resize while it's open.
+    applyLightboxFullscreenSizing();
   };
+
+  function applyLightboxFullscreenSizing() {
+    const contentEl = document.querySelector('.lightbox-content');
+    const imgEl = document.getElementById('lightboxImage');
+    if (!contentEl || !imgEl) return;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isSmallScreen = vw <= 1100 || vh <= 900;
+
+    if (isSmallScreen) {
+      // Use exact pixel values (not %/vw/vh) so sizing can't be
+      // miscalculated relative to a flex parent or any ambiguous
+      // containing block - this is the true screen size, period.
+      contentEl.style.setProperty('position', 'fixed', 'important');
+      contentEl.style.setProperty('left', '0px', 'important');
+      contentEl.style.setProperty('top', '0px', 'important');
+      contentEl.style.setProperty('right', '0px', 'important');
+      contentEl.style.setProperty('bottom', '0px', 'important');
+      contentEl.style.setProperty('width', vw + 'px', 'important');
+      contentEl.style.setProperty('height', vh + 'px', 'important');
+      contentEl.style.setProperty('max-width', 'none', 'important');
+      contentEl.style.setProperty('max-height', 'none', 'important');
+      contentEl.style.setProperty('margin', '0', 'important');
+      contentEl.style.setProperty('padding', '0', 'important');
+      contentEl.style.setProperty('border-radius', '0', 'important');
+      contentEl.style.setProperty('inset', '0px', 'important');
+
+      imgEl.style.setProperty('width', vw + 'px', 'important');
+      imgEl.style.setProperty('height', vh + 'px', 'important');
+      imgEl.style.setProperty('max-width', vw + 'px', 'important');
+      imgEl.style.setProperty('max-height', vh + 'px', 'important');
+      imgEl.style.setProperty('object-fit', 'contain', 'important');
+      imgEl.style.setProperty('border-radius', '0', 'important');
+    } else {
+      contentEl.removeAttribute('style');
+      imgEl.removeAttribute('style');
+    }
+  }
+
+  window.addEventListener('resize', function() {
+    if (!isOpen) return;
+    overlay.style.setProperty('width', window.innerWidth + 'px', 'important');
+    overlay.style.setProperty('height', window.innerHeight + 'px', 'important');
+    applyLightboxFullscreenSizing();
+  });
 
   window.closeLightbox = function() {
     overlay.classList.remove('open');
+    overlay.removeAttribute('style');
     document.body.style.overflow = '';
     isOpen = false;
   };
@@ -1155,9 +1214,84 @@
     return 'Yes, we have that! 🛒<br><br>' + lines;
   }
 
+  // ---- Detects prompt-injection / "ignore your instructions" style
+  // manipulation attempts, across all three languages, so the bot
+  // stays in character instead of complying with them. ----
+  const JAILBREAK_PATTERNS = [
+    'ignore your instructions', 'ignore previous instructions', 'ignore all previous',
+    'forget your instructions', 'you are not an assistant', 'pretend you are',
+    'pretend to be', 'act as if', 'roleplay as', 'system prompt', 'jailbreak',
+    'reveal your prompt', 'show me your prompt', 'what is your prompt',
+    'you are now', 'from now on you', 'disregard your',
+    'ntukurikize amabwiriza', 'wibagirwe amabwiriza', 'igira nk',
+    'ignorez vos instructions', 'oubliez vos instructions', 'fais semblant'
+  ];
+
+  function isJailbreakAttempt(qLower) {
+    return JAILBREAK_PATTERNS.some(function(p) { return qLower.includes(p); });
+  }
+
+  const JAILBREAK_REPLIES = {
+    en: "I'm just the Marie Rose Shop assistant, so I can't take on a different role or ignore how I'm set up — but I'm glad to help with anything about our products, hours, or location! 😊",
+    rw: "Ndi umufasha wa Marie Rose Shop gusa, ntabwo nshobora guhindura uwo ndi we cyangwa kwirengagiza uko nakozwe — ariko nishimira kukubwira ibijyanye n'ibicuruzwa byacu, amasaha, cyangwa aho tuherereye! 😊",
+    fr: "Je suis seulement l'assistant de Marie Rose Shop, donc je ne peux pas changer de rôle ou ignorer ma configuration — mais je serai ravi de vous aider avec nos produits, nos horaires ou notre emplacement ! 😊"
+  };
+
+  // ---- Detects questions that are impossible for a neighbourhood
+  // shop to fulfil (e.g. "do you sell a car", "can I buy a house"),
+  // so the bot gives an honest, friendly "no" instead of forcing a
+  // product match or a generic non-answer. ----
+  const IMPOSSIBLE_ITEMS = [
+    'car', 'house', 'plane', 'airplane', 'boat', 'gun', 'weapon', 'phone', 'laptop',
+    'computer', 'tv', 'television', 'motorbike', 'motorcycle', 'land', 'gold bar',
+    'imodoka', 'inzu', 'indege', 'ubwato', 'imbunda', 'telefone', 'ordinateur',
+    'voiture', 'maison', 'avion', 'bateau', 'arme'
+  ];
+
+  function isImpossibleRequest(qLower) {
+    const buyWords = ['sell', 'have', 'buy', 'gura', 'mfite', 'ufite', 'vendez', 'avez-vous', 'acheter'];
+    const mentionsBuying = buyWords.some(function(w) { return qLower.includes(w); });
+    const mentionsImpossible = IMPOSSIBLE_ITEMS.some(function(w) { return qLower.includes(w); });
+    return mentionsBuying && mentionsImpossible;
+  }
+
+  const IMPOSSIBLE_REPLIES = {
+    en: "Ha, good question — but no, we're a neighbourhood grocery and household-goods shop, so that's outside what we carry! 😄 If you meant something else, ask away, or WhatsApp us at +250 789 542 601.",
+    rw: "Haha, ikibazo cyiza — ariko oya, turi iduka rigurisha ibiribwa n'ibikoresho byo mu rugo, rero ibyo si mu byo dufite! 😄 Niba wari ushaka ikindi kintu, mbaza, cyangwa twandikire kuri WhatsApp +250 789 542 601.",
+    fr: "Ha, bonne question — mais non, nous sommes une épicerie de quartier, donc ce n'est pas quelque chose que nous vendons ! 😄 Si vous vouliez dire autre chose, n'hésitez pas à demander, ou contactez-nous sur WhatsApp au +250 789 542 601."
+  };
+
+  // ---- Detects gibberish / nonsense input (random keysmashes, single
+  // repeated characters, no recognizable words) so the bot doesn't
+  // just fall through to the generic "I don't have an answer" line
+  // every time, which feels broken to the user. ----
+  function isGibberish(qLower) {
+    const cleaned = qLower.replace(/[^a-zàâçéèêëîïôûùüÿñæœ]/gi, '');
+    if (cleaned.length < 3) return true;
+    // No vowels at all in a longish string is a strong gibberish signal
+    if (cleaned.length >= 5 && !/[aeiouàâéèêëîïôûùü]/i.test(cleaned)) return true;
+    // Same character repeated 4+ times (e.g. "aaaaaa", "kkkkkk")
+    if (/([a-z])\1{3,}/i.test(cleaned)) return true;
+    // 5+ consonants in a row is very rare in real English/French/Kinyarwanda words
+    if (/[bcdfghjklmnpqrstvwxz]{5,}/i.test(cleaned)) return true;
+    return false;
+  }
+
+  const GIBBERISH_REPLIES = {
+    en: "I couldn't quite understand that! Could you try asking in a few words — for example 'what time do you open' or 'do you have rice'?",
+    rw: "Sinabashije gusobanukirwa neza! Wagerageza kubaza mu magambo make — urugero 'mufungura saa zingahe' cyangwa 'mfite umuceri'?",
+    fr: "Je n'ai pas bien compris ! Pourriez-vous reformuler en quelques mots — par exemple 'à quelle heure ouvrez-vous' ou 'avez-vous du riz' ?"
+  };
+
   function getAIResponse(query) {
     const lang = getCurrentLanguage();
     const q = query.toLowerCase().trim();
+
+    // Universal checks, run before any language branch, so bad-faith
+    // and nonsense inputs get a sensible reply regardless of language.
+    if (isJailbreakAttempt(q)) return JAILBREAK_REPLIES[lang] || JAILBREAK_REPLIES.en;
+    if (isImpossibleRequest(q)) return IMPOSSIBLE_REPLIES[lang] || IMPOSSIBLE_REPLIES.en;
+    if (isGibberish(q)) return GIBBERISH_REPLIES[lang] || GIBBERISH_REPLIES.en;
 
     if (lang === 'en') {
       if (q === 'hi' || q === 'hello' || q === 'hey' || q === 'yo' || q === 'wssp' || q === 'sup' || q === 'hy' || q.includes('good morning') || q.includes('good afternoon') || q.includes('good evening')) {
@@ -1220,6 +1354,39 @@
       if (q.includes('contact') || q.includes('call') || q.includes('whatsapp') || q.includes('message') || q.includes('phone') || q.includes('number')) { return "You can reach us anytime! 📞<br><br>• <b>Call or WhatsApp:</b> +250 789 542 601<br>• <b>Visit us:</b> Kabuye, just below the Kabuye Parish Church.<br><br>We respond to messages quickly! 💬"; }
       if (q.includes('developed') || q.includes('created') || q.includes('developer') || q.includes('who built') || q.includes('gikundiro') || q.includes('pierrot')) { return "The developer who built this website and created me (the AI Assistant) is called <b>Gikundiro Pierrot</b>. He specializes in creating robust, scalable websites and databases. His expertise covers the entire web development lifecycle! 🚀"; }
       if (q.includes('safe') || q.includes('trust') || q.includes('legit') || q.includes('real')) { return "Yes, 100%! Marie Rose Shop is a trusted neighbourhood shop in Kabuye. We take compliance very seriously and provide official EBM receipts for every sale. You are in good hands! 😊"; }
+      if (q.includes('return') || q.includes('refund') || q.includes('exchange') || q.includes('wrong item') || q.includes('bring back')) {
+        return "If something isn't right with your purchase, bring it back with your EBM receipt as soon as possible and we'll sort it out — a refund, exchange, or replacement, depending on the situation. Just ask for Marie Rose or Pierrot at the counter.";
+      }
+      if (q.includes('expire') || q.includes('expiry') || q.includes('fresh') || q.includes('best before') || q.includes('old stock')) {
+        return "We check our shelves regularly and restock weekly, so everything sold is within date. If you ever spot something close to expiry, please point it out — we'd genuinely want to know!";
+      }
+      if (q.includes('allerg') || q.includes('ingredient') || q.includes('gluten') || q.includes('sugar free') || q.includes('halal')) {
+        return "We can check the label with you at the counter for allergens or ingredients on any specific product — just bring it up when you visit, or tell us the item here and we'll do our best to describe it.";
+      }
+      if (q.includes('complain') || q.includes('problem with') || q.includes('bad experience') || q.includes('not happy') || q.includes('disappointed')) {
+        return "I'm sorry to hear that. Please message us directly on WhatsApp at +250 789 542 601 with details — Marie Rose personally looks at every complaint and wants to make it right.";
+      }
+      if (q.includes('job') || q.includes('hiring') || q.includes('work here') || q.includes('employment') || q.includes('vacancy')) {
+        return "That's great that you're interested! We don't have an online application system, but feel free to visit the shop in person and ask Marie Rose about any current openings.";
+      }
+      if (q.includes('discount') && (q.includes('today') || q.includes('now') || q.includes('promo') || q.includes('sale') || q.includes('offer'))) {
+        return "We don't run flash sales, but our everyday prices are already kept fair and fixed — no surprise markups. Ask at the counter if there's a current bulk deal on any item.";
+      }
+      if (q.includes('other shop') || q.includes('competitor') || q.includes('cheaper elsewhere') || q.includes('compare')) {
+        return "We can't speak for other shops, but we focus on fair fixed prices, official EBM receipts, and quality stock sourced directly — so you always know what you're getting.";
+      }
+      if (q.includes('when will you have') || q.includes('restock') || q.includes('back in stock') || q.includes('out of stock')) {
+        return "Stock is restocked weekly. If something's out right now, message us on WhatsApp (+250 789 542 601) and we can give you a better idea of when it'll be back.";
+      }
+      if (q.includes('group order') || q.includes('event') || q.includes('wedding') || q.includes('party supplies') || q.includes('large order')) {
+        return "Yes, we can help with larger orders for events! Reach out on WhatsApp ahead of time (+250 789 542 601) so we can make sure we have enough stock ready for you.";
+      }
+      if (q.includes('weather') || q.includes('rain') || q.includes('raining')) {
+        return "We're open rain or shine during our normal hours — no weather closures! Stay dry on your way over. ☔";
+      }
+      if (q.includes('joke') || q.includes('funny') || q.includes('make me laugh')) {
+        return "I'll leave the comedy to the professionals 😄 — but I *can* tell you our prices are a real treat! Anything I can help you find today?";
+      }
       return "While I don't have the specific answer to that right now, you can call or WhatsApp us directly at +250 789 542 601, or visit our shop in Kabuye (just below the Kabuye Parish Church). The team is always happy to help! 😊";
     }
 
@@ -1271,6 +1438,30 @@
       if (q.includes('wakureze') || q.includes('wakoze') || q.includes('umurenge') || q.includes('gikundiro') || q.includes('pierrot')) {
         return "Umukoresha wakoze urubuga ni Gikundiro Pierrot. Yihanga mu gukora no gushushanya urubuga rukomeye kandi rwiza, ndetse no mu bubiko bw'amakuru. Ubuhamya bwe bugera ku nzego zose zo gukora urubuga! 🚀";
       }
+      if (q.includes('gusubiza') || q.includes('kugarura') || q.includes('sinishimiye') || q.includes('ntacyo')) {
+        return "Niba hari ikintu kitagenze neza ku byo waguze, garuka n'inyemezabwishyu ya EBM vuba bishoboka, tuzabikemura — kwishyura, guhindura, cyangwa gusimbuza. Baza Marie Rose cyangwa Pierrot ku isanduku.";
+      }
+      if (q.includes('kwangirika') || q.includes('igihe kirenze') || q.includes('gishya')) {
+        return "Dukurikirana ibicuruzwa byacu buri gihe kandi tugasubiramo mu cyumweru, bityo byose bigurishwa biracyafite igihe cyabyo. Niba wabonye ikintu cyegereje igihe cyacyo, tubwire — tuzashimira kubimenya!";
+      }
+      if (q.includes('ibirimo') || q.includes('allergie') || q.includes('gluten')) {
+        return "Dushobora kureba hamwe na wowe ibirimo mu gicuruzwa runaka ku isanduku — tubwire icyo kintu, tuzagusobanurira uko bishoboka kose.";
+      }
+      if (q.includes('umurimo') || q.includes('akazi') || q.includes('gukora hano')) {
+        return "Ni byiza ko ubishaka! Nta sisitemu yo gusaba akazi kuri interineti dufite, ariko wasura iduka ukabaza Marie Rose niba hari umwanya uhari.";
+      }
+      if (q.includes('igabanuka') && (q.includes('uyu munsi') || q.includes('nonaha'))) {
+        return "Ntabwo dukora ibiciro by'igihe gito, ariko ibiciro byacu bya buri munsi biramaze kuba byiza kandi bihamye. Baza ku isanduku niba hari amasezerano y'ubwinshi ku gicuruzwa runaka.";
+      }
+      if (q.includes('izindi duka') || q.includes('gereranya')) {
+        return "Ntidushobora kuvuga ku yandi maduka, ariko twibanda ku biciro byizewe bihamye, inyemezabwishyu ya EBM, n'ibicuruzwa byiza biva ahantu heza.";
+      }
+      if (q.includes('igihe kizaba gihari') || q.includes('kongera kuzana') || q.includes('nta gicuruzwa')) {
+        return "Dusubiramo ibicuruzwa buri cyumweru. Niba hari ikintu kidahari ubu, twandikire kuri WhatsApp (+250 789 542 601) tukubwire igihe kizaboneka.";
+      }
+      if (q.includes('ubukwe') || q.includes('ibirori') || q.includes('itsinda ry\'ibicuruzwa')) {
+        return "Yego, dushobora kugufasha mu bicuruzwa byinshi ku birori! Twandikire kuri WhatsApp mbere y'igihe (+250 789 542 601) kugira ngo tumenye neza ko dufite ibihagije.";
+      }
       return "Nubwo nta nyishu nyuzuye nfite ubu, mushobora guhamagara cyangwa kutwandikira kuri WhatsApp kuri +250 789 542 601, cyangwa kudusura mu iduka i Kabuye (munsi y'Itorero rya Kabuye). Itsinda ryacu rishobora kubafasha! 😊";
     }
 
@@ -1321,6 +1512,30 @@
       }
       if (q.includes('développé') || q.includes('créé') || q.includes('développeur') || q.includes('gikundiro') || q.includes('pierrot')) {
         return "Le développeur qui a créé ce site Web et m'a créé (l'assistant IA) s'appelle <b>Gikundiro Pierrot</b>. Il est spécialisé dans la création de sites Web et de bases de données robustes et évolutifs ! 🚀";
+      }
+      if (q.includes('retour') || q.includes('rembours') || q.includes('échange') || q.includes('mauvais article')) {
+        return "Si quelque chose ne va pas avec votre achat, rapportez-le avec votre reçu EBM dès que possible et nous trouverons une solution — remboursement, échange ou remplacement. Demandez Marie Rose ou Pierrot au comptoir.";
+      }
+      if (q.includes('périm') || q.includes('date limite') || q.includes('frais')) {
+        return "Nous vérifions régulièrement nos rayons et nous réapprovisionnons chaque semaine, donc tout ce qui est vendu est dans les délais. Si vous repérez quelque chose proche de la date limite, dites-le-nous !";
+      }
+      if (q.includes('allerg') || q.includes('ingrédient') || q.includes('gluten')) {
+        return "Nous pouvons vérifier l'étiquette avec vous au comptoir pour les allergènes ou les ingrédients d'un produit spécifique — dites-le-nous et nous ferons de notre mieux pour vous renseigner.";
+      }
+      if (q.includes('emploi') || q.includes('embauche') || q.includes('travailler ici') || q.includes('poste')) {
+        return "C'est super que cela vous intéresse ! Nous n'avons pas de système de candidature en ligne, mais n'hésitez pas à visiter la boutique et à demander à Marie Rose s'il y a des postes disponibles.";
+      }
+      if (q.includes('promo') && (q.includes('aujourd') || q.includes('maintenant'))) {
+        return "Nous ne faisons pas de ventes flash, mais nos prix quotidiens sont déjà justes et fixes — sans majoration surprise. Demandez au comptoir s'il y a une offre en gros sur un article.";
+      }
+      if (q.includes('autre magasin') || q.includes('concurrent') || q.includes('comparer')) {
+        return "Nous ne pouvons pas parler des autres magasins, mais nous misons sur des prix justes et fixes, des reçus EBM officiels, et des produits de qualité sourcés directement.";
+      }
+      if (q.includes('réapprovisionn') || q.includes('bientôt disponible') || q.includes('rupture')) {
+        return "Le réapprovisionnement se fait chaque semaine. Si un article manque actuellement, contactez-nous sur WhatsApp (+250 789 542 601) et nous pourrons vous dire quand il sera de retour.";
+      }
+      if (q.includes('événement') || q.includes('mariage') || q.includes('grande commande')) {
+        return "Oui, nous pouvons vous aider pour de plus grandes commandes pour vos événements ! Contactez-nous à l'avance sur WhatsApp (+250 789 542 601) pour que nous ayons assez de stock prêt pour vous.";
       }
       return "Bien que je n'aie pas la réponse spécifique pour le moment, vous pouvez nous appeler ou nous envoyer un WhatsApp au +250 789 542 601, ou visiter notre boutique à Kabuye (juste en dessous de l'église paroissiale de Kabuye). L'équipe sera ravie de vous aider ! 😊";
     }
