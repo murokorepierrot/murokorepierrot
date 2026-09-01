@@ -381,7 +381,7 @@ a:hover { color: var(--leaf-dark); }
   transition: var(--transition);
 }
 /* ============================================
-   HERO - WITH VIDEO SUPPORT
+   HERO - WITH BACKGROUND SLIDESHOW
    ============================================ */
 .hero {
   position: relative;
@@ -393,24 +393,64 @@ a:hover { color: var(--leaf-dark); }
   background: linear-gradient(135deg, #2a5a2a 0%, #1a3a1a 40%, #0d260d 100%);
 }
 
-/* Video element - covers the full hero */
-.hero-video {
+/* Background slideshow: 4 photos crossfading, each with a slow
+   Ken Burns zoom/pan for a premium, cinematic feel. */
+.hero-slideshow {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   z-index: 0;
+  overflow: hidden;
 }
 
-/* Fallback image - used when video fails or user prefers reduced motion */
-.hero-fallback-img {
+.hero-slide {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 1.6s ease-in-out;
+  will-change: opacity, transform;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+  z-index: 1;
+  animation: heroKenBurns 6s ease-out forwards;
+}
+
+/* Alternate zoom direction per slide so the motion feels varied
+   rather than repetitive across the loop. */
+.hero-slide:nth-child(odd).is-active {
+  animation-name: heroKenBurnsIn;
+}
+.hero-slide:nth-child(even).is-active {
+  animation-name: heroKenBurnsOut;
+}
+
+@keyframes heroKenBurnsIn {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+@keyframes heroKenBurnsOut {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+
+/* Respect prefers-reduced-motion: freeze on the first photo, no
+   zoom animation, matching the site's existing accessibility intent. */
+.hero-slideshow.reduced-motion .hero-slide {
+  transition: none;
+}
+.hero-slideshow.reduced-motion .hero-slide.is-active {
+  animation: none;
+  transform: scale(1);
 }
 
 .hero-overlay {
@@ -442,7 +482,9 @@ a:hover { color: var(--leaf-dark); }
   z-index: 2;
   text-align: center;
   max-width: 720px;
-  padding: 80px 24px 60px;
+  /* padding intentionally omitted here - see the "HERO CENTERING FIX"
+     block later in this file, which sets it per breakpoint. Duplicate
+     padding declarations here previously caused conflicts. */
 }
 
 /* ===== ALL HERO TEXT - FORCE WHITE ===== */
@@ -492,14 +534,10 @@ a:hover { color: var(--leaf-dark); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== REDUCED MOTION: Replace video with static image ===== */
+/* ===== REDUCED MOTION: handled via JS adding .reduced-motion to
+   .hero-slideshow (freezes on first photo, no zoom). Keep only the
+   content-animation disabling here. ===== */
 @media (prefers-reduced-motion: reduce) {
-  .hero-video {
-    display: none !important;
-  }
-  .hero-fallback-img {
-    display: block !important;
-  }
   .hero::after {
     animation: none;
   }
@@ -515,71 +553,75 @@ a:hover { color: var(--leaf-dark); }
     animation: none;
   }
 }
-/* ===== HERO RESPONSIVE - FULLSCREEN VIDEO ON MOBILE =====
-   Note: mobile hero height/video rules consolidated here. Do not add
+/* ===== HERO RESPONSIVE - FITS ON ONE MOBILE SCREEN =====
+   Note: mobile hero height rules consolidated here. Do not add
    duplicate .hero min-height/max-height rules elsewhere in this file -
-   they will fight each other and shrink the video. */
+   they will fight each other. Uses min-height only as a floor for
+   short content, NOT a forced height - real content height wins,
+   and spacing below is trimmed so it comfortably fits one screen. */
 @media (max-width: 768px) {
   .hero {
-    min-height: 100svh !important;
+    min-height: min(100svh, 640px) !important;
     max-height: none !important;
+    height: auto !important;
   }
-  .hero-video,
-  .hero-fallback-img {
+  .hero-slideshow {
     position: absolute !important;
     inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
   }
   .hero-content {
-    padding: 30px 20px 20px !important;
+    padding: 22px 20px 18px !important;
+  }
+  .hero-content .eyebrow {
+    font-size: 0.55rem !important;
+    margin-bottom: 0.25rem !important;
   }
   .hero-content h1 {
-    font-size: clamp(1.4rem, 4.5vw, 1.8rem) !important;
+    font-size: clamp(1.25rem, 4.2vw, 1.6rem) !important;
+    margin-bottom: 0.25em !important;
   }
   .hero-content h1 br {
     display: none !important;
   }
-  .hero-content .eyebrow {
-    font-size: 0.6rem !important;
-    margin-bottom: 0.3rem !important;
-  }
   .tagline {
-    font-size: 0.8rem !important;
-    margin-bottom: 0.5rem !important;
+    font-size: 0.75rem !important;
+    margin-bottom: 0.4rem !important;
   }
   .hero-content .hero-hours {
-    font-size: 0.65rem !important;
-    padding: 4px 10px !important;
-    margin: 0.2rem 0 0.6rem 0 !important;
+    font-size: 0.6rem !important;
+    padding: 3px 9px !important;
+    margin: 0.15rem 0 0.5rem 0 !important;
   }
   .cta-row {
     gap: 6px !important;
-    margin-top: 0.8rem !important;
+    margin-top: 0.5rem !important;
   }
   .cta-row .btn {
-    padding: 8px 14px !important;
-    font-size: 0.75rem !important;
+    padding: 7px 14px !important;
+    font-size: 0.72rem !important;
   }
 }
 
 @media (max-width: 480px) {
+  .hero {
+    min-height: min(100svh, 580px) !important;
+  }
   .hero-content {
-    padding: 20px 16px 15px !important;
+    padding: 18px 16px 14px !important;
   }
   .hero-content h1 {
-    font-size: clamp(1.1rem, 4vw, 1.4rem) !important;
+    font-size: clamp(1.05rem, 3.8vw, 1.3rem) !important;
   }
   .hero-content .eyebrow {
-    font-size: 0.5rem !important;
+    font-size: 0.48rem !important;
   }
   .tagline {
-    font-size: 0.7rem !important;
+    font-size: 0.68rem !important;
   }
   .hero-content .hero-hours {
-    font-size: 0.55rem !important;
+    font-size: 0.52rem !important;
     padding: 3px 8px !important;
     gap: 4px !important;
   }
@@ -592,7 +634,7 @@ a:hover { color: var(--leaf-dark); }
   }
   .cta-row .btn {
     padding: 6px 10px !important;
-    font-size: 0.65rem !important;
+    font-size: 0.62rem !important;
     border-radius: 6px !important;
   }
   .cta-row {
@@ -6559,6 +6601,10 @@ html {
 
 /* ============================================
    HERO CENTERING FIX
+   Padding intentionally omitted here - the mobile media queries
+   earlier in this file (search "FITS ON ONE MOBILE SCREEN") set
+   padding for small screens. Setting it here unconditionally with
+   !important would override those and cause mobile overflow again.
    ============================================ */
 .hero-content {
   display: flex !important;
@@ -6569,7 +6615,12 @@ html {
   width: 100% !important;
   max-width: 720px !important;
   margin: 0 auto !important;
-  padding: 60px 24px 40px !important;
+}
+
+@media (min-width: 769px) {
+  .hero-content {
+    padding: 60px 24px 40px !important;
+  }
 }
 
 .cta-row {
@@ -6585,7 +6636,7 @@ html {
 /* ============================================
    MOBILE HERO HEIGHT FIX - superseded, see the
    consolidated ".hero" mobile rules earlier in
-   this file (search "FULLSCREEN VIDEO ON MOBILE").
+   this file (search "FULLSCREEN SLIDESHOW ON MOBILE").
    Non-height tweaks below are still applied.
    ============================================ */
 @media (max-width: 768px) {
