@@ -23,16 +23,12 @@
 
 <meta name="msvalidate.01" content="F418770C0C85A74B8C16AB09FC35C4DF" />
 
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-
-
 <!-- PWA: installable app manifest + iOS support -->
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Marie Rose Shop">
+
 
 <!-- Icons for Browser, iOS, and Android -->
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo.png">
@@ -325,40 +321,15 @@
   background: linear-gradient(135deg, #2a5a2a 0%, #1a3a1a 40%, #0d260d 100%);
 ">
 
-  <!-- Video Background -->
-  <video 
-    id="heroVideo"
-    class="hero-video" 
-    poster="images/rm.png"
-    autoplay 
-    muted 
-    loop 
-    playsinline
-    preload="metadata"
-    aria-hidden="true"
-    style="
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    "
-  >
-    <source src="images/hero-video.mp4" type="video/mp4">
-    <source src="images/hero-video.webm" type="video/webm">
-    <img src="images/rm.png" alt="Marie Rose Shop front" loading="eager">
-  </video>
-  
-  <!-- Static fallback image -->
-  <img 
-    id="heroFallbackImg"
-    src="images/rm.png" 
-    class="hero-fallback-img" 
-    alt="Marie Rose Shop front" 
-    loading="eager"
-    style="display: none;"
-  >
+  <!-- Background Slideshow (4 photos, crossfade + Ken Burns zoom) -->
+  <div class="hero-slideshow" id="heroSlideshow" aria-hidden="true">
+    <div class="hero-slide is-active" style="background-image: url('images/lk.png');"></div>
+    <div class="hero-slide" style="background-image: url('images/fv.png');"></div>
+    <div class="hero-slide" style="background-image: url('images/kc.png');"></div>
+    <div class="hero-slide" style="background-image: url('images/bn.avif');"></div>
+    <div class="hero-slide" style="background-image: url('images/rm.png');"></div>
+    
+  </div>
   
   <!-- Overlay -->
   <div class="hero-overlay" style="
@@ -861,29 +832,28 @@
             <img src="images/lk.png" alt="Marie Rose Shop Interior" loading="lazy" data-group="about">
           </div>
           
-          <!-- Slide 2 -->
-          <div class="about-slide" data-slide="1">
-            <img src="images/bn.avif" alt="Marie Rose Shop Storefront" loading="lazy" data-group="about">
-          </div>
-          
           <!-- Slide 3 -->
           <div class="about-slide" data-slide="2">
-            <img src="images/grocery.png" alt="Shop Interior Displays" loading="lazy" data-group="about">
+            <img src="images/fv.png" alt="Shop Interior Displays" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 4 -->
           <div class="about-slide" data-slide="3">
-            <img src="images/web.png" alt="Marie Rose Shop Team" loading="lazy" data-group="about">
+            <img src="images/kc.png" alt="Marie Rose Shop Team" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 5 -->
           <div class="about-slide" data-slide="4">
-            <img src="images/tg.jpg" alt="Product Shelves" loading="lazy" data-group="about">
+            <img src="images/bn.avif" alt="Product Shelves" loading="lazy" data-group="about">
           </div>
           
           <!-- Slide 6 -->
           <div class="about-slide" data-slide="5">
-            <img src="images/rm.png" alt="Fresh Stock Arrivals" loading="lazy" data-group="about">
+            <img src="images/vb.jpg" alt="Fresh Stock Arrivals" loading="lazy" data-group="about">
+          </div>
+            <!-- Slide 2 -->
+          <div class="about-slide" data-slide="1">
+            <img src="images/dg.jpg" alt="Marie Rose Shop Storefront" loading="lazy" data-group="about">
           </div>
 
         </div>
@@ -971,7 +941,7 @@
           </span>
         </div>
         <div class="gallery-item" onclick="openLightbox(this)">
-          <img src="images/ds.jpg" alt="Marie Rose Shop Storefront" loading="lazy" data-group="gallery">
+          <img src="images/fv.png" alt="Marie Rose Shop Storefront" loading="lazy" data-group="gallery">
           <span class="image-count">2 / 6</span>
           <span class="gloss"></span>
           <span class="zoom-icon">
@@ -980,7 +950,7 @@
           </span>
         </div>
         <div class="gallery-item" onclick="openLightbox(this)">
-          <img src="images/fd.jpg" alt="Shop Interior Displays" loading="lazy" data-group="gallery">
+          <img src="images/vb.jpg" alt="Shop Interior Displays" loading="lazy" data-group="gallery">
           <span class="image-count">3 / 6</span>
           <span class="gloss"></span>
           <span class="zoom-icon">
@@ -1022,27 +992,27 @@
           <span class="gloss"></span>
         </div>
         <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
-          <img src="images/ds.jpg" alt="" loading="lazy">
+          <img src="images/dg.jpg" alt="" loading="lazy">
           <span class="image-count">2 / 6</span>
           <span class="gloss"></span>
         </div>
         <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
-          <img src="images/fd.jpg" alt="" loading="lazy">
+          <img src="images/fv.png" alt="" loading="lazy">
           <span class="image-count">3 / 6</span>
           <span class="gloss"></span>
         </div>
         <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
-          <img src="images/web.png" alt="" loading="lazy">
+          <img src="images/kc.png" alt="" loading="lazy">
           <span class="image-count">4 / 6</span>
           <span class="gloss"></span>
         </div>
         <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
-          <img src="images/vb.jpg" alt="" loading="lazy">
+          <img src="images/bn.avif" alt="" loading="lazy">
           <span class="image-count">5 / 6</span>
           <span class="gloss"></span>
         </div>
         <div class="gallery-item gallery-item--clone" aria-hidden="true" tabindex="-1">
-          <img src="images/bn.avif" alt="" loading="lazy">
+          <img src="images/tg.jpg" alt="" loading="lazy">
           <span class="image-count">6 / 6</span>
           <span class="gloss"></span>
         </div>
@@ -1552,7 +1522,7 @@
         <div class="team-header-slide" data-slide="1">
           <img src="images/rf.png" alt="Marie Rose - Owner" loading="lazy" data-group="team">
           <div class="team-header-title">
-            Our Amazing Team
+            Marie Rose
             <span class="sub">Manager &amp; Cashier</span>
           </div>
           <span class="team-zoom-icon">
@@ -1565,7 +1535,7 @@
         <div class="team-header-slide" data-slide="2">
           <img src="images/fb.png" alt="Gikundiro Pierrot - EBM Provider" loading="lazy" data-group="team">
           <div class="team-header-title">
-            Our Amazing Team
+            Gikundiro Pierrot
             <span class="sub">EBM Provider</span>
           </div>
           <span class="team-zoom-icon">
@@ -1576,9 +1546,9 @@
         
         <!-- Slide 4 - Gisubizo Bienfait -->
         <div class="team-header-slide" data-slide="3">
-          <img src="images/web.png" alt="Gisubizo Bienfait - Import & Sourcing" loading="lazy" data-group="team">
+          <img src="images/qu.png" alt="Gisubizo Bienfait - Import & Sourcing" loading="lazy" data-group="team">
           <div class="team-header-title">
-            Our Amazing Team
+            Gisubizo Bienfait
             <span class="sub">Import &amp; Sourcing</span>
           </div>
           <span class="team-zoom-icon">
@@ -1589,9 +1559,9 @@
         
         <!-- Slide 5 - Jean Pierre -->
         <div class="team-header-slide" data-slide="4">
-          <img src="images/rf.png" alt="Jean Pierre - Import & Sourcing" loading="lazy" data-group="team">
+          <img src="images/dd.jpeg" alt="Jean Pierre - Import & Sourcing" loading="lazy" data-group="team">
           <div class="team-header-title">
-            Our Amazing Team
+            Jean Pierre
             <span class="sub">Import &amp; Sourcing</span>
           </div>
           <span class="team-zoom-icon">
@@ -1930,7 +1900,7 @@
 
   <div class="toast" id="searchToast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-<script src="script.js?v=20260830-5"></script>
+<script src="script.js?v=20260831-1"></script>
 
   <!-- PWA: register service worker for offline support + installability.
        This also keeps the site fresh on every device: sw.js fetches HTML "network-first"
