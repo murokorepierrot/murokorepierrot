@@ -2408,81 +2408,56 @@
 
 })();
 /* ============================================================
-   HERO VIDEO SMART FALLBACK
+   HERO BACKGROUND SLIDESHOW (crossfade + Ken Burns zoom)
+   Replaces the previous video background with 4 photos that
+   fade into one another, each slowly zooming for a premium feel.
    ============================================================ */
 (function() {
   'use strict';
 
-  const video = document.getElementById('heroVideo');
-  const fallbackImg = document.getElementById('heroFallbackImg');
-  
-  if (!video) return;
+  const slideshow = document.getElementById('heroSlideshow');
+  if (!slideshow) return;
 
-  // Check if user prefers reduced motion
+  const slides = Array.from(slideshow.querySelectorAll('.hero-slide'));
+  if (slides.length < 2) return;
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
-  // Check if user has data saver enabled
-  const isDataSaver = navigator.connection && navigator.connection.saveData === true;
-  
-  // Check if connection is slow (effective type)
-  const isSlowConnection = navigator.connection && (
-    navigator.connection.effectiveType === 'slow-2g' ||
-    navigator.connection.effectiveType === '2g'
-  );
 
-  // Decide whether to show video or fallback image
-  const shouldUseVideo = !prefersReducedMotion && !isDataSaver && !isSlowConnection;
+  let current = 0;
+  const SLIDE_DURATION = 6000; // ms each photo stays fully visible/zooming
+  let timer = null;
 
-  if (shouldUseVideo) {
-    // Show video, hide fallback
-    video.style.display = 'block';
-    if (fallbackImg) fallbackImg.style.display = 'none';
-    
-    // Attempt to play the video
-    video.play().catch(function() {
-      // If video fails to play, fallback to image
-      video.style.display = 'none';
-      if (fallbackImg) fallbackImg.style.display = 'block';
-    });
-  } else {
-    // Use fallback image
-    video.style.display = 'none';
-    if (fallbackImg) fallbackImg.style.display = 'block';
+  function goToNext() {
+    const next = (current + 1) % slides.length;
+    slides[current].classList.remove('is-active');
+    slides[next].classList.add('is-active');
+    current = next;
   }
 
-  // Handle visibility change - pause video when tab is hidden
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden && video) {
-      video.pause();
-    } else if (!document.hidden && video && shouldUseVideo) {
-      video.play().catch(function() {});
-    }
-  });
+  function start() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(goToNext, SLIDE_DURATION);
+  }
 
-  // Handle connection change
-  if (navigator.connection) {
-    navigator.connection.addEventListener('change', function() {
-      const newIsSlow = navigator.connection.effectiveType === 'slow-2g' || 
-                        navigator.connection.effectiveType === '2g';
-      if (newIsSlow || navigator.connection.saveData) {
-        // Switch to image on slow connection
-        if (video) {
-          video.pause();
-          video.style.display = 'none';
-          if (fallbackImg) fallbackImg.style.display = 'block';
-        }
+  function stop() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
+  if (prefersReducedMotion) {
+    // Respect reduced-motion: show the first photo only, no cycling/zoom.
+    slideshow.classList.add('reduced-motion');
+  } else {
+    start();
+    // Pause cycling when the tab isn't visible, to save battery/CPU.
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        stop();
+      } else {
+        start();
       }
     });
   }
-
-  // Make the video loop seamlessly
-  if (video) {
-    video.addEventListener('ended', function() {
-      this.currentTime = 0;
-      this.play().catch(function() {});
-    });
-  }
-
 })();
 /* ============================================================
    HERO CONTENT CENTERING FIX
