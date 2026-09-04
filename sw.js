@@ -6,7 +6,7 @@
    automatically deleting the old one — this is what stops visitors from
    getting stuck on an old version of the site.
    ========================================================================= */
-const CACHE_VERSION = 'v2026-08-26-3';
+const CACHE_VERSION = 'v2026-09-03-1';
 const STATIC_CACHE = `mrs-static-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -14,6 +14,8 @@ const PRECACHE_URLS = [
   './index.html',
   './style.css',
   './script.js',
+  './products-render.js',
+  './products.json',
   './manifest.json'
 ];
 
