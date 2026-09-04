@@ -1236,9 +1236,8 @@ a:hover { color: var(--leaf-dark); }
     font-size: 0.75rem !important;
   }
 }
-
 /* ============================================
-   GALLERY - AUTO-SLIDING FILMSTRIP (MODERN, SEAMLESS LOOP)
+   GALLERY - AUTO-SLIDING FILMSTRIP (FIXED)
    ============================================ */
 .gallery {
   padding: 70px 0;
@@ -1247,13 +1246,19 @@ a:hover { color: var(--leaf-dark); }
   overflow: hidden;
 }
 
-/* ---- Viewport: clips the track and fades the edges ---- */
+/* ---- Viewport: clips the track ---- */
 .gallery-viewport {
   position: relative;
   overflow: hidden;
   margin-top: 36px;
   -webkit-mask-image: linear-gradient(to right, transparent 0, black 48px, black calc(100% - 48px), transparent 100%);
   mask-image: linear-gradient(to right, transparent 0, black 48px, black calc(100% - 48px), transparent 100%);
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.gallery-viewport:active {
+  cursor: grabbing;
 }
 
 /* ---- Track: the endless drifting strip ---- */
@@ -1263,16 +1268,11 @@ a:hover { color: var(--leaf-dark); }
   gap: 20px;
   width: max-content;
   will-change: transform;
-  animation: gallery-scroll 46s linear infinite;
+  /* Auto-scroll animation runs via JavaScript, not CSS */
 }
 
 .gallery-track.is-paused {
   animation-play-state: paused;
-}
-
-@keyframes gallery-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
 }
 
 /* ---- Gallery Item Base ---- */
@@ -1291,6 +1291,7 @@ a:hover { color: var(--leaf-dark); }
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   transition: box-shadow 0.5s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
 }
 
 .gallery-item--clone {
@@ -1423,12 +1424,11 @@ a:hover { color: var(--leaf-dark); }
 }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE - GALLERY
    ============================================ */
 @media (max-width: 992px) {
   .gallery-track {
     gap: 14px;
-    animation-duration: 38s;
   }
 
   .gallery-item {
@@ -1456,7 +1456,6 @@ a:hover { color: var(--leaf-dark); }
 
   .gallery-track {
     gap: 10px;
-    animation-duration: 26s;
   }
 
   .gallery-item {
@@ -1488,12 +1487,38 @@ a:hover { color: var(--leaf-dark); }
 @media (max-width: 480px) {
   .gallery-track {
     gap: 8px;
-    animation-duration: 22s;
   }
 
   .gallery-item {
     width: 78vw;
     min-height: 130px;
+  }
+}
+
+/* Reduced Motion: stop the drift */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-viewport {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+    scroll-snap-type: x proximity;
+  }
+  .gallery-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .gallery-item {
+    scroll-snap-align: start;
+    transition: none !important;
+  }
+  .gallery-item img {
+    transition: none !important;
+  }
+  .gallery-item .gloss {
+    display: none !important;
+  }
+  .gallery-item--clone {
+    display: none !important;
   }
 }
 
