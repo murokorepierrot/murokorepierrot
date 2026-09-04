@@ -1686,14 +1686,8 @@
   });
 
 })();
-
 /* ============================================================
-   GALLERY: AUTO-SLIDING FILMSTRIP (MODERN, SEAMLESS LOOP)
-   The track holds the 6 real photos followed by an aria-hidden duplicate
-   of the same 6, then drifts left via a pure-CSS animation that shifts
-   exactly one set width (-50%) and loops without any visible seam.
-   JS here only pauses the drift on hover/touch so people can look and
-   tap comfortably, and disables it entirely for reduced-motion users.
+   GALLERY: AUTO-SLIDING FILMSTRIP WITH DRAG + RESUME
    ============================================================ */
 (function() {
   'use strict';
@@ -1705,56 +1699,247 @@
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion) return;
 
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // ---- Speed: pixels per second ----
+  function getSpeed() {
+    const w = window.innerWidth;
+    if (w <= 480) return 30;
+    if (w <= 768) return 38;
+    if (w <= 992) return 45;
+    return 55;
+  }
 
+  let isPaused = false;
   let pauseTimeout = null;
+  let rafId = null;
+  let lastTimestamp = null;
+  let currentScroll = 0;
+  let isProgrammaticScroll = false;
+  let halfWidth = 0;
 
-  function pause() {
-    track.classList.add('is-paused');
+  function updateHalfWidth() {
+    halfWidth = track.scrollWidth / 2;
+  }
+  updateHalfWidth();
+
+  // ---- Core animation loop ----
+  function animate(timestamp) {
+    if (lastTimestamp === null) lastTimestamp = timestamp;
+    const delta = (timestamp - lastTimestamp) / 1000;
+    lastTimestamp = timestamp;
+
+    if (!isPaused && !document.hidden && delta < 0.5) {
+      currentScroll += getSpeed() * delta;
+
+      // Wrap seamlessly
+      if (halfWidth > 0) {
+        if (currentScroll >= halfWidth) {
+          currentScroll -= halfWidth;
+        } else if (currentScroll < 0) {
+          currentScroll += halfWidth;
+        }
+      }
+
+      isProgrammaticScroll = true;
+      track.style.transform = 'translateX(-' + currentScroll + 'px)';
+    } else if (delta >= 0.5) {
+      // Tab was hidden, resync
+      currentScroll = parseFloat(track.style.transform.replace(/[^0-9.-]/g, '')) || 0;
+    }
+
+    rafId = requestAnimationFrame(animate);
   }
 
-  function resume() {
-    track.classList.remove('is-paused');
+  // ---- Pause / Resume ----
+  function pauseAutoScroll() {
+    isPaused = true;
+    clearTimeout(pauseTimeout);
   }
 
-  if (!isTouchDevice) {
-    viewport.addEventListener('mouseenter', pause);
-    viewport.addEventListener('mouseleave', function() {
-      clearTimeout(pauseTimeout);
-      pauseTimeout = setTimeout(resume, 400);
-    });
-    viewport.addEventListener('focusin', pause);
-    viewport.addEventListener('focusout', function() {
-      clearTimeout(pauseTimeout);
-      pauseTimeout = setTimeout(resume, 400);
-    });
-  } else {
-    viewport.addEventListener('touchstart', function() {
-      clearTimeout(pauseTimeout);
-      pause();
-    }, { passive: true });
-
-    viewport.addEventListener('touchend', function() {
-      clearTimeout(pauseTimeout);
-      pauseTimeout = setTimeout(resume, 1800);
-    }, { passive: true });
+  function resumeAutoScroll() {
+    isPaused = false;
+    lastTimestamp = null;
+    // Sync currentScroll from the actual transform
+    currentScroll = parseFloat(track.style.transform.replace(/[^0-9.-]/g, '')) || 0;
   }
 
+  function scheduleResume(delay = 2500) {
+    clearTimeout(pauseTimeout);
+    pauseTimeout = setTimeout(resumeAutoScroll, delay);
+  }
+
+  // ---- Manual scroll via wheel / touch drag ----
+  let isDragging = false;
+  let startX = 0;
+  let startScroll = 0;
+
+  // Mouse drag
+  viewport.addEventListener('mousedown', function(e) {
+    if (e.target.closest('a, button')) return;
+    isDragging = true;
+    startX = e.pageX;
+    startScroll = currentScroll;
+    viewport.style.cursor = 'grabbing';
+    viewport.style.userSelect = 'none';
+    pauseAutoScroll();
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    const dx = e.pageX - startX;
+    currentScroll = startScroll - dx;
+
+    // Wrap
+    if (halfWidth > 0) {
+      if (currentScroll >= halfWidth) currentScroll -= halfWidth;
+      else if (currentScroll < 0) currentScroll += halfWidth;
+    }
+
+    track.style.transform = 'translateX(-' + currentScroll + 'px)';
+  });
+
+  window.addEventListener('mouseup', function() {
+    if (isDragging) {
+      isDragging = false;
+      viewport.style.cursor = '';
+      viewport.style.userSelect = '';
+      scheduleResume(2500);
+    }
+  });
+
+  // Touch drag
+  let touchStartX = 0;
+  let touchStartScroll = 0;
+
+  viewport.addEventListener('touchstart', function(e) {
+    const touch = e.touches[0];
+    touchStartX = touch.pageX;
+    touchStartScroll = currentScroll;
+    pauseAutoScroll();
+  }, { passive: true });
+
+  viewport.addEventListener('touchmove', function(e) {
+    const touch = e.touches[0];
+    const dx = touch.pageX - touchStartX;
+    currentScroll = touchStartScroll - dx;
+
+    if (halfWidth > 0) {
+      if (currentScroll >= halfWidth) currentScroll -= halfWidth;
+      else if (currentScroll < 0) currentScroll += halfWidth;
+    }
+
+    track.style.transform = 'translateX(-' + currentScroll + 'px)';
+  }, { passive: true });
+
+  viewport.addEventListener('touchend', function() {
+    scheduleResume(2500);
+  }, { passive: true });
+
+  // ---- Mouse wheel scroll ----
+  viewport.addEventListener('wheel', function(e) {
+    if (e.deltaX !== 0) {
+      pauseAutoScroll();
+      currentScroll += e.deltaX;
+
+      if (halfWidth > 0) {
+        if (currentScroll >= halfWidth) currentScroll -= halfWidth;
+        else if (currentScroll < 0) currentScroll += halfWidth;
+      }
+
+      track.style.transform = 'translateX(-' + currentScroll + 'px)';
+      scheduleResume(2500);
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // ---- Mouse enter/leave ----
+  viewport.addEventListener('mouseenter', function() {
+    pauseAutoScroll();
+  });
+
+  viewport.addEventListener('mouseleave', function() {
+    scheduleResume(2500);
+  });
+
+  // ---- Focus ----
+  viewport.addEventListener('focusin', pauseAutoScroll);
+  viewport.addEventListener('focusout', function() {
+    scheduleResume(2500);
+  });
+
+  // ---- Visibility change ----
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-      pause();
+      pauseAutoScroll();
     } else {
-      resume();
+      resumeAutoScroll();
     }
+  });
+
+  // ---- Resize ----
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      updateHalfWidth();
+      currentScroll = parseFloat(track.style.transform.replace(/[^0-9.-]/g, '')) || 0;
+    }, 300);
+  });
+
+  // ---- Start ----
+  currentScroll = 0;
+  rafId = requestAnimationFrame(animate);
+
+  // ---- Cleanup ----
+  window.addEventListener('beforeunload', function() {
+    if (rafId) cancelAnimationFrame(rafId);
   });
 
 })();
 
-
 /* ============================================================
-   TEAM HEADER CAROUSEL - INFINITE HORIZONTAL SLIDER (FIXED)
-   Auto-advancing with clickable images
+   GALLERY: MOUSE DRAG SCROLLING (OPTIONAL)
    ============================================================ */
+(function() {
+  'use strict';
+
+  const viewport = document.querySelector('.gallery-viewport');
+  if (!viewport) return;
+
+  let isDragging = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+
+  viewport.addEventListener('mousedown', function(e) {
+    if (e.target.closest('a, button')) return;
+    isDragging = true;
+    startX = e.pageX;
+    startScrollLeft = viewport.scrollLeft;
+    viewport.style.cursor = 'grabbing';
+    viewport.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    const dx = e.pageX - startX;
+    viewport.scrollLeft = startScrollLeft - dx;
+  });
+
+  window.addEventListener('mouseup', function() {
+    if (isDragging) {
+      isDragging = false;
+      viewport.style.cursor = '';
+      viewport.style.userSelect = '';
+    }
+  });
+
+  viewport.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+  });
+
+})();
+
 (function() {
   'use strict';
 
